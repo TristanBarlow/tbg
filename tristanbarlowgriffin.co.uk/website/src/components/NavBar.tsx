@@ -1,6 +1,7 @@
 import React from 'react'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 
+/* eslint-disable */
 type propsWithRouter = RouteComponentProps<{}>
 interface State {
   menuActive: boolean

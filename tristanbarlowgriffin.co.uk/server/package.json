@@ -1,0 +1,21 @@
+{
+  "name": "tbg-server",
+  "version": "1.0.0",
+  "main": "/build/index.js",
+  "author": "Tristan Barlow-Griffin",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^3.0.0",
+    "@types/express": "^4.17.2",
+    "@types/node": "^13.7.4",
+    "rollup": "^1.31.1",
+    "tslib": "^1.11.0",
+    "typescript": "^3.8.2"
+  },
+  "scripts": {
+    "build": "yarn rollup -c"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
