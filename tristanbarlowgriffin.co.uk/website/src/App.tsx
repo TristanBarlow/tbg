@@ -7,6 +7,7 @@ import NavBar from './components/NavBar'
 import Background from './components/Background'
 import ProjectView from './pages/ProjectView'
 import './css/main.css'
+import Chess from './pages/Chess'
 
 function App () {
   return (
@@ -19,6 +20,7 @@ function App () {
             <Route path="/contact" component={ Contact } />
             <Route path="/projects/*" component={ ProjectView } />
             <Route path="/projects" component={ Projects } />
+            <Route path="/chess-ai" component={ Chess } />
             <Route path="/" component={ Home } />
           </Switch>
         </div>
