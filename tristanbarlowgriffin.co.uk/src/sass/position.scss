@@ -28,9 +28,14 @@
   flex-wrap: wrap;
 }
 
-.center{
+.center, .center-a *{
+  text-align: center;
   display: flex;
   justify-content: center;
+}
+
+.center-s{
+  justify-self: center;
 }
 
 .full-height{
