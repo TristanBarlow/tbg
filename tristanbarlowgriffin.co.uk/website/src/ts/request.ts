@@ -4,7 +4,7 @@ export function apiRequest<T> (
   path: string,
   method: 'GET' | 'POST' | 'PUT',
   responseType: XMLHttpRequestResponseType,
-  data?: Record<string, any>
+  data?: Record<string, any> | File
 ): Promise<APIResponse<T>> {
   const xhr = new XMLHttpRequest()
   xhr.responseType = responseType
@@ -19,12 +19,25 @@ export function apiRequest<T> (
       xhr.ontimeout = _ => rejects()
       xhr.onabort = _ => rejects()
       xhr.open(method, path, true)
-      xhr.setRequestHeader('Content-type', 'application/json')
-      if (data) xhr.send(JSON.stringify(data))
-      else xhr.send()
+
+      if (data) {
+        if (data instanceof File) {
+          xhr.setRequestHeader('Content-type', data.type)
+          xhr.send(data)
+        } else {
+          xhr.setRequestHeader('Content-type', 'application/json')
+          xhr.send(JSON.stringify(data))
+        }
+      } else {
+        xhr.send()
+      }
+
     } catch (e) {
-      console.log(e)
-      rejects()
+      rejects(e)
     }
   })
+}
+
+export function makeImageUrl (id: string): string {
+  return `/api/image${ id }`
 }

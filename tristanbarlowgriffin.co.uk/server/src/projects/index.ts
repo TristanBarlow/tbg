@@ -1,6 +1,8 @@
 import { RequestHandler } from 'express'
 import { getAll } from './projects'
 import { getImage } from './bucket'
+import { createReadStream } from 'fs'
+import { Readable, Writable } from 'stream'
 export * from './create'
 
 export const getProjects: RequestHandler = async (req, res) => {
@@ -15,10 +17,18 @@ export const getProjects: RequestHandler = async (req, res) => {
 
 export const getImageHandler: RequestHandler = async (req, res) => {
   try {
-    const w = await getImage(req.params.id)
-    w.pipe(res.status(200))
+    const r = await getImage(req.params.id)
+    r.pipe(res.status(200))
   } catch (e) {
     console.error(e)
     res.sendStatus(400)
   }
+}
+
+export const imageUploadHandler: RequestHandler = async (req, res) => {
+  const foo = new Writable()
+  const data = req.pipe(foo)
+  console.log(foo)
+  console.log(typeof data, data)
+  res.sendStatus(200)
 }

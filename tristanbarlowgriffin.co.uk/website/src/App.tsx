@@ -6,6 +6,7 @@ import Projects from './pages/Projects'
 import NavBar from './components/NavBar'
 import Background from './components/Background'
 import ProjectView from './pages/ProjectView'
+import ProjectManager from './pages/ProjectManager'
 import './css/main.css'
 import Chess from './pages/Chess'
 
@@ -18,6 +19,7 @@ function App () {
         <div className="section">
           <Switch>
             <Route path="/contact" component={ Contact } />
+            <Route path="/projects/manage" component={ ProjectManager } />
             <Route path="/projects/*" component={ ProjectView } />
             <Route path="/projects" component={ Projects } />
             <Route path="/chess-ai" component={ Chess } />

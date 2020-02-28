@@ -16,9 +16,3 @@ export const createHandler: RequestHandler = async (req, res) => {
     return res.sendStatus(400)
   }
 }
-
-export const imageUploadHandler: RequestHandler = async (req, res) => {
-  const data = req.body
-  console.log(typeof data, data)
-  res.sendStatus(200)
-}

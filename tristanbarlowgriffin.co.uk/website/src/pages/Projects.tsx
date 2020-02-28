@@ -1,5 +1,5 @@
 import React from 'react'
-import { apiRequest } from '../ts/request'
+import { apiRequest, makeImageUrl } from '../ts/request'
 import { Project } from '../@types/project'
 import ImageEle from '../components/Image'
 import { NavBar } from '../components/NavBar'
@@ -28,7 +28,7 @@ export default class Projects extends React.Component<{}, State>{
           <p className="title is-5">{ proj.title }</p>
           <p></p>
           <div className="center">
-            <ImageEle url={ proj.imgUrl } />
+            <ImageEle url={ makeImageUrl(proj.gifId) } />
           </div>
         </div>
       </div>
