@@ -26,9 +26,7 @@ export const getImageHandler: RequestHandler = async (req, res) => {
 }
 
 export const imageUploadHandler: RequestHandler = async (req, res) => {
-  const foo = new Writable()
-  const data = req.pipe(foo)
-  console.log(foo)
+  const data = req.body
   console.log(typeof data, data)
   res.sendStatus(200)
 }
