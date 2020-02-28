@@ -1,6 +1,6 @@
 import express from 'express'
 import env from './env'
-import { projects } from './projects'
+import { createHandler, getProjects, imageUploadHandler, getImageHandler } from './projects'
 
 const app = express()
 app.use((req, res, next) => {
@@ -8,7 +8,8 @@ app.use((req, res, next) => {
   next()
 })
 
-app.get('/api/projects', (req, res) => {
-  res.send(projects)
-})
+app.get('/api/projects', getProjects)
+app.post('/api/projects/create', createHandler)
+app.post('/api/projects/image', imageUploadHandler)
+app.get('/api/image/:id', getImageHandler)
 app.listen(env.PORT)

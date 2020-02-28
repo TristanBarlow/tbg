@@ -1,29 +1,24 @@
-import { Project } from '../@types/project'
+import { RequestHandler } from 'express'
+import { getAll } from './projects'
+import { getImage } from './bucket'
+export * from './create'
 
-export const projects: Project[] = [
-  {
-    description: 'Long descriptions, Long descriptionsLong descriptions ',
-    title: 'My Project',
-    link: 'http://github.com/tristanbarlow',
-    imgUrl: 'http://github.com/TristanBarlow/OpenGL-Demo/raw/master/OPEN_GL_GIF.gif',
-    gifUrl: 'http://github.com/TristanBarlow/Portfolio/blob/master/MainProject/Home/images/NEW_TOMOZ.PNG?raw=true'
-  }, {
-    description: 'Long descriptions, Long descriptionsLong descriptions ',
-    title: 'My Project',
-    link: 'http://github.com/tristanbarlow',
-    imgUrl: 'http://github.com/TristanBarlow/OpenGL-Demo/raw/master/OPEN_GL_GIF.gif',
-    gifUrl: 'http://github.com/TristanBarlow/Portfolio/blob/master/MainProject/Home/images/NEW_TOMOZ.PNG?raw=true'
-  }, {
-    description: 'Long descriptions, Long descriptionsLong descriptions ',
-    title: 'My Project',
-    link: 'http://github.com/tristanbarlow',
-    imgUrl: 'http://github.com/TristanBarlow/OpenGL-Demo/raw/master/OPEN_GL_GIF.gif',
-    gifUrl: 'http://github.com/TristanBarlow/Portfolio/blob/master/MainProject/Home/images/NEW_TOMOZ.PNG?raw=true'
-  }, {
-    description: 'Long descriptions, Long descriptionsLong descriptions ',
-    title: 'My Project',
-    link: 'http://github.com/tristanbarlow',
-    imgUrl: 'http://github.com/TristanBarlow/OpenGL-Demo/raw/master/OPEN_GL_GIF.gif',
-    gifUrl: 'http://github.com/TristanBarlow/Portfolio/blob/master/MainProject/Home/images/NEW_TOMOZ.PNG?raw=true'
-  },
-]
+export const getProjects: RequestHandler = async (req, res) => {
+  try {
+    const projs = await getAll()
+    res.send(projs)
+  } catch (e) {
+    console.error(e)
+    res.sendStatus(400)
+  }
+}
+
+export const getImageHandler: RequestHandler = async (req, res) => {
+  try {
+    const w = await getImage(req.params.id)
+    w.pipe(res.status(200))
+  } catch (e) {
+    console.error(e)
+    res.sendStatus(400)
+  }
+}
