@@ -1,8 +1,6 @@
 import { RequestHandler } from 'express'
 import { getAll } from './projects'
-import { getImage, createWriteStream } from './bucket'
-import { createReadStream } from 'fs'
-import { Readable, Writable } from 'stream'
+import { getImage, createWriteStream, asyncPipe } from './bucket'
 export * from './create'
 
 export const getProjects: RequestHandler = async (req, res) => {
@@ -34,8 +32,13 @@ export const imageUploadHandler: RequestHandler = async (req, res) => {
     if (typeof name !== 'string' || name.length < 4)
       throw Error('Id of the image is malformed ' + name)
 
+    console.log('Creating write stream for File: ', name, ' Type: ', contentType)
     const w = createWriteStream(name, contentType)
-    req.pipe(w)
+    const success = await asyncPipe(w, req)
+    if (!success)
+      throw Error(`Image Failed to upload to the bucket: ${ name }`)
+
+    console.log('Image written to bucket: ', name, ' Type: ', contentType)
     res.sendStatus(200)
   } catch (e) {
     console.error(e)

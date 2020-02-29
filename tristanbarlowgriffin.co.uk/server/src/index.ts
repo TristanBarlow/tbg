@@ -5,7 +5,7 @@ import bodyParser from 'body-parser'
 
 const app = express()
 app.use(bodyParser.json(), (req, res, next) => {
-  console.log('PATH: ', req.path, ' QUERY: ', req.query, ' IP: ', req.ip)
+  console.log('PATH: ', req.path, 'METHOD: ', req.method, ' QUERY: ', req.query, ' IP: ', req.ip)
   next()
 })
 
