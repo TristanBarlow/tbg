@@ -2,7 +2,7 @@ export interface APIResponse<T> { status: number, data: T | undefined }
 
 export function apiRequest<T> (
   path: string,
-  method: 'GET' | 'POST' | 'PUT',
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   responseType: XMLHttpRequestResponseType,
   data?: Record<string, any> | File
 ): Promise<APIResponse<T>> {

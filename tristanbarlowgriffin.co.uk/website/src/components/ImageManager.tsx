@@ -27,6 +27,11 @@ export default class ImageManager extends React.Component<{}, State>{
     this.setState({ loading: false })
   }
 
+  async delete (id: string) {
+    await apiRequest('/api/image/' + id, 'DELETE', 'text')
+    this.loadImages()
+  }
+
   get imageElements (): JSX.Element {
     if (this.state.loading)
       return <Loading size={ 10 } />
@@ -41,6 +46,8 @@ export default class ImageManager extends React.Component<{}, State>{
               <ImageEle height='200px' meta={ x } />
               <div className="center" style={ { marginTop: '10px' } }>
                 <button onClick={ () => this.setState({ showImageUpload: true, activeImage: x }) } className="button is-link"> Update</button>
+                <button onClick={ () => this.delete(x.name) } className="button is-danger"> Delete</button>
+
               </div>
             </div>
           </div>

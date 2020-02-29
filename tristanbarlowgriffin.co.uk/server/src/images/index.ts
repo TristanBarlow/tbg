@@ -1,37 +1,11 @@
-import { firestore } from '../../common/firestore'
-import { ImageMeta, isMeta } from '../../@types/project'
-import { FieldValue, WriteResult } from '@google-cloud/firestore'
+import { WriteResult } from '@google-cloud/firestore'
 import { RequestHandler } from 'express'
-import { asyncPipe, getReadStream, createWriteStream } from './bucket'
+import { asyncPipe, getReadStream, createWriteStream, deleteImage } from './bucket'
 import { Readable } from 'stream'
+import { writeMeta, viewed, deleteImageMeta } from './firestore'
+import { getAll } from './firestore'
 
-const images = firestore()
-  .collection('images')
-  .withConverter<ImageMeta>({
-    fromFirestore: (data) => {
-      if (!isMeta(data))
-        throw Error(`Image Data from firestore is not of type ImageMeta: ${ JSON.stringify(data) }`)
-
-      return data
-    },
-    toFirestore: (model) => model
-  })
-
-async function getAll (): Promise<ImageMeta[]> {
-  const snap = await images.get()
-  return snap.docs.map(x => x.data())
-}
-
-function viewed (name: string): Promise<WriteResult> {
-  const partialUpdate = { viewed: FieldValue.increment(1) } as unknown as ImageMeta
-  return images.doc(name).set(partialUpdate, { merge: true })
-}
-
-function writeMeta (meta: ImageMeta): Promise<WriteResult> {
-  return images.doc(meta.name).set(meta, { merge: true })
-}
-
-async function createImage (id: string, description: string, contentType: string, r: Readable): Promise<WriteResult> {
+export async function createImage (id: string, description: string, contentType: string, r: Readable): Promise<WriteResult> {
   console.log('Creating write stream for File: ', id, ' Type: ', contentType)
   const w = createWriteStream(id, contentType)
   const success = await asyncPipe(w, r)
@@ -40,6 +14,18 @@ async function createImage (id: string, description: string, contentType: string
 
   console.log('Image written to bucket: ', id, ' Type: ', contentType)
   return writeMeta({ name: id, description, viewed: 0 })
+}
+
+export const deleteImageHandler: RequestHandler = async (req, res) => {
+  try {
+    const id = req.params.id
+    console.log('DELETING IMAGE: ', id)
+    await Promise.all([deleteImageMeta(id), deleteImage(id)])
+    res.sendStatus(200)
+  } catch (e) {
+    console.error(e)
+    res.sendStatus(400)
+  }
 }
 
 export const imageUploadHandler: RequestHandler = async (req, res) => {
@@ -75,7 +61,7 @@ export const getAllImageHandler: RequestHandler = async (req, res) => {
 export const getImageHandler: RequestHandler = async (req, res) => {
   try {
     const id = req.params.id
-    if (typeof id !== 'string')
+    if (typeof id !== 'string' && id !== '' && id !== 'undefined')
       throw Error('Malformed ID on get Image handler ' + id)
 
     const r = await getReadStream(id)

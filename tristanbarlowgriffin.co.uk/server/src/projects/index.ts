@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express'
 import { getAll } from './projects'
-export * from './images'
 export * from './create'
 
 export const getProjects: RequestHandler = async (req, res) => {

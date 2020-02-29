@@ -1,4 +1,4 @@
-import { storage } from '../../common/storage'
+import { storage } from '../common/storage'
 import { Readable, Writable } from 'stream'
 
 export const bucket = storage().bucket('tbg-assets')
@@ -13,6 +13,10 @@ export async function getReadStream (id: string): Promise<Readable> {
 
 export function createWriteStream (id: string, contentType: string): Writable {
   return bucket.file(id).createWriteStream({ contentType, resumable: false, metadata: { uploadTime: Date.now() / 1000 } })
+}
+
+export async function deleteImage (id: string): Promise<void> {
+  await bucket.file(id).delete()
 }
 
 export function asyncPipe (w: Writable, r: Readable): Promise<boolean> {
