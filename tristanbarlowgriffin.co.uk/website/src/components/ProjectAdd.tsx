@@ -23,8 +23,8 @@ export default class ProjectAdd extends ModalBase<Props, State> {
   }
 
   async submit (): Promise<void> {
-    const foo = await apiRequest(`/api/projects/create`, 'POST', 'text', this.state)
-    console.log(foo)
+    await apiRequest(`/api/projects/create`, 'POST', 'text', this.state)
+    this.props.close()
   }
 
   getBody (): JSX.Element | null {
@@ -44,6 +44,7 @@ export default class ProjectAdd extends ModalBase<Props, State> {
       </div>
     )
   }
+
   getTitle (): JSX.Element | null {
     return <p className="modal-card-title">Making Project</p>
   }

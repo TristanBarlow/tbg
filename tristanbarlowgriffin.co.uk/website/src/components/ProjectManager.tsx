@@ -2,6 +2,7 @@ import React from 'react'
 import ProjectAdd from '../components/ProjectAdd'
 import { ImageMeta, Project } from '../@types/project'
 import { apiRequest } from '../ts/request'
+import { toKebab } from '../shared/util'
 
 interface State {
   showProjectAdd: boolean
@@ -23,7 +24,8 @@ export default class ProjectManager extends React.Component<{}, State>{
   }
 
   close () {
-    this.setState({ showProjectAdd: false, })
+    this.setState({ showProjectAdd: false })
+    this.loadProjects()
   }
 
   get projectAdd (): JSX.Element | null {
@@ -33,6 +35,11 @@ export default class ProjectManager extends React.Component<{}, State>{
     )
   }
 
+  async delete (x: Project) {
+    await apiRequest('/api/projects/' + toKebab(x.title), 'DELETE', 'text')
+    this.loadProjects()
+  }
+
   get projects (): JSX.Element {
     return (
       <div className="tile">
@@ -40,12 +47,15 @@ export default class ProjectManager extends React.Component<{}, State>{
           <div key={ x.title } className="tile is-parent is-3">
             <div className="tile is-child box col">
               <p className="subtitle is-4">Title: { x.title }</p>
+              <p className="subtitle is-5">link: { x.link }</p>
               <p className="subtitle is-4">GIF: { x.gifId }</p>
               <p className="subtitle is-4">Image: { x.imageId }</p>
-              <p className="subtitle is-5">link: { x.link }</p>
               <p className="subtitle is-7">Description: { x.description }</p>
               <div className="center" style={ { marginTop: '10px' } }>
-                <button onClick={ () => this.setState({ showProjectAdd: true, activeProject: x }) } className="button is-link"> Update</button>
+                <div className="field is-grouped">
+                  <button onClick={ () => this.setState({ showProjectAdd: true, activeProject: x }) } className="button is-link"> Update</button>
+                  <button onClick={ () => this.delete(x) } className="button is-danger"> Delete</button>
+                </div>
               </div>
             </div>
           </div>

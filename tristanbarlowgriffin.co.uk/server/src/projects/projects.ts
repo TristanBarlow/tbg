@@ -1,6 +1,6 @@
 import { firestore } from '../common/firestore'
 import { Project, isProject } from '../@types/project'
-import { WriteResult } from '@google-cloud/firestore'
+import { WriteResult, DocumentReference } from '@google-cloud/firestore'
 import { toKebab, toTitle } from '../shared/util'
 
 const projects = firestore()
@@ -19,11 +19,19 @@ const projects = firestore()
     }
   })
 
+function getRef (title: string): DocumentReference {
+  return projects.doc(toKebab(title))
+}
+
 export function writeProject (proj: Project): Promise<WriteResult> {
-  return projects.doc().set(proj, { merge: true })
+  return getRef(proj.title).set(proj, { merge: true })
 }
 
 export async function getAll (): Promise<Project[]> {
   const projs = await projects.get()
   return projs.docs.map(x => x.data())
+}
+
+export function deleteProject (id: string): Promise<WriteResult> {
+  return projects.doc(id).delete()
 }

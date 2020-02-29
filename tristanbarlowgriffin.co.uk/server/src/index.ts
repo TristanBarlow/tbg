@@ -1,7 +1,7 @@
 import express from 'express'
 import env from './env'
 import { imageUploadHandler, getImageHandler, getAllImageHandler, deleteImageHandler } from './images'
-import { createHandler, getProjects, } from './projects'
+import { createHandler, getProjects, deleteProjectHandler, } from './projects'
 import bodyParser from 'body-parser'
 
 const app = express()
@@ -12,6 +12,7 @@ app.use(bodyParser.json(), (req, res, next) => {
 
 app.get('/api/projects', getProjects)
 app.post('/api/projects/create', createHandler)
+app.delete('/api/projects/:id', deleteProjectHandler)
 
 app.get('/api/image/:id', getImageHandler)
 app.get('/api/images', getAllImageHandler)
