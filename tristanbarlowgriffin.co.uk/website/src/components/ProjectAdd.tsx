@@ -1,31 +1,46 @@
 import React from 'react'
 import { apiRequest } from '../ts/request'
-import ModalBase from './ModalBase'
+import ModalBase, { ModalBaseProps } from './ModalBase'
 import { Project } from '../@types/project'
+import InputField from './InputField'
 
 interface Props {
-
+  proj: Project | null
 }
 interface State extends Project {
   loading: boolean
 }
+
 export default class ProjectAdd extends ModalBase<Props, State> {
 
   fileElement: HTMLInputElement | null = null
-  state: State = { title: '', description: '', gifId: '', loading: false, imageId: '', link: '' }
+
+
+  constructor (p: Props & ModalBaseProps) {
+    super(p)
+    this.state = { title: '', description: '', gifId: '', loading: false, imageId: '', link: '' }
+    if (p.proj) this.state = { ...this.state, ...p.proj }
+  }
 
   async submit (): Promise<void> {
-    const foo = await apiRequest(`/api/project/${ this.state.title }`, 'POST', 'text', this.state)
+    const foo = await apiRequest(`/api/projects/create`, 'POST', 'text', this.state)
     console.log(foo)
   }
 
   getBody (): JSX.Element | null {
     return (
       <div>
+        <InputField label="Title" value={ this.state.title } change={ (x) => this.setState({ title: x }) } />
         <div className="field">
-          <p className="label">Title</p>
-          <input value={ this.state.title } onChange={ (x) => this.setState({ title: x.target.value }) } className="input" type="text" />
+          <p className="label">Description</p>
+          <textarea
+            value={ this.state.description }
+            onChange={ (x) => this.setState({ description: x.target.value }) }
+            className="textarea" />
         </div>
+        <InputField label="Link" value={ this.state.link } change={ (x) => this.setState({ link: x }) } />
+        <InputField label="Image ID" value={ this.state.imageId } change={ (x) => this.setState({ imageId: x }) } />
+        <InputField label="Gif ID" value={ this.state.gifId } change={ (x) => this.setState({ gifId: x }) } />
       </div>
     )
   }

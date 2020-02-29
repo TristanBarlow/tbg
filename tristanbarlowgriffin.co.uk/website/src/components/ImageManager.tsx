@@ -42,7 +42,6 @@ export default class ImageManager extends React.Component<{}, State>{
               <div className="center" style={ { marginTop: '10px' } }>
                 <button onClick={ () => this.setState({ showImageUpload: true, activeImage: x }) } className="button is-link"> Update</button>
               </div>
-
             </div>
           </div>
         )) }

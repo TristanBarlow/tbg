@@ -2,6 +2,7 @@ import React from 'react'
 import { apiRequest } from '../ts/request'
 import ModalBase, { ModalBaseProps } from './ModalBase'
 import { ImageMeta } from '../@types/project'
+import InputField from './InputField'
 
 interface Props {
   meta: ImageMeta | null
@@ -35,14 +36,8 @@ export default class ImageUpload extends ModalBase<Props, State> {
   getBody (): JSX.Element | null {
     return (
       <div>
-        <div className="field">
-          <p className="label">Choose Name</p>
-          <input value={ this.state.name } onChange={ (x) => this.setState({ name: x.target.value }) } className="input" type="text" />
-        </div>
-        <div className="field">
-          <p className="label">Description</p>
-          <input value={ this.state.description || '' } onChange={ (x) => this.setState({ description: x.target.value }) } className="input" type="text" />
-        </div>
+        <InputField value={ this.state.name } label="Choose Name" change={ (x) => this.setState({ name: x }) } />
+        <InputField value={ this.state.description || '' } label="Description" change={ (x) => this.setState({ description: x }) } />
         <div className="field">
           <p className="label">Choose file</p>
           <input ref={ (x) => this.fileElement = x } className="input" type="file" />
