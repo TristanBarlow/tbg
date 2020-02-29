@@ -1,9 +1,9 @@
 import React from 'react'
 
-interface Props {
+export interface ModalBaseProps {
   close: () => void
 }
-export default abstract class ModalBase<T, S> extends React.Component<T & Props, S>{
+export default abstract class ModalBase<T, S> extends React.Component<T & ModalBaseProps, S>{
   abstract getBody (): JSX.Element | null
   abstract getTitle (): JSX.Element | null
   abstract getFooter (): JSX.Element | null

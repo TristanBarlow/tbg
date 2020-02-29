@@ -37,7 +37,3 @@ export function apiRequest<T> (
     }
   })
 }
-
-export function makeImageUrl (id: string): string {
-  return `/api/image${ id }`
-}

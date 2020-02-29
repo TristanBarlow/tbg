@@ -1,18 +1,26 @@
 import React from 'react'
 import { apiRequest } from '../ts/request'
-import ModalBase from './ModalBase'
+import ModalBase, { ModalBaseProps } from './ModalBase'
+import { ImageMeta } from '../@types/project'
 
 interface Props {
-
+  meta: ImageMeta | null
 }
-interface State {
+interface State extends Omit<ImageMeta, 'viewed'> {
   loading: boolean
-  name: string
 }
 export default class ImageUpload extends ModalBase<Props, State> {
 
   fileElement: HTMLInputElement | null = null
-  state: State = { name: '', loading: false }
+
+  constructor (p: Props & ModalBaseProps) {
+    super(p)
+    this.state = {
+      name: p.meta?.name || '',
+      loading: false,
+      description: p.meta?.description || '',
+    }
+  }
 
   async submit (): Promise<void> {
     if (!this.fileElement || !this.fileElement.files) return
@@ -20,8 +28,8 @@ export default class ImageUpload extends ModalBase<Props, State> {
     const file = this.fileElement.files[0]
     if (!file) return
 
-    const foo = await apiRequest(`/api/image/${ this.state.name }`, 'POST', 'text', file)
-    console.log(foo)
+    await apiRequest(`/api/image/${ this.state.name }?descr=${ this.state.description }`, 'POST', 'text', file)
+    this.props.close()
   }
 
   getBody (): JSX.Element | null {
@@ -30,6 +38,10 @@ export default class ImageUpload extends ModalBase<Props, State> {
         <div className="field">
           <p className="label">Choose Name</p>
           <input value={ this.state.name } onChange={ (x) => this.setState({ name: x.target.value }) } className="input" type="text" />
+        </div>
+        <div className="field">
+          <p className="label">Description</p>
+          <input value={ this.state.description || '' } onChange={ (x) => this.setState({ description: x.target.value }) } className="input" type="text" />
         </div>
         <div className="field">
           <p className="label">Choose file</p>

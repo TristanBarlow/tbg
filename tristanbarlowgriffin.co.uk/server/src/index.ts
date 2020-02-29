@@ -1,6 +1,6 @@
 import express from 'express'
 import env from './env'
-import { createHandler, getProjects, imageUploadHandler, getImageHandler } from './projects'
+import { createHandler, getProjects, imageUploadHandler, getImageHandler, getAllImageHandler } from './projects'
 import bodyParser from 'body-parser'
 
 const app = express()
@@ -13,4 +13,5 @@ app.get('/api/projects', getProjects)
 app.post('/api/projects/create', createHandler)
 app.post('/api/image/:id', imageUploadHandler)
 app.get('/api/image/:id', getImageHandler)
+app.get('/api/images', getAllImageHandler)
 app.listen(env.PORT)

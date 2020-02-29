@@ -1,13 +1,13 @@
-import { storage } from '../common/storage'
+import { storage } from '../../common/storage'
 import { Readable, Writable } from 'stream'
-
 
 export const bucket = storage().bucket('tbg-assets')
 
-export async function getImage (id: string): Promise<Readable> {
+export async function getReadStream (id: string): Promise<Readable> {
   const [file] = await bucket.file(id).get()
   if (!file.exists())
     throw Error(`File: ${ id } does not exist`)
+
   return file.createReadStream()
 }
 

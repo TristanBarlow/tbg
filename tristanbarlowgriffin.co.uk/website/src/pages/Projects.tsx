@@ -1,5 +1,5 @@
 import React from 'react'
-import { apiRequest, makeImageUrl } from '../ts/request'
+import { apiRequest } from '../ts/request'
 import { Project } from '../@types/project'
 import ImageEle from '../components/Image'
 import { NavBar } from '../components/NavBar'
@@ -26,9 +26,7 @@ export default class Projects extends React.Component<{}, State>{
       <div className="tile is-parent selectable" onClick={ () => this.openProject(proj.title) }>
         <div className="tile is-child box" >
           <p className="title is-5">{ proj.title }</p>
-          <p></p>
           <div className="center">
-            <ImageEle url={ makeImageUrl(proj.gifId) } />
           </div>
         </div>
       </div>
