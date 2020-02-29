@@ -1,5 +1,5 @@
 import { storage } from '../common/storage'
-import { Readable } from 'stream'
+import { Readable, Writable } from 'stream'
 
 
 export const bucket = storage().bucket('tbg-assets')
@@ -11,7 +11,6 @@ export async function getImage (id: string): Promise<Readable> {
   return file.createReadStream()
 }
 
-export function writeImage (id: string, buff: Buffer): void {
-  const w = bucket.file(id).createWriteStream()
-  return w.end(buff)
+export function createWriteStream (id: string, contentType: string): Writable {
+  return bucket.file(id).createWriteStream({ contentType, metadata: { uploadTime: Date.now() / 1000 } })
 }

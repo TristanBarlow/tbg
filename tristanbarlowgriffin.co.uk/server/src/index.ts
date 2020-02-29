@@ -11,6 +11,6 @@ app.use(bodyParser.json(), (req, res, next) => {
 
 app.get('/api/projects', getProjects)
 app.post('/api/projects/create', createHandler)
-app.post('/api/image', imageUploadHandler)
+app.post('/api/image/:id', imageUploadHandler)
 app.get('/api/image/:id', getImageHandler)
 app.listen(env.PORT)
