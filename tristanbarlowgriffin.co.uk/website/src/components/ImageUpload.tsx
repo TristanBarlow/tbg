@@ -30,7 +30,7 @@ export default class ImageUpload extends ModalBase<Props, State> {
     if (!file) return
 
     await apiRequest(`/api/image/${ this.state.name }?descr=${ this.state.description }`, 'POST', 'text', file)
-    this.props.close()
+    this.close()
   }
 
   getBody (): JSX.Element | null {

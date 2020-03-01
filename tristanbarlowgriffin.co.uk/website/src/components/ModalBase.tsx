@@ -1,7 +1,7 @@
 import React from 'react'
 
 export interface ModalBaseProps {
-  close: () => void
+  close?: () => void
 }
 export default abstract class ModalBase<T, S> extends React.Component<T & ModalBaseProps, S>{
   abstract getBody (): JSX.Element | null
@@ -17,14 +17,28 @@ export default abstract class ModalBase<T, S> extends React.Component<T & ModalB
     )
   }
 
-  render (): JSX.Element {
+  protected close () {
+    if (this.props.close)
+      this.props.close()
+  }
+
+  private get closeEle (): JSX.Element | null {
+    if (typeof this.props.close === 'function')
+      return (
+        <i className="button material-icons is-danger is-size-6" onClick={ () => this.close() }>close</i>
+      )
+
+    return null
+  }
+
+  render (): JSX.Element | null {
     return (
       <div className="modal is-active" style={ { width: '100vw', height: '100vh', position: 'fixed', zIndex: 1000 } }>
         <div className="modal-background"></div>
         <div className="modal-card">
           <header className="modal-card-head has-background-white" style={ { border: 'none' } }>
             { this.getTitle() }
-            <i className="button material-icons is-danger is-size-6" onClick={ () => this.props.close() }>close</i>
+            { this.closeEle }
           </header>
           <section className="modal-card-body">
             { this.getBody() }

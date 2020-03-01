@@ -4,7 +4,8 @@ export function apiRequest<T> (
   path: string,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   responseType: XMLHttpRequestResponseType,
-  data?: Record<string, any> | File
+  data?: Record<string, any> | File,
+  key?: string
 ): Promise<APIResponse<T>> {
   const xhr = new XMLHttpRequest()
   xhr.responseType = responseType
@@ -19,6 +20,10 @@ export function apiRequest<T> (
       xhr.ontimeout = _ => rejects()
       xhr.onabort = _ => rejects()
       xhr.open(method, path, true)
+
+      if (key) {
+        xhr.setRequestHeader('key', key)
+      }
 
       if (data) {
         if (data instanceof File) {
