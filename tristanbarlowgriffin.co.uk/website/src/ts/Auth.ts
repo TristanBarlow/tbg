@@ -3,8 +3,8 @@ import { apiRequest } from './request'
 export type AuthListner = ((isAuthed: boolean) => void)
 export class Auth {
   private static _inst: Auth
-  private key: string = ''
-  private isAuthed: boolean = false
+  private _key: string = ''
+  private _isAuthed: boolean = false
   private authStateListners: { [id: string]: AuthListner } = {}
 
   static get inst (): Auth {
@@ -12,12 +12,11 @@ export class Auth {
   }
 
   static get key (): string {
-    if (!Auth.inst) return ''
-    return Auth.key
+    return Auth.inst._key || ''
   }
 
   static get isAuthed (): boolean {
-    return Auth.isAuthed || false
+    return Auth.inst._isAuthed || false
   }
 
   static validate (key: string): Promise<boolean> {
@@ -32,7 +31,7 @@ export class Auth {
     for (const key in this.authStateListners) {
       const listner = this.authStateListners[key]
       try {
-        listner(this.isAuthed)
+        listner(this._isAuthed)
       } catch (e) {
         console.log('Removing listner: ', key)
         delete this.authStateListners[key]
@@ -41,16 +40,16 @@ export class Auth {
   }
 
   private async validate (key: string): Promise<boolean> {
-    this.key = ''
-    this.isAuthed = false
+    this._key = ''
+    this._isAuthed = false
     const response = await apiRequest('/api/validate', 'GET', 'text', undefined, key)
     if (response.status === 200) {
-      this.key = key
-      this.isAuthed = true
+      this._key = key
+      this._isAuthed = true
     }
 
     this.notifyListners()
-    return this.isAuthed
+    return this._isAuthed
   }
 
   private constructor () { }

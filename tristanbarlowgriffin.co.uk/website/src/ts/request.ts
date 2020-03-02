@@ -1,3 +1,5 @@
+import { Auth } from './Auth'
+
 export interface APIResponse<T> { status: number, data: T | undefined }
 
 export function apiRequest<T> (
@@ -21,8 +23,8 @@ export function apiRequest<T> (
       xhr.onabort = _ => rejects()
       xhr.open(method, path, true)
 
-      if (key) {
-        xhr.setRequestHeader('key', key)
+      if (Auth.isAuthed || key) {
+        xhr.setRequestHeader('key', Auth.key || key || '')
       }
 
       if (data) {
