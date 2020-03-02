@@ -14,12 +14,13 @@
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "tslib": "^1.11.0",
+    "ts-node": "^8.6.2",
     "typescript": "^3.8.2"
   },
   "scripts": {
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
     "start": "yarn nodemon --watch 'src/**/*.ts' --exec 'yarn lint && yarn build-run'",
-    "build-run": "yarn tsc && node --inspect build/index.js"
+    "build-run": "yarn ts-node src/index.ts"
   },
   "dependencies": {
     "@google-cloud/firestore": "^3.5.1",
