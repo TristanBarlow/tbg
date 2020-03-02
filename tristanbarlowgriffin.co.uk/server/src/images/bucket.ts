@@ -23,7 +23,6 @@ export function asyncPipe (w: Writable, r: Readable): Promise<boolean> {
   return new Promise<boolean>((resolve) => {
     r.on('error', () => resolve(false))
     r.on('close', () => resolve(true))
-    r.on('end', () => resolve(true))
     r.pipe(w)
   })
 } 
