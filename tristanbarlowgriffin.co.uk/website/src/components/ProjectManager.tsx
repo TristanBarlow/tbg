@@ -1,6 +1,6 @@
 import React from 'react'
 import ProjectAdd from '../components/ProjectAdd'
-import { ImageMeta, Project } from '../@types/project'
+import { Project } from '../@types/project'
 import { apiRequest } from '../ts/request'
 import { toKebab } from '../shared/util'
 

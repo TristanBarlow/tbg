@@ -4,6 +4,7 @@ export interface Project {
   link: string
   imageId: string
   gifId: string
+  order: number
 }
 
 function isStr (x: string | undefined | null): x is string {

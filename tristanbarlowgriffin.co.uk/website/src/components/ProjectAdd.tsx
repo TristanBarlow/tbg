@@ -18,7 +18,7 @@ export default class ProjectAdd extends ModalBase<Props, State> {
 
   constructor (p: Props & ModalBaseProps) {
     super(p)
-    this.state = { title: '', description: '', gifId: '', loading: false, imageId: '', link: '' }
+    this.state = { title: '', description: '', gifId: '', loading: false, imageId: '', link: '', order: 100 }
     if (p.proj) this.state = { ...this.state, ...p.proj }
   }
 
@@ -41,6 +41,7 @@ export default class ProjectAdd extends ModalBase<Props, State> {
         <InputField label="Link" value={ this.state.link } change={ (x) => this.setState({ link: x }) } />
         <InputField label="Image ID" value={ this.state.imageId } change={ (x) => this.setState({ imageId: x }) } />
         <InputField label="Gif ID" value={ this.state.gifId } change={ (x) => this.setState({ gifId: x }) } />
+        <InputField label="Order" type="number" value={ this.state.order.toString() } change={ (x) => this.setState({ order: parseInt(x) }) } />
       </div>
     )
   }

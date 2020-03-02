@@ -3,7 +3,7 @@ import Loading from './Loading'
 import { ImageMeta } from '../@types/project'
 
 interface Props {
-  meta: ImageMeta
+  meta: ImageMeta | string
   loadSize?: number
   width?: string,
   height?: string
@@ -18,18 +18,27 @@ export default class ImageEle extends React.Component<Props, State>{
   constructor (p: Props) {
     super(p)
 
-    const url = `/api/image/${ p.meta.name }`
     this.image = new Image()
-    this.image.src = url
+    if (typeof p.meta !== 'string') {
+      const url = `/api/image/${ p.meta.name }`
+      this.image.src = url
+    } else {
+      this.image.src = p.meta
+    }
+
     this.image.onload = (ev) => {
       this.setState({ loaded: true })
     }
   }
 
+  get description (): string {
+    return typeof this.props.meta === 'string' ? 'no description' : this.props.meta.description || 'no description'
+  }
+
   render () {
     if (this.state.loaded)
       return <img
-        alt={ this.props.meta.description || 'no description' }
+        alt={ this.description }
         style={ { width: this.props.width, height: this.props.height, objectFit: 'contain', borderRadius: '3%' } }
         src={ this.image.src }
       />
