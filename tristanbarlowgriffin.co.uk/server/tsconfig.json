@@ -6,7 +6,7 @@
     "target": "ESNext",
     "module": "CommonJS",
     "rootDir": "src",
-    "outDir": "./build",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "skipLibCheck": true
   }

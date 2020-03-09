@@ -20,6 +20,7 @@
   "scripts": {
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
     "start": "yarn nodemon --watch 'src/**/*.ts' --exec 'yarn lint && yarn build-run'",
+    "build": "yarn tsc",
     "build-run": "yarn ts-node src/index.ts"
   },
   "dependencies": {

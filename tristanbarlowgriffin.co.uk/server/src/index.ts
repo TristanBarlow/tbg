@@ -4,6 +4,7 @@ import { imageUploadHandler, getImageHandler, getAllImageHandler, deleteImageHan
 import { createHandler, getProjects, deleteProjectHandler, } from './projects'
 import bodyParser from 'body-parser'
 import { ValidateKeyHeader } from './auth/auth'
+import { resolve } from 'path'
 
 const app = express()
 app.use(bodyParser.json(), (req, res, next) => {
@@ -13,6 +14,8 @@ app.use(bodyParser.json(), (req, res, next) => {
 
 app.get('/api/projects', getProjects)
 app.get('/api/image/:id', getImageHandler)
+
+app.get(/^(?!\/api).+/, express.static(resolve(__dirname, '..', 'build')))
 
 app.use(ValidateKeyHeader)
 app.get('/api/validate', (req, res) => res.sendStatus(200))
