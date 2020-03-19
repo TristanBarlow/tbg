@@ -74,6 +74,7 @@ export default class ChessBoard extends React.Component<Props, State>{
     const result = this.game.move(move)
     if (result === null) {
       console.log('Illegal move')
+      return
     }
 
     this.setState({ lastMove: result })
@@ -100,15 +101,15 @@ export default class ChessBoard extends React.Component<Props, State>{
 
   get fromCSS (): React.CSSProperties {
     return {
-      border: '2px dashed yellow',
-      transitionDuration: '1s'
+      backgroundColor: 'grey',
+      transitionDuration: '0.1s'
     }
   }
 
   get toCSS (): React.CSSProperties {
     return {
-      border: '2px solid yellow',
-      transitionDuration: '1s'
+      backgroundColor: 'yellow',
+      transitionDuration: '0.2s'
     }
   }
 
@@ -116,7 +117,6 @@ export default class ChessBoard extends React.Component<Props, State>{
     const move = this.state.lastMove
     if (!move) return {}
     return {
-      [move.from]: this.fromCSS,
       [move.to]: this.toCSS
     }
   }
@@ -124,7 +124,7 @@ export default class ChessBoard extends React.Component<Props, State>{
   render () {
     return (
       <Renderer
-        calcWidth={ () => 500 }
+        calcWidth={ () => window.outerWidth < 450 ? 350 : 500 }
         orientation={ this.state.orientation }
         showNotation={ true }
         draggable={ this.currentIsHuman }

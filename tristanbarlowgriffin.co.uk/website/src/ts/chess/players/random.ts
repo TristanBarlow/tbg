@@ -1,9 +1,12 @@
 import { ChessPlayer } from './chessPlayer'
 import { newBoard } from '../chess'
+import { PlayersTypes } from './types'
+
 
 export class RandomBot extends ChessPlayer {
-  name = "Random Bot"
+  name = PlayersTypes.RANDOM
   isHuman = false
+
   async getMove (fen: string): Promise<string | null> {
     const game = newBoard(fen)
     const possibleMoves = game.moves()
