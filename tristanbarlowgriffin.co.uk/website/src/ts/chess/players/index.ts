@@ -1,4 +1,6 @@
 import { ChessPlayer } from './chessPlayer'
+import { Human } from './human'
+import { RandomBot } from './random'
 
 export * from './chessPlayer'
 export * from './human'
@@ -9,10 +11,11 @@ export enum PlayersTypes {
   RANDOM = "Random"
 }
 
-export const Players: { [id: string where In PlayersTypes]: ChessPlayer } = {
-
+export const Players: { [key in PlayersTypes]: ChessPlayer } = {
+  Human: new Human(),
+  Random: new RandomBot()
 }
 
-export function PlayerFactory (player: Players): ChessPlayer {
-
+export function PlayerFactory (player: PlayersTypes): ChessPlayer {
+  return Players[player]
 }

@@ -1,7 +1,9 @@
 import React from 'react'
 import Renderer, { Piece } from 'chessboardjsx'
-import { newBoard, ChessInstance, Square, ShortMove } from '../ts/chess/chess'
-import { ChessPlayer } from '../ts/chess/players/chessPlayer'
+import { newBoard, ChessInstance, Square, ShortMove, Chess, Move } from '../../ts/chess/chess'
+import { ChessPlayer } from '../../ts/chess/players/chessPlayer'
+
+type SquaresCSS = Pick<Renderer['props'], 'squareStyles'>['squareStyles']
 
 interface Drop {
   sourceSquare: Square
@@ -16,6 +18,7 @@ interface Props {
 interface State {
   fen: string
   orientation: 'white' | 'black'
+  lastMove: Move | null
 }
 
 export default class ChessBoard extends React.Component<Props, State>{
@@ -26,7 +29,8 @@ export default class ChessBoard extends React.Component<Props, State>{
     this.game = newBoard()
     this.state = {
       fen: this.game.fen(),
-      orientation: this.currentIsHuman ? 'white' : 'black'
+      orientation: this.currentIsHuman ? 'white' : 'black',
+      lastMove: null
     }
 
     this.getMove()
@@ -72,6 +76,8 @@ export default class ChessBoard extends React.Component<Props, State>{
       console.log('Illegal move')
     }
 
+    this.setState({ lastMove: result })
+
     await this.updateBoard()
     if (this.checkGameOver()) {
       this.game.reset()
@@ -92,11 +98,37 @@ export default class ChessBoard extends React.Component<Props, State>{
     })
   }
 
+  get fromCSS (): React.CSSProperties {
+    return {
+      border: '2px dashed yellow',
+      transitionDuration: '1s'
+    }
+  }
+
+  get toCSS (): React.CSSProperties {
+    return {
+      border: '2px solid yellow',
+      transitionDuration: '1s'
+    }
+  }
+
+  get tileColours (): SquaresCSS {
+    const move = this.state.lastMove
+    if (!move) return {}
+    return {
+      [move.from]: this.fromCSS,
+      [move.to]: this.toCSS
+    }
+  }
+
   render () {
     return (
       <Renderer
         calcWidth={ () => 500 }
         orientation={ this.state.orientation }
+        showNotation={ true }
+        draggable={ this.currentIsHuman }
+        squareStyles={ this.tileColours }
         position={ this.state.fen }
         onDrop={ (x: Drop) => this.onDrop(x) }
       />

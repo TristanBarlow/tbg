@@ -1,6 +1,5 @@
 import React from 'react'
-import ChessBoard from '../components/ChessBoard'
-import { RandomBot, Human } from '../ts/chess/players'
+import ChessController from '../components/chess/ChessController'
 export default class ChessPage extends React.Component<{}>{
   componentDidMount () {
 
@@ -9,8 +8,7 @@ export default class ChessPage extends React.Component<{}>{
   render () {
     return (
       <div className="row around">
-        <ChessBoard black={ new RandomBot() } white={ new Human() } />
-        <ChessBoard black={ new RandomBot() } white={ new RandomBot() } />
+        <ChessController />
       </div>
     )
   }
