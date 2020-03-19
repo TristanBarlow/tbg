@@ -18,10 +18,10 @@ export default class Home extends React.Component<{}>{
           <p className="title is-4 is-size-6-mobile">Full Stack Software Engineer</p>
           <p className="title is-5 is-size-7-mobile">Cornwall, UK</p>
           <div className="row">
-            <a href="https://linkedin.com/in/tristan-barlow-griffin-2b4a4817a/" target="_blank" className="selectable p-x-md">
+            <a href="https://linkedin.com/in/tristan-barlow-griffin-2b4a4817a/" rel="noopener noreferrer" target="_blank" className="selectable p-x-md">
               <ImageEle width="70px" meta={ LinkedIn } />
             </a>
-            <a href="https://github.com/TristanBarlow" target="_blank" className="selectable p-x-md" >
+            <a href="https://github.com/TristanBarlow" target="_blank" rel="noopener noreferrer" className="selectable p-x-md" >
               <ImageEle width="70px" meta={ GitHub } />
             </a>
           </div>

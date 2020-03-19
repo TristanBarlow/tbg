@@ -1,17 +1,16 @@
 import React from 'react'
-import ChessBoard from 'chessboardjsx'
-import Chessboard from 'chessboardjsx'
+import ChessBoard from '../components/ChessBoard'
+import { RandomBot, Human } from '../ts/chess/players'
+export default class ChessPage extends React.Component<{}>{
+  componentDidMount () {
 
+  }
 
-
-export default class Chess extends React.Component<{}>{
-
-  render() {
+  render () {
     return (
-      <div style={{ width: '100px' }}>
-        <Chessboard
-          calcWidth={() => 500}
-          position={"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"} />
+      <div className="row around">
+        <ChessBoard black={ new RandomBot() } white={ new Human() } />
+        <ChessBoard black={ new RandomBot() } white={ new RandomBot() } />
       </div>
     )
   }
