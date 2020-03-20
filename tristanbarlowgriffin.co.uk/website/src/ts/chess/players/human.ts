@@ -7,4 +7,8 @@ export class Human extends ChessPlayer {
   getMove (fen: string): Promise<string> {
     throw new Error('Human player should not call get move.')
   }
+
+  get stats (): string | null {
+    return null
+  }
 }

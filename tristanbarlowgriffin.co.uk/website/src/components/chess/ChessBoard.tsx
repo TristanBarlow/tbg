@@ -1,7 +1,7 @@
 import React from 'react'
 import Renderer, { Piece } from 'chessboardjsx'
-import { newBoard, ChessInstance, Square, ShortMove, Chess, Move } from '../../ts/chess/chess'
-import { ChessPlayer } from '../../ts/chess/players/chessPlayer'
+import { newBoard, ChessInstance, Square, ShortMove, Move } from '../../ts/chess/chess'
+import { ChessPlayer, PlayerColour } from '../../ts/chess/players/chessPlayer'
 
 type SquaresCSS = Pick<Renderer['props'], 'squareStyles'>['squareStyles']
 
@@ -14,10 +14,14 @@ interface Drop {
 interface Props {
   white: ChessPlayer
   black: ChessPlayer
+  pause: boolean
+  onMove: (player: PlayerColour, stats: string | null) => void
+  setUndo: (undo: () => void) => void
 }
 interface State {
   fen: string
-  orientation: 'white' | 'black'
+  history: string[]
+  orientation: PlayerColour
   lastMove: Move | null
 }
 
@@ -26,9 +30,13 @@ export default class ChessBoard extends React.Component<Props, State>{
 
   constructor (p: Props) {
     super(p)
+    this.undo = this.undo.bind(this)
+    p.setUndo(this.undo)
+
     this.game = newBoard()
     this.state = {
       fen: this.game.fen(),
+      history: [this.game.fen()],
       orientation: this.currentIsHuman ? 'white' : 'black',
       lastMove: null
     }
@@ -36,8 +44,26 @@ export default class ChessBoard extends React.Component<Props, State>{
     this.getMove()
   }
 
+  undo () {
+    const lastMove = this.game.undo()
+    console.log('UNDO', lastMove)
+    if (!lastMove) {
+      console.log('NO MOVE TO UNDO')
+      return
+    }
+
+    this.setState({ lastMove: null, fen: this.game.fen() }, () => {
+      this.forceUpdate()
+    })
+  }
+
   get currentIsHuman (): boolean {
     return this.currentPlayer.isHuman
+  }
+
+  get currentPlayerColour (): PlayerColour {
+    const turn = this.game.turn()
+    return turn === 'w' ? 'white' : 'black'
   }
 
   get currentPlayer (): ChessPlayer {
@@ -45,8 +71,18 @@ export default class ChessBoard extends React.Component<Props, State>{
     return turn === 'w' ? this.props.white : this.props.black
   }
 
+  get lastPlayerColour (): PlayerColour {
+    const turn = this.game.turn()
+    return turn === 'w' ? 'black' : 'white'
+  }
+
+  get lastPlayer (): ChessPlayer {
+    const turn = this.game.turn()
+    return turn === 'w' ? this.props.black : this.props.white
+  }
+
   async getMove () {
-    if (this.currentIsHuman) {
+    if (this.currentIsHuman || this.props.pause) {
       return
     }
 
@@ -71,6 +107,8 @@ export default class ChessBoard extends React.Component<Props, State>{
   }
 
   async makeMove (move: ShortMove | string): Promise<void> {
+    if (this.props.pause) return
+
     const result = this.game.move(move)
     if (result === null) {
       console.log('Illegal move')
@@ -84,6 +122,7 @@ export default class ChessBoard extends React.Component<Props, State>{
       this.game.reset()
     }
 
+    this.props.onMove(this.lastPlayerColour, this.lastPlayer.stats)
     setTimeout(() => this.getMove(), 1000)
   }
 
@@ -97,6 +136,17 @@ export default class ChessBoard extends React.Component<Props, State>{
       to: drop.targetSquare,
       promotion: 'q'
     })
+  }
+
+  async componentDidUpdate (prev: Props) {
+    if (!this.props.pause && prev.pause) {
+      return this.getMove()
+    }
+
+    if ((this.props.white !== prev.white) ||
+      (this.props.black !== prev.black)) {
+      return this.getMove()
+    }
   }
 
   get fromCSS (): React.CSSProperties {
@@ -122,8 +172,10 @@ export default class ChessBoard extends React.Component<Props, State>{
   }
 
   render () {
+    console.log('FENN', this.state.fen)
     return (
       <Renderer
+        undo={ true }
         calcWidth={ () => window.outerWidth < 450 ? 350 : 500 }
         orientation={ this.state.orientation }
         showNotation={ true }

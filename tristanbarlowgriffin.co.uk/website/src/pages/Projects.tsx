@@ -1,7 +1,6 @@
 import React from 'react'
 import { apiRequest } from '../ts/request'
 import { Project } from '../@types/project'
-import ImageEle from '../components/Image'
 import { NavBar } from '../components/NavBar'
 import { toKebab } from '../shared/util'
 

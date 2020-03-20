@@ -1,26 +1,32 @@
 import React from 'react'
-import { ChessPlayer, PlayersTypes, PlayerFactory } from '../../ts/chess/players'
+import { ChessPlayer, PlayersTypes, PlayerFactory, PlayerColour } from '../../ts/chess/players'
 import ChessBoard from './ChessBoard'
 import Button, { Colors } from '../Button'
 import OptionSelecta from '../OptionSelecta'
-import { withRouter } from 'react-router'
+import { stat } from 'fs'
 
 interface State {
   white: ChessPlayer
   black: ChessPlayer
-
+  paused: boolean
   showControls: boolean
+  whiteLog: string
+  blackLog: string
 }
 interface Props {
 
 }
 export default class ChessController extends React.Component<Props, State>{
+  undo!: () => void
   constructor (p: Props) {
     super(p)
     this.state = {
+      paused: true,
       showControls: false,
       black: PlayerFactory(PlayersTypes.RANDOM),
-      white: PlayerFactory(PlayersTypes.RANDOM)
+      white: PlayerFactory(PlayersTypes.RANDOM),
+      blackLog: '',
+      whiteLog: ''
     }
   }
 
@@ -29,24 +35,65 @@ export default class ChessController extends React.Component<Props, State>{
     return (
       <div>
         <OptionSelecta<PlayersTypes>
+          label="White"
           value={ this.state.white.name }
           options={ Object.values(PlayersTypes) }
           onChange={ (x) => this.setState({ white: PlayerFactory(x) }) } />
+
+        <OptionSelecta<PlayersTypes>
+          label="Black"
+          value={ this.state.black.name }
+          options={ Object.values(PlayersTypes) }
+          onChange={ (x) => this.setState({ black: PlayerFactory(x) }) } />
+
+        <Button
+          color={ Colors.INFO }
+          label={ this.state.paused ? 'Start' : 'Pause' }
+          onClick={ () => { this.setState({ paused: !this.state.paused }) } } />
+
+        <Button
+          color={ Colors.INFO }
+          label="UNDO"
+          onClick={ () => {
+            this.setState({ paused: true })
+            this.undo()
+          } } />
       </div>
     )
+  }
+
+  get outPutLog (): JSX.Element {
+    return (<div>
+      <div>{ this.state.whiteLog }</div>
+      <div>{ this.state.blackLog }</div>
+    </div>)
+  }
+
+  updateStats (color: PlayerColour, stats: string | null) {
+    if (color === 'white') {
+      this.setState({ whiteLog: this.state.whiteLog + (stats || '') })
+    } else {
+      this.setState({ blackLog: this.state.blackLog + (stats || '') })
+    }
   }
 
   render () {
     return (
       <div>
         <div className="tile around">
-          <ChessBoard black={ this.state.black } white={ this.state.white } />
+          <ChessBoard
+            setUndo={ (x) => this.undo = x }
+            onMove={ (x, y) => this.updateStats(x, y) }
+            black={ this.state.black }
+            pause={ this.state.paused }
+            white={ this.state.white } />
           <div className="column">
             <Button
               color={ Colors.INFO }
               label={ this.state.showControls ? 'Hide' : 'Show' }
               onClick={ () => { this.setState({ showControls: !this.state.showControls }) } } />
             { this.controls }
+            { this.updateStats }
           </div>
         </div>
       </div>
