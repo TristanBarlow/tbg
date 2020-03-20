@@ -3,7 +3,6 @@ import { ChessPlayer, PlayersTypes, PlayerFactory, PlayerColour } from '../../ts
 import ChessBoard from './ChessBoard'
 import Button, { Colors } from '../Button'
 import OptionSelecta from '../OptionSelecta'
-import { stat } from 'fs'
 
 interface State {
   white: ChessPlayer
