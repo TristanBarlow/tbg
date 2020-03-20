@@ -38,7 +38,7 @@ export class MiniMacsNode {
 
     let best_move: string | null = null
     let fen = this.game.fen()
-    let moves = shuffle(this.game.moves(true, ['legal']))
+    let moves = shuffle(this.game.moves(true))
     let best_value = isMaxing ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
 
     for (let i = 0; i < moves.length; i++) {
@@ -98,7 +98,7 @@ export class MiniMacsNode {
 export function quickGetMove (fen: string): MoveResponse {
   const node = new MiniMacsNode(fen)
   const strt = performance.now()
-  const rating = node.NewLayer(3, true)
+  const rating = node.NewLayer(4, true)
   const seconds = (performance.now() - strt) / 1000
   console.log('TOOk ', seconds, ' To Search: ', node.moveCount, ' Moves Per Secon', node.moveCount / seconds)
   return {
