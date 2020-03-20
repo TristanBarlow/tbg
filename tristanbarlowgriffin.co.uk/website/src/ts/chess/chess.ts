@@ -1,10 +1,8 @@
-import _chess, { Chess as TChess, ChessInstance } from 'chess.js'
+import { Chess, ChessInstance } from './chessLib'
 
-const Chess = (_chess as unknown as typeof TChess)
 export function newBoard (fen?: string): ChessInstance {
-  return new Chess(fen)
+  return Chess(fen)
 }
 
-export * from 'chess.js'
-
+export * from './chessLib'
 export default Chess

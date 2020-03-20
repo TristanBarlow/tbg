@@ -1,6 +1,5 @@
-import { ChessInstance, Chess, newBoard } from '../../chess'
+import { ChessInstance, newBoard, PieceType } from '../../chess'
 import { PlayerColour } from '../chessPlayer'
-import { PieceType } from 'chess.js'
 import { shuffle } from '../../../util'
 
 const MINIMAX_VALS: { [key in PieceType]: number } = {
@@ -12,7 +11,7 @@ const MINIMAX_VALS: { [key in PieceType]: number } = {
   k: 1000,
 }
 
-export interface WorkerResponse { rating: number, move: string | null }
+export interface MoveResponse { rating: number, move: string | null }
 
 export class MiniMacsNode {
   game: ChessInstance
@@ -23,6 +22,7 @@ export class MiniMacsNode {
   a: number = Number.POSITIVE_INFINITY
   b: number = Number.NEGATIVE_INFINITY
   colour: PlayerColour
+  moveCount = 0
 
   constructor (fen: string) {
     this.game = newBoard(fen)
@@ -36,13 +36,14 @@ export class MiniMacsNode {
       return this.EvaluateBoard()
     }
 
-    let best_move = null
+    let best_move: string | null = null
     let fen = this.game.fen()
-    let moves = shuffle(this.game.moves())
+    let moves = shuffle(this.game.moves(true, ['legal']))
     let best_value = isMaxing ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
 
     for (let i = 0; i < moves.length; i++) {
       let move = moves[i]
+      this.moveCount++
       if (!this.game.move(move)) {
         console.log("move failed")
       }
@@ -64,7 +65,7 @@ export class MiniMacsNode {
         b = Math.min(b, value)
       }
 
-      this.game.load(fen)
+      this.game.load(fen, false)
       if (b <= a) {
         break
       }
@@ -79,17 +80,29 @@ export class MiniMacsNode {
 
     let b = 0
     let w = 0
-    board.forEach(row => {
-      row.forEach(column => {
-        if (!column) return
+    for (let i = 0; i < board.length; i++)
+      for (let y = 0; y < board[i].length; y++) {
+        const column = board[i][y]
+        if (!column) continue
 
         let val = MINIMAX_VALS[column.type]
         if (column.color === 'w') w += val
         else b += val
-      })
-    })
+      }
 
     return this.colour === 'white' ? w - b : b - w
   }
 
+}
+
+export function quickGetMove (fen: string): MoveResponse {
+  const node = new MiniMacsNode(fen)
+  const strt = performance.now()
+  const rating = node.NewLayer(3, true)
+  const seconds = (performance.now() - strt) / 1000
+  console.log('TOOk ', seconds, ' To Search: ', node.moveCount, ' Moves Per Secon', node.moveCount / seconds)
+  return {
+    move: node.bestMove,
+    rating
+  }
 }
