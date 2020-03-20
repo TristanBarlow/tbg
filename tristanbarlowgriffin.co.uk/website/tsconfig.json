@@ -5,7 +5,9 @@
       "dom",
       "dom.iterable",
       "esnext",
-      "WebWorker"
+      "WebWorker",
+      "es6",
+      "es7"
     ],
     "allowJs": true,
     "skipLibCheck": true,

@@ -1,6 +1,7 @@
 import { ChessPlayer } from '../chessPlayer'
 import { PlayersTypes } from '../types'
-import { MiniMacsNode, WorkerResponse } from './node'
+import { WorkerResponse } from './node'
+import * as NodeWorker from './node.worker'
 
 export class MinMaxBot extends ChessPlayer {
   name = PlayersTypes.MINMAX
@@ -9,12 +10,8 @@ export class MinMaxBot extends ChessPlayer {
 
 
   async getMove (fen: string): Promise<string | null> {
-    const worker = new Worker('./node.worker.ts')
-    const result = await new Promise<WorkerResponse>((resolve) => {
-      worker.onmessage = (ev) => {
-        resolve(ev.data)
-      }
-    })
+    const worker = new (NodeWorker as any)() as typeof NodeWorker
+    const result = await worker.getMove(fen)
     return result.move
   }
 
