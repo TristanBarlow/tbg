@@ -2,6 +2,7 @@ import React from 'react'
 import Renderer, { Piece } from 'chessboardjsx'
 import { newBoard, ChessInstance, Square, ShortMove, Move } from '../../ts/chess/chess'
 import { ChessPlayer, PlayerColour } from '../../ts/chess/players/chessPlayer'
+import { MoveResponse } from '../../ts/chess/players'
 
 type SquaresCSS = Pick<Renderer['props'], 'squareStyles'>['squareStyles']
 
@@ -15,7 +16,7 @@ interface Props {
   white: ChessPlayer
   black: ChessPlayer
   pause: boolean
-  onMove: (player: PlayerColour, stats: string | null) => void
+  onMove: (player: PlayerColour, moveResponse: MoveResponse) => void
   setUndo: (undo: () => void) => void
 }
 interface State {
@@ -86,13 +87,14 @@ export default class ChessBoard extends React.Component<Props, State>{
       return
     }
 
-    const move = await this.currentPlayer.getMove(this.game.fen())
-    if (!move) {
+    const response = await this.currentPlayer.getMove(this.game.fen())
+    if (!response?.move) {
       this.checkGameOver()
       return
     }
 
-    await this.makeMove(move)
+    await this.makeMove(response.move)
+    this.props.onMove(this.lastPlayerColour, response)
   }
 
   checkGameOver () {
@@ -122,7 +124,6 @@ export default class ChessBoard extends React.Component<Props, State>{
       this.game.reset()
     }
 
-    this.props.onMove(this.lastPlayerColour, this.lastPlayer.stats)
     setTimeout(() => this.getMove(), 1000)
   }
 

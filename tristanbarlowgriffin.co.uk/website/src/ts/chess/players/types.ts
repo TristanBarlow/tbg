@@ -1,4 +1,4 @@
-import { ChessPlayer } from './chessPlayer'
+import { ChessPlayer, PlayerColour } from './chessPlayer'
 import { Human } from './human'
 import { MinMaxBot } from './MinMax'
 import { RandomBot } from './random'
@@ -18,4 +18,15 @@ export const Players: { [key in PlayersTypes]: ChessPlayer } = {
 export function PlayerFactory (player: PlayersTypes): ChessPlayer {
   console.log('Player', player)
   return Players[player]
+}
+
+export interface MoveResponse {
+  move: string | null
+  rating: number
+  timeTaken: number
+  details: string
+}
+
+export function timeTaken (strt: number): number {
+  return (performance.now() - strt) / 1000
 }

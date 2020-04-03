@@ -1,5 +1,5 @@
 import { ChessPlayer } from '../chessPlayer'
-import { PlayersTypes } from '../types'
+import { PlayersTypes, MoveResponse } from '../types'
 import * as MinMaxWorker from './node.worker'
 
 type MoveWorker = typeof MinMaxWorker
@@ -17,13 +17,12 @@ export class MinMaxBot extends ChessPlayer {
   }
 
 
-  async getMove (fen: string): Promise<string | null> {
+  async getMove (fen: string): Promise<MoveResponse | null> {
     const result = await this.worker.getMove(fen)
-    return result.move
+    return result
   }
 
   get stats (): string {
     return this.statHistory
   }
-
 }

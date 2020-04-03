@@ -1,6 +1,7 @@
 import { ChessInstance, newBoard, PieceType } from '../../chess'
 import { PlayerColour } from '../chessPlayer'
 import { shuffle } from '../../../util'
+import { MoveResponse, timeTaken } from '../types'
 
 const MINIMAX_VALS: { [key in PieceType]: number } = {
   p: 1,
@@ -10,8 +11,6 @@ const MINIMAX_VALS: { [key in PieceType]: number } = {
   q: 9,
   k: 1000,
 }
-
-export interface MoveResponse { rating: number, move: string | null }
 
 export class MiniMacsNode {
   game: ChessInstance
@@ -99,10 +98,10 @@ export function quickGetMove (fen: string): MoveResponse {
   const node = new MiniMacsNode(fen)
   const strt = performance.now()
   const rating = node.NewLayer(4, true)
-  const seconds = (performance.now() - strt) / 1000
-  console.log('TOOk ', seconds, ' To Search: ', node.moveCount, ' Moves Per Secon', node.moveCount / seconds)
   return {
     move: node.bestMove,
-    rating
+    rating,
+    details: `Searched ${ node.moveCount } different moves`,
+    timeTaken: timeTaken(strt)
   }
 }

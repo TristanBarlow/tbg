@@ -1,5 +1,5 @@
 import React from 'react'
-import { ChessPlayer, PlayersTypes, PlayerFactory, PlayerColour } from '../../ts/chess/players'
+import { ChessPlayer, PlayersTypes, PlayerFactory, PlayerColour, MoveResponse } from '../../ts/chess/players'
 import ChessBoard from './ChessBoard'
 import Button, { Colors } from '../Button'
 import OptionSelecta from '../OptionSelecta'
@@ -62,17 +62,18 @@ export default class ChessController extends React.Component<Props, State>{
   }
 
   get outPutLog (): JSX.Element {
-    return (<div>
-      <div>{ this.state.whiteLog }</div>
-      <div>{ this.state.blackLog }</div>
-    </div>)
+    return (
+      <div className="column">
+        <div>{ this.state.whiteLog }</div>
+        <div>{ this.state.blackLog }</div>
+      </div>)
   }
 
-  updateStats (color: PlayerColour, stats: string | null) {
+  updateStats (color: PlayerColour, response: MoveResponse) {
     if (color === 'white') {
-      this.setState({ whiteLog: this.state.whiteLog + (stats || '') })
+      this.setState({ whiteLog: this.state.whiteLog + (response.rating || '') })
     } else {
-      this.setState({ blackLog: this.state.blackLog + (stats || '') })
+      this.setState({ blackLog: this.state.blackLog + (response.rating || '') })
     }
   }
 
@@ -86,13 +87,16 @@ export default class ChessController extends React.Component<Props, State>{
             black={ this.state.black }
             pause={ this.state.paused }
             white={ this.state.white } />
-          <div className="column">
-            <Button
-              color={ Colors.INFO }
-              label={ this.state.showControls ? 'Hide' : 'Show' }
-              onClick={ () => { this.setState({ showControls: !this.state.showControls }) } } />
-            { this.controls }
-            { this.updateStats }
+          <div>
+            <div className="column">
+              <Button
+                color={ Colors.INFO }
+                label={ this.state.showControls ? 'Hide' : 'Show' }
+                onClick={ () => { this.setState({ showControls: !this.state.showControls }) } } />
+              { this.controls }
+              { this.updateStats }
+            </div>
+            { this.outPutLog }
           </div>
         </div>
       </div>
