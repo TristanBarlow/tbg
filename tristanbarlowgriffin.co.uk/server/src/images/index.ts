@@ -32,7 +32,7 @@ export const imageUploadHandler: RequestHandler = async (req, res) => {
   try {
     const contentType = req.headers['content-type']
     const id = req.params.id
-    const descr = req.query.descr || ''
+    const descr = (req.query.descr as string) || ''
     if (typeof contentType !== 'string')
       throw Error('Content type is not defined ' + contentType)
     if (typeof id !== 'string' || id.length < 4)

@@ -1,13 +1,18 @@
 {
   "private": true,
   "scripts": {
-    "build": "yarn --cwd website build",
-    "build-server": "yarn --cwd server build",
-    "docker-build": "yarn build-hub && yarn build-server && docker build -t triss/starlinen . && docker tag triss/starlinen eu.gcr.io/star-linen/app",
+    "build": "yarn workspace website build",
+    "start:site": "yarn --cwd website start",
+    "start:server": "yarn workspace server start",
+    "docker-build": "yarn build && && docker build -t triss/ . && docker tag triss/starlinen eu.gcr.io/star-linen/app",
     "build-publish": "yarn docker-build && docker push eu.gcr.io/star-linen/app"
   },
   "workspaces": [
     "server",
-    "website"
-  ]
+    "website",
+    "packages/*"
+  ],
+  "dependencies": {
+    "ts-node": "^9.0.0"
+  }
 }

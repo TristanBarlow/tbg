@@ -1,5 +1,5 @@
 import React from 'react'
-import { Project } from '../@types/project'
+import { Project } from '../../../packages/types/src/project'
 import { toKebab } from '../shared/util'
 import { useHistory } from 'react-router'
 import { useProjects } from '../ts/projects'
@@ -7,7 +7,7 @@ import { useProjects } from '../ts/projects'
 function ProjectTile (proj: Project): JSX.Element {
   const history = useHistory()
   return (
-    <div className="tile is-parent selectable" onClick={ () => history.push(`/projects/${ toKebab(name) }`) }>
+    <div className="tile is-parent selectable" onClick={ () => history.push(`/projects/${ toKebab(proj.title) }`) }>
       <div className="tile is-child box" >
         <p className="title is-5">{ proj.title }</p>
         <div className="center">

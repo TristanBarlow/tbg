@@ -4,10 +4,7 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext",
-      "WebWorker",
-      "es6",
-      "es7"
+      "esnext"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -20,9 +17,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react",
+    "jsx": "react"
   },
   "include": [
-    "src"
+    "src",
+    "../packages/types/src/project.ts"
   ]
 }

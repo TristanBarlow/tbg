@@ -1,4 +1,4 @@
-import { ChessPlayer, PlayerColour } from './chessPlayer'
+import { ChessPlayer } from './chessPlayer'
 import { Human } from './human'
 import { MinMaxBot } from './MinMax'
 import { RandomBot } from './random'

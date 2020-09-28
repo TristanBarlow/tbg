@@ -1,5 +1,5 @@
 import { firestore } from '../common/firestore'
-import { Project, isProject } from '../@types/project'
+import { Project, isProject } from 'my-types'
 import { WriteResult, DocumentReference } from '@google-cloud/firestore'
 import { toKebab, toTitle } from '../shared/util'
 

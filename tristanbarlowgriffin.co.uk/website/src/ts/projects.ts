@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Project } from '../@types/project'
+import { Project } from '../../../packages/types/src/project'
 import { apiRequest } from './request'
 
 
@@ -15,10 +15,9 @@ export function useProjects (): [Project[], boolean] {
         if (x.data) {
           setProjects(x.data)
         }
-
       })
 
-  })
+  }, [])
 
   return [projects, loading]
 }
