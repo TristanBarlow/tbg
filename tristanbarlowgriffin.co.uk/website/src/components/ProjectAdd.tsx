@@ -1,7 +1,7 @@
 import React from 'react'
 import { apiRequest } from '../ts/request'
 import ModalBase, { ModalBaseProps } from './ModalBase'
-import { Project } from '../@types/project'
+import { Project } from 'my-types'
 import InputField from './InputField'
 
 interface Props {

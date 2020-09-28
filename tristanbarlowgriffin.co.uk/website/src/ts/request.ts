@@ -1,6 +1,6 @@
 import { Auth } from './Auth'
 
-export interface APIResponse<T> { status: number, data: T | undefined }
+export interface APIResponse<T> { status: number, data?: T }
 
 export async function apiRequest<T> (
   path: string,
@@ -13,7 +13,7 @@ export async function apiRequest<T> (
   if (data) {
     if (data instanceof File) {
       headers.append('Content-type', data.type)
-    } else {
+    } else if (typeof data === 'object') {
       headers.append('Content-type', data.type)
       body = JSON.stringify(data)
     }
@@ -23,7 +23,13 @@ export async function apiRequest<T> (
     headers.append('key', Auth.key || key || '')
   }
 
-  const res = await fetch(path, { body, method, headers })
+  console.log(process.env.REACT_APP_SERVER_URL)
+  const res = await fetch(`${ process.env.REACT_APP_SERVER_URL }${ path }`, { body, method, headers })
+  if (res.status !== 200) {
+    return {
+      status: res.status
+    }
+  }
   return {
     data: await res.json(),
     status: res.status

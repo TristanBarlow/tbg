@@ -15,7 +15,7 @@ export default function App () {
   return (
     <div>
       { Background({ color: 'hsl(0, 0%, 96%)' }) }
-      < BrowserRouter >
+      <BrowserRouter>
         <NavBar />
         <div className="section">
           <Switch>
