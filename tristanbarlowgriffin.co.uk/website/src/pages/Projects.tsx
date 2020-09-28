@@ -24,7 +24,7 @@ export default function Projects () {
     <div className="">
       <p className="title is-3 is-size-5-mobile">My Projects</p>
       <div className="tile is-ancestor ">
-        { projects.map(x => <ProjectTile { ...x } />) }
+        { projects.map(x => <ProjectTile key={ x.title } { ...x } />) }
       </div>
     </div>
   )

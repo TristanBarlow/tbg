@@ -23,7 +23,7 @@ export default class ProjectAdd extends ModalBase<Props, State> {
   }
 
   async submit (): Promise<void> {
-    await apiRequest(`/api/projects/create`, 'POST', 'text', this.state)
+    await apiRequest(`/api/projects/create`, 'POST', this.state)
     this.close()
   }
 

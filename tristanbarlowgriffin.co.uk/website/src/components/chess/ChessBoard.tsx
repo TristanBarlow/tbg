@@ -177,7 +177,7 @@ export default class ChessBoard extends React.Component<Props, State>{
     return (
       <Renderer
         undo={ true }
-        calcWidth={ () => window.outerWidth < 450 ? 350 : 500 }
+        calcWidth={ () => window.outerWidth < 510 ? window.outerWidth - 10 : 500 }
         orientation={ this.state.orientation }
         showNotation={ true }
         draggable={ this.currentIsHuman }
