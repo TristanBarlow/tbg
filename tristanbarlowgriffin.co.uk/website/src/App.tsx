@@ -11,32 +11,27 @@ import './css/main.css'
 import ChessPage from './pages/Chess'
 import Auth from './components/AuthGuard'
 
-export class App extends React.Component<{}> {
-
-  render () {
-    return (
-      <div>
-        { Background({ color: 'hsl(0, 0%, 96%)' }) }
-        < BrowserRouter >
-          <NavBar />
-          <div className="section">
-            <Switch>
-              <Route path="/contact" component={ Contact } />
-              <Route path="/projects/*" component={ ProjectView } />
-              <Route path="/projects" component={ Projects } />
-              <Route path="/chess" component={ ChessPage } />
-              <Route path="/manage*" >
-                <Auth>
-                  <Manage />
-                </Auth>
-              </Route>
-              <Route path="/" component={ Home } />
-            </Switch>
-          </div>
-        </BrowserRouter >
-      </div>
-    )
-  }
+export default function App () {
+  return (
+    <div>
+      { Background({ color: 'hsl(0, 0%, 96%)' }) }
+      < BrowserRouter >
+        <NavBar />
+        <div className="section">
+          <Switch>
+            <Route path="/contact" component={ Contact } />
+            <Route path="/projects/*" component={ ProjectView } />
+            <Route path="/projects" component={ Projects } />
+            <Route path="/chess" component={ ChessPage } />
+            <Route path="/manage*" >
+              <Auth>
+                <Manage />
+              </Auth>
+            </Route>
+            <Route path="/" component={ Home } />
+          </Switch>
+        </div>
+      </BrowserRouter >
+    </div>
+  )
 }
-
-export default App
