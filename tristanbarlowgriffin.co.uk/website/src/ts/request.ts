@@ -6,7 +6,6 @@ export async function apiRequest<T> (
   path: string,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   data?: Record<string, any> | File,
-  key?: string
 ): Promise<APIResponse<T>> {
   const headers: Headers = new Headers()
   let body: any = data
@@ -14,24 +13,32 @@ export async function apiRequest<T> (
     if (data instanceof File) {
       headers.append('Content-type', data.type)
     } else if (typeof data === 'object') {
-      headers.append('Content-type', data.type)
+      headers.append('Content-type', 'application/json')
       body = JSON.stringify(data)
     }
   }
 
-  if (Auth.isAuthed || key) {
-    headers.append('key', Auth.key || key || '')
+  if (Auth.isAuthed) {
+    headers.append('key', Auth.key || '')
   }
 
-  console.log(process.env.REACT_APP_SERVER_URL)
+  console.log(body)
   const res = await fetch(`${ process.env.REACT_APP_SERVER_URL }${ path }`, { body, method, headers })
   if (res.status !== 200) {
     return {
       status: res.status
     }
   }
-  return {
-    data: await res.json(),
-    status: res.status
+
+  const text = await res.text()
+  try {
+    return {
+      data: JSON.parse(text, () => null),
+      status: res.status
+    }
+  } catch (e) {
+    return {
+      status: res.status
+    }
   }
 }

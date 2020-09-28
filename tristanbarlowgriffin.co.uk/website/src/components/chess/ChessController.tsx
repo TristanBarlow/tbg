@@ -3,6 +3,7 @@ import { ChessPlayer, PlayersTypes, PlayerFactory, PlayerColour, MoveResponse } 
 import ChessBoard from './ChessBoard'
 import Button, { Colors } from '../Button'
 import OptionSelecta from '../OptionSelecta'
+import { Flex } from '@chakra-ui/core'
 
 interface State {
   white: ChessPlayer
@@ -79,27 +80,27 @@ export default class ChessController extends React.Component<Props, State>{
 
   render () {
     return (
-      <div>
-        <div className="tile around">
+      <Flex>
+        <Flex flexDirection="row" flexWrap="wrap" justify="center" p={ 1 }>
           <ChessBoard
             setUndo={ (x) => this.undo = x }
             onMove={ (x, y) => this.updateStats(x, y) }
             black={ this.state.black }
             pause={ this.state.paused }
             white={ this.state.white } />
-          <div>
-            <div className="column">
+          <Flex>
+            <Flex className="column">
               <Button
                 color={ Colors.INFO }
                 label={ this.state.showControls ? 'Hide' : 'Show' }
                 onClick={ () => { this.setState({ showControls: !this.state.showControls }) } } />
               { this.controls }
               { this.updateStats }
-            </div>
+            </Flex>
             { this.outPutLog }
-          </div>
-        </div>
-      </div>
+          </Flex>
+        </Flex>
+      </Flex>
     )
   }
 }
