@@ -10,7 +10,7 @@ export class MinMaxBot extends ChessPlayer {
   static _woker: MoveWorker
   get worker (): MoveWorker {
     if (!MinMaxBot._woker) {
-      MinMaxBot._woker = new (MinMaxWorker as any)()
+      MinMaxBot._woker = MinMaxWorker
     }
 
     return MinMaxBot._woker
