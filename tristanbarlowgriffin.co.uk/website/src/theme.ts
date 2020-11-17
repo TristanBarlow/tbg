@@ -1,4 +1,4 @@
-import { CustomTheme, DefaultTheme, theme } from '@chakra-ui/core'
+import { DefaultTheme, theme } from '@chakra-ui/core'
 
 export const myTheme: DefaultTheme = {
     ...theme,
