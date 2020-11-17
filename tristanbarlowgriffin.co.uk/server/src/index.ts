@@ -22,14 +22,13 @@ app
 app.get('/api/projects', getProjects)
 app.get('/api/image/:id', getImageHandler)
 
-app.get(/^(?!\/api).+/, express.static(resolve(__dirname, '..', 'build')))
-
 app.post('/api/validate', validateKeyBody)
-app.use(validateKeyHeader)
-app.get('/api/images', getAllImageHandler)
-app.post('/api/image/:id', imageUploadHandler)
-app.delete('/api/image/:id', deleteImageHandler)
-app.post('/api/projects/create', createHandler)
-app.delete('/api/projects/:id', deleteProjectHandler)
+app.get('/api/images', validateKeyHeader, getAllImageHandler)
+app.post('/api/image/:id', validateKeyHeader, imageUploadHandler)
+app.delete('/api/image/:id', validateKeyHeader, deleteImageHandler)
+app.post('/api/projects/create', validateKeyHeader, createHandler)
+app.delete('/api/projects/:id', validateKeyHeader, deleteProjectHandler)
 
+app.use(express.static(resolve(__dirname, '..', 'build')))
+app.use((req, res) => res.sendFile(resolve(__dirname, '..', 'build', 'index.html')))
 app.listen(CONFIG.PORT)
