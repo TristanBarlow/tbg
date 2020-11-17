@@ -26,7 +26,7 @@ export interface ImageMeta {
   description: string | null
 }
 
-export function isMeta (meta: Partial<ImageMeta> | null | undefined): meta is ImageMeta {
+export function isMeta (meta: Partial<ImageMeta> | null | undefined | any): meta is ImageMeta {
   return !!meta
     && isStr(meta.name)
     && (meta.description === null || isStr(meta.description))
