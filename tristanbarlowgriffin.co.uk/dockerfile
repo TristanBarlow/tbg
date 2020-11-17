@@ -10,4 +10,4 @@ RUN yarn
 RUN yarn build 
 WORKDIR /usr/src/app/server
 # Run the web service on container startup.
-CMD [ "ts-node", "src/index.ts" ]
+CMD ["yarn", "ts-node", "src/index.ts" ]
