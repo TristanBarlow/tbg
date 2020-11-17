@@ -1,16 +1,11 @@
 {
-  "name": "@tbg/types",
+  "name": "@tbg/util",
   "version": "1.0.0",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "MIT",
   "private": true,
-  "scripts": {
-    "build": "yarn tsc -b"
-  },
   "dependencies": {
-    "date-fns": "^2.15.0",
-    "short-uuid": "^3.1.1",
     "typescript": "^3.9.6"
   }
 }

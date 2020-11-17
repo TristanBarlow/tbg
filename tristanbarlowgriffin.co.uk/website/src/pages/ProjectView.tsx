@@ -1,5 +1,5 @@
 import React from 'react'
-import { lastPart, toTitle } from '../shared/util'
+import { lastPart, toTitle } from '@tbg/util'
 import { Project } from '../../../packages/types/src/project'
 
 interface Props extends Project {

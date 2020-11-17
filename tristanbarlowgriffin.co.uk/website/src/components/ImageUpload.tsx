@@ -1,7 +1,7 @@
 import React from 'react'
 import { apiRequest } from '../ts/request'
 import ModalBase, { ModalBaseProps } from './ModalBase'
-import { ImageMeta } from 'my-types'
+import { ImageMeta } from '@tbg/types'
 import InputField from './InputField'
 
 interface Props {

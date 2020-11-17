@@ -1,6 +1,6 @@
 import React from 'react'
 import { Project } from '../../../packages/types/src/project'
-import { toKebab } from '../shared/util'
+import { toKebab } from '@tbg/util'
 import { useHistory } from 'react-router'
 import { useProjects } from '../ts/projects'
 
