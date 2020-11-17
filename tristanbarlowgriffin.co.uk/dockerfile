@@ -1,6 +1,7 @@
 FROM node:12-slim
 
 ENV MODE prod
+ARG KEY
 ENV KEY ${KEY}
 
 WORKDIR /usr/src/app
