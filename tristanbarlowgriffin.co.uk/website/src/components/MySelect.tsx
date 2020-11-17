@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Flex, FlexProps, PseudoBox, Text } from '@chakra-ui/core'
+import React from 'react'
+import { Flex, PseudoBox, Text } from '@chakra-ui/core'
 
 export interface MySelectProps<T extends string> {
   label?: string
