@@ -1,4 +1,5 @@
-import React from 'react'
+import { ButtonProps, Button as CButton } from '@chakra-ui/core'
+import React, { PropsWithChildren } from 'react'
 import Loading from './Loading'
 
 export enum Colors {
@@ -8,22 +9,14 @@ export enum Colors {
   DANGER = ' is-danger '
 }
 
-export enum Size {
-  SMALL = ' is-small ',
-  NORMAL = ' is-normal ',
-  MEDIUM = '  is-medium ',
-  LARGE = '  is-large '
-}
-
-interface Props {
-  label: string
+interface Props extends ButtonProps {
+  label?: string
   loading?: boolean
   color?: Colors
-  size?: Size
-  onClick: () => void
+  click: () => void
 }
-export default function Button (props: Props) {
-  const clazz = `button ${ props.color } ${ props.size || '' }`
+export default function Button (props: PropsWithChildren<Props>) {
+  const clazz = `button ${ props.color }`
 
   if (props.loading)
     return (
@@ -31,6 +24,6 @@ export default function Button (props: Props) {
     )
 
   return (
-    <button onClick={ () => props.onClick() } className={ clazz } >{ props.label }</button>
+    <CButton onClick={ () => props.click } className={ clazz }{ ...props }>{ props.label }</CButton>
   )
 }
