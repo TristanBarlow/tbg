@@ -1,7 +1,7 @@
 steps:
   # Build the container image
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/orangeroofs/app", "-f=dockerfile", "."]
+    args: ["build", "-t", "gcr.io/personal-251317/app", "."]
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/personal-251317/app"]
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
