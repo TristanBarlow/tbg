@@ -3,11 +3,11 @@ FROM node:12-slim
 ENV MODE prod
 
 WORKDIR /usr/src/app
-COPY server server
-COPY website website
+COPY . .
 
+RUN yarn
+
+RUN yarn build 
 WORKDIR /usr/src/app/server
-RUN yarn --production
-
 # Run the web service on container startup.
 CMD [ "ts-node", "src/index.ts" ]
