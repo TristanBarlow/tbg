@@ -1,5 +1,5 @@
 import express from 'express'
-import env from './env'
+import { CONFIG } from './env'
 import { imageUploadHandler, getImageHandler, getAllImageHandler, deleteImageHandler } from './images'
 import { createHandler, getProjects, deleteProjectHandler, } from './projects'
 import { validateKeyBody, validateKeyHeader } from './auth/auth'
@@ -32,4 +32,4 @@ app.delete('/api/image/:id', deleteImageHandler)
 app.post('/api/projects/create', createHandler)
 app.delete('/api/projects/:id', deleteProjectHandler)
 
-app.listen(env.PORT)
+app.listen(CONFIG.PORT)
