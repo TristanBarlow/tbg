@@ -1,6 +1,6 @@
 import React from 'react'
-import ImageUpload from '../components/ImageUpload'
-import { ImageMeta } from '../@types/project'
+import ImageUpload from './ImageUpload'
+import { ImageMeta } from '../../../packages/types/src/project'
 import { apiRequest } from '../ts/request'
 import Loading from './Loading'
 import ImageEle from './Image'
@@ -21,14 +21,14 @@ export default class ImageManager extends React.Component<{}, State>{
 
   async loadImages () {
     this.setState({ loading: true })
-    const response = await apiRequest<ImageMeta[]>('/api/images', 'GET', 'json')
+    const response = await apiRequest<ImageMeta[]>('/api/images', 'GET')
     if (response.status === 200 && response.data)
       this.setState({ images: response.data })
     this.setState({ loading: false })
   }
 
   async delete (id: string) {
-    await apiRequest('/api/image/' + id, 'DELETE', 'text')
+    await apiRequest('/api/image/' + id, 'DELETE')
     this.loadImages()
   }
 

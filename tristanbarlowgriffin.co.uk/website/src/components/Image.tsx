@@ -1,6 +1,6 @@
 import React from 'react'
 import Loading from './Loading'
-import { ImageMeta } from '../@types/project'
+import { ImageMeta } from '@tbg/types'
 
 interface Props {
   meta: ImageMeta | string
@@ -20,7 +20,7 @@ export default class ImageEle extends React.Component<Props, State>{
 
     this.image = new Image()
     if (typeof p.meta !== 'string') {
-      const url = `/api/image/${ p.meta.name }`
+      const url = `${ process.env.REACT_APP_SERVER_URL }/api/image/${ p.meta.name }`
       this.image.src = url
     } else {
       this.image.src = p.meta

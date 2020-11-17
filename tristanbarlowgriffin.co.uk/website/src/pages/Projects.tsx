@@ -1,46 +1,31 @@
 import React from 'react'
-import { apiRequest } from '../ts/request'
-import { Project } from '../@types/project'
-import ImageEle from '../components/Image'
-import { NavBar } from '../components/NavBar'
-import { toKebab } from '../shared/util'
+import { Project } from '../../../packages/types/src/project'
+import { toKebab } from '@tbg/util'
+import { useHistory } from 'react-router'
+import { useProjects } from '../ts/projects'
 
-interface State {
-  projects: Project[]
+function ProjectTile (proj: Project): JSX.Element {
+  const history = useHistory()
+  return (
+    <div className="tile is-parent selectable" onClick={ () => history.push(`/projects/${ toKebab(proj.title) }`) }>
+      <div className="tile is-child box" >
+        <p className="title is-5">{ proj.title }</p>
+        <div className="center">
+        </div>
+      </div>
+    </div>
+  )
 }
-export default class Projects extends React.Component<{}, State>{
-  state = { projects: [] }
 
-  constructor (p: {}) {
-    super(p)
+export default function Projects () {
+  const [projects] = useProjects()
 
-    apiRequest<Project[]>('/api/projects', 'GET', 'json').then(x => this.setState({ projects: x.data || [] }))
-  }
-
-  openProject (name: string) {
-    NavBar.push(`/projects/${ toKebab(name) }`)
-  }
-
-  projectTile (proj: Project): JSX.Element {
-    return (
-      <div className="tile is-parent selectable" onClick={ () => this.openProject(proj.title) }>
-        <div className="tile is-child box" >
-          <p className="title is-5">{ proj.title }</p>
-          <div className="center">
-          </div>
-        </div>
+  return (
+    <div className="">
+      <p className="title is-3 is-size-5-mobile">My Projects</p>
+      <div className="tile is-ancestor ">
+        { projects.map(x => <ProjectTile key={ x.title } { ...x } />) }
       </div>
-    )
-  }
-
-  render () {
-    return (
-      <div className="">
-        <p className="title is-3 is-size-5-mobile">My Projects</p>
-        <div className="tile is-ancestor ">
-          { this.state.projects.map(x => this.projectTile(x)) }
-        </div>
-      </div>
-    )
-  }
+    </div>
+  )
 }

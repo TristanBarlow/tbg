@@ -33,6 +33,12 @@ export class NavBar extends React.Component<propsWithRouter, State> {
     return "navbar-menu "
   }
 
+  makeItem (label: string, path: string): JSX.Element {
+    return (<a className="navbar-item " onClick={ () => this.navigate(path) }>
+      { label }
+    </a>)
+  }
+
   render () {
     return (
       <div>
@@ -50,13 +56,9 @@ export class NavBar extends React.Component<propsWithRouter, State> {
 
           <div id="navbarBasicExample" className={ this.menu }>
             <div className="navbar-start">
-              <a className="navbar-item " onClick={ () => this.navigate('/projects') }>
-                Projects
-              </a>
-
-              <a className="navbar-item" onClick={ () => this.navigate('/contact') }>
-                Contact
-              </a>
+              { this.makeItem('Projects', '/projects') }
+              { this.makeItem('Chess', '/chess') }
+              { this.makeItem('Contact', '/contact') }
             </div>
           </div>
         </nav >
