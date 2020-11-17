@@ -9,6 +9,7 @@ import ProjectView from './pages/ProjectView'
 import Manage from './pages/Manage'
 import './css/main.css'
 import ChessPage from './pages/Chess'
+import Login from './components/Login'
 
 export default function App () {
   return (
@@ -22,9 +23,8 @@ export default function App () {
             <Route path="/projects/*" component={ ProjectView } />
             <Route path="/projects" component={ Projects } />
             <Route path="/chess" component={ ChessPage } />
-            <Route path="/manage*" >
-              <Manage />
-            </Route>
+            <Route path="/admin/login" component={ Login } />
+            <Route path="/admin" component={ Manage } />
             <Route path="/" component={ Home } />
           </Switch>
         </div>

@@ -9,7 +9,7 @@ export interface Env {
 export const CONFIG: Env = {
   PORT: process.env.PORT || '8080',
   MODE: process.env.MODE !== 'prod' ? 'dev' : 'prod',
-  KEY: process.env.KEY || ''
+  KEY: process.env.KEY || 'test'
 }
 
 export function serviceAccountPath (): string | undefined {

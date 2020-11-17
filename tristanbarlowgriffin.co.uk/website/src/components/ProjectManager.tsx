@@ -1,84 +1,77 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ProjectAdd from './ProjectAdd'
 import { Project } from '../../../packages/types/src/project'
 import { apiRequest } from '../ts/request'
 import { toKebab } from '@tbg/util'
+import { useProjects } from '../ts/projects'
+import LoadingModal from './LoadingModal'
+import { Flex, Grid, Link, Text } from '@chakra-ui/core'
+import Button from './Button'
 
 interface State {
   showProjectAdd: boolean
   projects: Project[]
   activeProject: Project | null
 }
-export default class ProjectManager extends React.Component<{}, State>{
-  state: State = { showProjectAdd: false, projects: [], activeProject: null }
+export default function ProjectManager () {
+  const [refresh, setRefresh] = useState(false)
+  const [projects, loading] = useProjects(refresh)
+  const [projectAdd, setProjectAdd] = useState(false)
+  const [activeProject, setActiveProj] = useState<Project | null>(null)
 
-  constructor (p: {}) {
-    super(p)
-    this.loadProjects()
+  function close () {
+    setProjectAdd(false)
+    setActiveProj(null)
+    setRefresh(!refresh)
   }
 
-  async loadProjects () {
-    const response = await apiRequest<Project[]>('/api/projects', 'GET')
-    if (response.status === 200 && response.data)
-      this.setState({ projects: response.data })
-  }
-
-  close () {
-    this.setState({ showProjectAdd: false })
-    this.loadProjects()
-  }
-
-  get projectAdd (): JSX.Element | null {
-    if (!this.state.showProjectAdd) return null
-    return (
-      <ProjectAdd proj={ this.state.activeProject } close={ () => this.close() } />
-    )
-  }
-
-  async delete (x: Project) {
+  async function deleteProj (x: Project) {
     await apiRequest('/api/projects/' + toKebab(x.title), 'DELETE')
-    this.loadProjects()
+    setRefresh(!refresh)
   }
 
-  get projects (): JSX.Element {
-    return (
-      <div className="tile">
-        { this.state.projects.map(x =>
-          <div key={ x.title } className="tile is-parent is-3">
-            <div className="tile is-child box col">
-              <p className="subtitle is-4">Title: { x.title }</p>
-              <p className="subtitle is-5">link: { x.link }</p>
-              <p className="subtitle is-4">GIF: { x.gifId }</p>
-              <p className="subtitle is-4">Image: { x.imageId }</p>
-              <p className="subtitle is-7">Description: { x.description }</p>
-              <div className="center" style={ { marginTop: '10px' } }>
-                <div className="field is-grouped">
-                  <button onClick={ () => this.setState({ showProjectAdd: true, activeProject: x }) } className="button is-link"> Update</button>
-                  <button onClick={ () => this.delete(x) } className="button is-danger"> Delete</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) }
-      </div>
-    )
+  const showProjectAdd = (proj: Project | null) => {
+    setProjectAdd(true)
+    setActiveProj(proj)
   }
 
-  render (): JSX.Element {
-    return (
-      <div className="tile is-ancestor">
-        <div className="tile is-parent is-vertical">
-          <div className="title">Projects</div>
-          <button
-            onClick={ () => this.setState({ showProjectAdd: true }) }
-            style={ { width: 'fit-content' } }
-            className="button is-primary">
-            Upload New Project
+  if (loading) {
+    return <LoadingModal hideBG />
+  }
+
+  return (
+    <div className="tile is-ancestor">
+      <div className="tile is-parent is-vertical">
+        <div className="title">Projects</div>
+        <button
+          onClick={ () => setProjectAdd(true) }
+          style={ { width: 'fit-content' } }
+          className="button is-primary">
+          Upload New Project
           </button>
-          { this.projects }
+        <div className="tile">
+          {
+            projects.map(x =>
+              <Flex className="shadow-1" padding={ 2 } bg="white" flexDirection="column" w="350px" key={ x.title }>
+                <Grid rowGap={ 2 } overflowX="hidden" columnGap={ 2 } templateColumns="100px auto">
+                  <Text fontWeight="600">Title: </Text>
+                  <Text> { x.title }</Text>
+                  <Text fontWeight="600">link: </Text>
+                  <Link as="a" src={ x.link }> { x.link }</Link>
+                  <Text fontWeight="600">GIF: </Text>
+                  <Text> { x.gifId }</Text>
+                  <Text fontWeight="600">Image: </Text>
+                  <Text> { x.imageId }</Text>
+                </Grid>
+                <Flex mt={ 2 } w="100%" justifyContent="space-around" className="field is-grouped">
+                  <Button click={ () => showProjectAdd(x) } className="button is-link"> Update</Button>
+                  <Button click={ () => deleteProj(x) } className="button is-danger"> Delete</Button>
+                </Flex>
+              </Flex>
+            ) }
         </div>
-        { this.projectAdd }
-      </div >
-    )
-  }
+      </div>
+      { projectAdd && <ProjectAdd proj={ activeProject } close={ close } /> }
+    </div >
+  )
 }
