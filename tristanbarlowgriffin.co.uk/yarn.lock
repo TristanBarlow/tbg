@@ -3411,7 +3411,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^2.10.0, @typescript-eslint/parser@npm:^2.21.0":
+"@typescript-eslint/parser@npm:^2.10.0":
   version: 2.34.0
   resolution: "@typescript-eslint/parser@npm:2.34.0"
   dependencies:
@@ -3425,6 +3425,23 @@ __metadata:
     typescript:
       optional: true
   checksum: a3fe33d422d5cfe97e36c983253d33d2f5907657f9bb61a129c58656441acf9e90ec525a5273239cc876bc43e031056b2796924f3e64e8ca1295674fb30a2eec
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/parser@npm:^4.8.0":
+  version: 4.8.0
+  resolution: "@typescript-eslint/parser@npm:4.8.0"
+  dependencies:
+    "@typescript-eslint/scope-manager": 4.8.0
+    "@typescript-eslint/types": 4.8.0
+    "@typescript-eslint/typescript-estree": 4.8.0
+    debug: ^4.1.1
+  peerDependencies:
+    eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: d93a0ef0085698a909a5e6b7afda11410f34a32cdd55d11aa4cc9a1dd9fa2c4375c89f09c19e80270f69373af4a36ecd072824a2b2ea2ff1c30b0d24ad156212
   languageName: node
   linkType: hard
 
@@ -15863,7 +15880,7 @@ resolve@1.15.0:
     "@types/jest": ^25.1.3
     "@types/node": ^13.7.4
     "@typescript-eslint/eslint-plugin": ^4.8.0
-    "@typescript-eslint/parser": ^2.21.0
+    "@typescript-eslint/parser": ^4.8.0
     cors: ^2.8.5
     eslint: ^6.8.0
     express: ^4.17.1
