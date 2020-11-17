@@ -1,18 +1,19 @@
 {
-  "devDependencies": {
-    "@types/node": "^13.1.8",
-    "typescript": "^3.7.2"
-  },
+  "private": true,
   "scripts": {
-    "build": "yarn --cwd website build",
-    "build-server": "yarn --cwd server build",
-    "docker-build": "yarn build-hub && yarn build-server && docker build -t triss/starlinen . && docker tag triss/starlinen eu.gcr.io/star-linen/app",
+    "build": "yarn workspace website build",
+    "start:site": "yarn --cwd website start",
+    "start:server": "yarn workspace server start",
+    "build:p": "yarn workspace @tbg/types build && yarn workspace @tbg/util build",
+    "docker-build": "yarn build && && docker build -t triss/ . && docker tag triss/starlinen eu.gcr.io/star-linen/app",
     "build-publish": "yarn docker-build && docker push eu.gcr.io/star-linen/app"
   },
+  "workspaces": [
+    "server",
+    "website",
+    "packages/*"
+  ],
   "dependencies": {
-    "@types/uuid": "^3.4.6",
-    "date-fns": "^2.9.0",
-    "date-fns-tz": "^1.0.9",
-    "memory-streams": "^0.1.3"
+    "ts-node": "^9.0.0"
   }
 }

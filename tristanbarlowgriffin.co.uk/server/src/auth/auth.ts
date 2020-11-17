@@ -6,7 +6,7 @@ function IsKeyValid (a: any): boolean {
   return a === MANAGE_KEY
 }
 
-export const ValidateKeyHeader: RequestHandler = (req, res, next) => {
+export const validateKeyHeader: RequestHandler = (req, res, next) => {
   const key = req.headers.key
   if (!IsKeyValid(key)) {
     console.error('Failed Key attempt. GOT: ', key)
@@ -14,4 +14,11 @@ export const ValidateKeyHeader: RequestHandler = (req, res, next) => {
   }
 
   next()
+}
+export const validateKeyBody: RequestHandler = (req, res) => {
+  console.log('Got validate attempt: ', req.body)
+  if (req.body.key === MANAGE_KEY) {
+    return res.sendStatus(200)
+  }
+  res.sendStatus(401)
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { apiRequest } from '../ts/request'
 import ModalBase, { ModalBaseProps } from './ModalBase'
-import { Project } from '../@types/project'
+import { Project } from '@tbg/types'
 import InputField from './InputField'
 
 interface Props {
@@ -23,7 +23,7 @@ export default class ProjectAdd extends ModalBase<Props, State> {
   }
 
   async submit (): Promise<void> {
-    await apiRequest(`/api/projects/create`, 'POST', 'text', this.state)
+    await apiRequest(`/api/projects/create`, 'POST', this.state)
     this.close()
   }
 

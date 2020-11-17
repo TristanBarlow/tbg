@@ -1,13 +1,9 @@
 import React from 'react'
-
-
-
-export default class Chess extends React.Component<{}>{
-  board: HTMLElement | null = null
-
-  render () {
-    return (
-      <div></div>
-    )
-  }
+import ChessController from '../components/chess/ChessController'
+export default function ChessPage () {
+  return (
+    <div className="row around">
+      <ChessController />
+    </div>
+  )
 }

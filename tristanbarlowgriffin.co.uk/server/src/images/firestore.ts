@@ -1,5 +1,5 @@
 import { firestore } from '../common/firestore'
-import { ImageMeta, isMeta } from '../@types/project'
+import { ImageMeta, isMeta } from '@tbg/types'
 import { FieldValue, WriteResult } from '@google-cloud/firestore'
 
 const images = firestore()
