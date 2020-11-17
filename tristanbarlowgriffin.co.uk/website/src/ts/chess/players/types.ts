@@ -9,15 +9,15 @@ export enum PlayersTypes {
   RANDOM = "Random"
 }
 
-export const Players: { [key in PlayersTypes]: ChessPlayer } = {
-  Human: new Human(),
-  MinMax: new MinMaxBot(),
-  Random: new RandomBot()
+export const Players: { [key in PlayersTypes]: () => ChessPlayer } = {
+  Human: () => new Human(),
+  MinMax: () => new MinMaxBot(),
+  Random: () => new RandomBot()
 }
 
-export function PlayerFactory (player: PlayersTypes): ChessPlayer {
+export function PlayerFactory(player: PlayersTypes): ChessPlayer {
   console.log('Player', player)
-  return Players[player]
+  return Players[player]()
 }
 
 export interface MoveResponse {
@@ -27,6 +27,6 @@ export interface MoveResponse {
   details: string
 }
 
-export function timeTaken (strt: number): number {
+export function timeTaken(strt: number): number {
   return (performance.now() - strt) / 1000
 }
