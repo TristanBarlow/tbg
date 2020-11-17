@@ -4,9 +4,11 @@ steps:
     args:
       [
         "build",
+        "tristanbarlowgriffin.co.uk",
+        "--build-arg",
+        "KEY=$_MY_KEY",
         "-t",
         "gcr.io/personal-251317/tbg",
-        "tristanbarlowgriffin.co.uk",
       ]
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/personal-251317/tbg"]
