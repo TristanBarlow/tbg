@@ -1,7 +1,13 @@
 steps:
   # Build the container image
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/personal-251317/app", "."]
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/personal-251317/tbg",
+        "tristanbarlowgriffin.co.uk",
+      ]
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/personal-251317/app"]
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
@@ -10,11 +16,11 @@ steps:
       [
         "run",
         "deploy",
-        "personal-251317",
+        "tbg",
         "--image",
-        "gcr.io/personal-251317/app",
+        "gcr.io/personal-251317/tbg",
         "--region",
-        "europe-west1",
+        "europe-west2",
         "--memory",
         "2Gi",
         "--platform",
