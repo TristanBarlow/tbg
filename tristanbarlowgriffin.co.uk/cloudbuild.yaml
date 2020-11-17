@@ -9,7 +9,7 @@ steps:
         "tristanbarlowgriffin.co.uk",
       ]
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/personal-251317/app"]
+    args: ["push", "gcr.io/personal-251317/tbg"]
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
