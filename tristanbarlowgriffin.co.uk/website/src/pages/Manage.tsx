@@ -23,13 +23,12 @@ const tabs: Tab[] = [
     title: 'Images'
   }
 ]
-export default function Manage () {
+export default function Manage() {
   const history = useHistory()
-  const parts = window.location.pathname.split('/')
 
-  function makeTab (t: Tab) {
+  function makeTab(t: Tab) {
     return (
-      <li onClick={ () => history.push(t.path) } ><a>{ t.title }</a></li>
+      <li onClick={() => history.push(t.path)} ><a>{t.title}</a></li>
     )
   }
 
@@ -37,7 +36,7 @@ export default function Manage () {
     <div>
       <div className="tabs">
         <ul>
-          { tabs.map(x => makeTab(x)) }
+          {tabs.map(x => makeTab(x))}
         </ul>
       </div>
       <div>
