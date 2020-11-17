@@ -29,7 +29,7 @@ interface State {
 export default class ChessBoard extends React.Component<Props, State>{
   game: ChessInstance
 
-  constructor (p: Props) {
+  constructor(p: Props) {
     super(p)
     this.undo = this.undo.bind(this)
     p.setUndo(this.undo)
@@ -45,7 +45,7 @@ export default class ChessBoard extends React.Component<Props, State>{
     this.getMove()
   }
 
-  undo () {
+  undo() {
     const lastMove = this.game.undo()
     console.log('UNDO', lastMove)
     if (!lastMove) {
@@ -58,31 +58,31 @@ export default class ChessBoard extends React.Component<Props, State>{
     })
   }
 
-  get currentIsHuman (): boolean {
+  get currentIsHuman(): boolean {
     return this.currentPlayer.isHuman
   }
 
-  get currentPlayerColour (): PlayerColour {
+  get currentPlayerColour(): PlayerColour {
     const turn = this.game.turn()
     return turn === 'w' ? 'white' : 'black'
   }
 
-  get currentPlayer (): ChessPlayer {
+  get currentPlayer(): ChessPlayer {
     const turn = this.game.turn()
     return turn === 'w' ? this.props.white : this.props.black
   }
 
-  get lastPlayerColour (): PlayerColour {
+  get lastPlayerColour(): PlayerColour {
     const turn = this.game.turn()
     return turn === 'w' ? 'black' : 'white'
   }
 
-  get lastPlayer (): ChessPlayer {
+  get lastPlayer(): ChessPlayer {
     const turn = this.game.turn()
     return turn === 'w' ? this.props.black : this.props.white
   }
 
-  async getMove () {
+  async getMove() {
     if (this.currentIsHuman || this.props.pause) {
       return
     }
@@ -97,18 +97,18 @@ export default class ChessBoard extends React.Component<Props, State>{
     this.props.onMove(this.lastPlayerColour, response)
   }
 
-  checkGameOver () {
+  checkGameOver() {
     return this.game.game_over() ||
       this.game.in_draw()
   }
 
-  updateBoard (): Promise<void> {
+  updateBoard(): Promise<void> {
     return new Promise<void>((resolve) => {
       this.setState({ fen: this.game.fen() }, resolve)
     })
   }
 
-  async makeMove (move: ShortMove | string): Promise<void> {
+  async makeMove(move: ShortMove | string): Promise<void> {
     if (this.props.pause) return
 
     const result = this.game.move(move)
@@ -127,7 +127,7 @@ export default class ChessBoard extends React.Component<Props, State>{
     setTimeout(() => this.getMove(), 1000)
   }
 
-  onDrop (drop: Drop) {
+  onDrop(drop: Drop) {
     if (!this.currentIsHuman) {
       return
     }
@@ -139,7 +139,7 @@ export default class ChessBoard extends React.Component<Props, State>{
     })
   }
 
-  async componentDidUpdate (prev: Props) {
+  async componentDidUpdate(prev: Props) {
     if (!this.props.pause && prev.pause) {
       return this.getMove()
     }
@@ -150,21 +150,21 @@ export default class ChessBoard extends React.Component<Props, State>{
     }
   }
 
-  get fromCSS (): React.CSSProperties {
+  get fromCSS(): React.CSSProperties {
     return {
       backgroundColor: 'grey',
       transitionDuration: '0.1s'
     }
   }
 
-  get toCSS (): React.CSSProperties {
+  get toCSS(): React.CSSProperties {
     return {
       backgroundColor: 'yellow',
       transitionDuration: '0.2s'
     }
   }
 
-  get tileColours (): SquaresCSS {
+  get tileColours(): SquaresCSS {
     const move = this.state.lastMove
     if (!move) return {}
     return {
@@ -172,19 +172,21 @@ export default class ChessBoard extends React.Component<Props, State>{
     }
   }
 
-  render () {
+  render() {
     console.log('FENN', this.state.fen)
     return (
-      <Renderer
-        undo={ true }
-        calcWidth={ () => window.outerWidth < 510 ? window.outerWidth - 10 : 500 }
-        orientation={ this.state.orientation }
-        showNotation={ true }
-        draggable={ this.currentIsHuman }
-        squareStyles={ this.tileColours }
-        position={ this.state.fen }
-        onDrop={ (x: Drop) => this.onDrop(x) }
-      />
+      <div className="shadow-1">
+        <Renderer
+          undo={true}
+          calcWidth={() => window.outerWidth < 510 ? window.outerWidth - 10 : 500}
+          orientation={this.state.orientation}
+          showNotation={true}
+          draggable={this.currentIsHuman}
+          squareStyles={this.tileColours}
+          position={this.state.fen}
+          onDrop={(x: Drop) => this.onDrop(x)}
+        />
+      </div>
     )
   }
 }
