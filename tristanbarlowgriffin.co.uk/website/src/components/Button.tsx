@@ -22,19 +22,15 @@ interface Props {
   size?: Size
   onClick: () => void
 }
-export default class Button extends React.Component<Props>{
-  get clazz () {
-    return `button ${ this.props.color } ${ this.props.size || '' }`
-  }
+export default function Button (props: Props) {
+  const clazz = `button ${ props.color } ${ props.size || '' }`
 
-  render () {
-    if (this.props.loading)
-      return (
-        <Loading size={ 3 } />
-      )
-
+  if (props.loading)
     return (
-      <button onClick={ () => this.props.onClick() } className={ this.clazz } >{ this.props.label }</button>
+      <Loading size={ 3 } />
     )
-  }
+
+  return (
+    <button onClick={ () => props.onClick() } className={ clazz } >{ props.label }</button>
+  )
 }
