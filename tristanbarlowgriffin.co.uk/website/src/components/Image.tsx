@@ -1,6 +1,6 @@
 import React from 'react'
 import Loading from './Loading'
-import { ImageMeta } from 'my-types'
+import { ImageMeta } from '@tbg/types'
 
 interface Props {
   meta: ImageMeta | string

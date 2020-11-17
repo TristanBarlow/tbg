@@ -2,7 +2,7 @@ import React from 'react'
 import ProjectAdd from './ProjectAdd'
 import { Project } from '../../../packages/types/src/project'
 import { apiRequest } from '../ts/request'
-import { toKebab } from '../shared/util'
+import { toKebab } from '@tbg/util'
 
 interface State {
   showProjectAdd: boolean

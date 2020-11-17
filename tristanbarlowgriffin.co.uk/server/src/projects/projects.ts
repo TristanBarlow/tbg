@@ -1,7 +1,7 @@
 import { firestore } from '../common/firestore'
-import { Project, isProject } from 'my-types'
+import { Project, isProject } from '@tbg/types'
 import { WriteResult, DocumentReference } from '@google-cloud/firestore'
-import { toKebab, toTitle } from '../shared/util'
+import { toKebab, toTitle } from '@tbg/util'
 
 const projects = firestore()
   .collection('projects')
