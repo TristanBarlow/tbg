@@ -1,7 +1,7 @@
 import React from 'react'
 import { apiRequest } from '../ts/request'
 import ModalBase, { ModalBaseProps } from './ModalBase'
-import { ImageMeta } from '../@types/project'
+import { ImageMeta } from '@tbg/types'
 import InputField from './InputField'
 
 interface Props {
@@ -29,7 +29,7 @@ export default class ImageUpload extends ModalBase<Props, State> {
     const file = this.fileElement.files[0]
     if (!file) return
 
-    await apiRequest(`/api/image/${ this.state.name }?descr=${ this.state.description }`, 'POST', 'text', file)
+    await apiRequest(`/api/image/${ this.state.name }?descr=${ this.state.description }`, 'POST', file)
     this.close()
   }
 

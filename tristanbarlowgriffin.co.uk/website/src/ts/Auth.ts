@@ -42,7 +42,7 @@ export class Auth {
   private async validate (key: string): Promise<boolean> {
     this._key = ''
     this._isAuthed = false
-    const response = await apiRequest('/api/validate', 'GET', 'text', undefined, key)
+    const response = await apiRequest('/api/validate', 'POST', { key })
     if (response.status === 200) {
       this._key = key
       this._isAuthed = true

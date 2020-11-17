@@ -1,23 +1,17 @@
 import React from 'react'
-import { lastPart, toTitle } from '../shared/util'
-import { Project } from '../@types/project'
+import { lastPart, toTitle } from '@tbg/util'
+import { Project } from '../../../packages/types/src/project'
 
 interface Props extends Project {
 
 }
-export default class ProjectView extends React.Component<Props>{
+export default function ProjectView (props: Props) {
 
-  get title (): string {
-    return lastPart(window.location.pathname)
-  }
-
-  render () {
-    return (
-      <div className="tile is-ancestor">
-        <div className="tile is-parent">
-          <p className="title is-3 is-size-5-mobile">{ toTitle(this.title) }</p>
-        </div>
+  return (
+    <div className="tile is-ancestor">
+      <div className="tile is-parent">
+        <p className="title is-3 is-size-5-mobile">{ lastPart(window.location.pathname) }</p>
       </div>
-    )
-  }
+    </div>
+  )
 }

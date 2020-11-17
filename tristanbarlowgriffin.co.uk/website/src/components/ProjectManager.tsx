@@ -1,8 +1,8 @@
 import React from 'react'
-import ProjectAdd from '../components/ProjectAdd'
-import { Project } from '../@types/project'
+import ProjectAdd from './ProjectAdd'
+import { Project } from '../../../packages/types/src/project'
 import { apiRequest } from '../ts/request'
-import { toKebab } from '../shared/util'
+import { toKebab } from '@tbg/util'
 
 interface State {
   showProjectAdd: boolean
@@ -18,7 +18,7 @@ export default class ProjectManager extends React.Component<{}, State>{
   }
 
   async loadProjects () {
-    const response = await apiRequest<Project[]>('/api/projects', 'GET', 'json')
+    const response = await apiRequest<Project[]>('/api/projects', 'GET')
     if (response.status === 200 && response.data)
       this.setState({ projects: response.data })
   }
@@ -36,7 +36,7 @@ export default class ProjectManager extends React.Component<{}, State>{
   }
 
   async delete (x: Project) {
-    await apiRequest('/api/projects/' + toKebab(x.title), 'DELETE', 'text')
+    await apiRequest('/api/projects/' + toKebab(x.title), 'DELETE')
     this.loadProjects()
   }
 

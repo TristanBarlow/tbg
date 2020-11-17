@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import { isProject } from '../@types/project'
+import { isProject } from '@tbg/types'
 import { writeProject } from './projects'
 
 export const createHandler: RequestHandler = async (req, res) => {
