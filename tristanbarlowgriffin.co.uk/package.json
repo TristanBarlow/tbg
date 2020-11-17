@@ -1,12 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "build": "yarn workspace website build",
+    "build": "yarn build:p && yarn workspace website build",
     "start:site": "yarn --cwd website start",
     "start:server": "yarn workspace server start",
-    "build:p": "yarn workspace @tbg/types build && yarn workspace @tbg/util build",
-    "docker-build": "yarn build && && docker build -t triss/ . && docker tag triss/starlinen eu.gcr.io/star-linen/app",
-    "build-publish": "yarn docker-build && docker push eu.gcr.io/star-linen/app"
+    "build:p": "yarn workspace @tbg/types build && yarn workspace @tbg/util build"
   },
   "workspaces": [
     "server",

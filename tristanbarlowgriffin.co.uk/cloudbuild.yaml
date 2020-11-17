@@ -1,0 +1,24 @@
+steps:
+  # Build the container image
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/orangeroofs/app", "-f=dockerfile", "."]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/personal-251317/app"]
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "personal-251317",
+        "--image",
+        "gcr.io/personal-251317/app",
+        "--region",
+        "europe-west1",
+        "--memory",
+        "2Gi",
+        "--platform",
+        "managed",
+      ]
+
+timeout: 1200s
