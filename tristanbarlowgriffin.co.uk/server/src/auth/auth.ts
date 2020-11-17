@@ -2,7 +2,7 @@ import { MANAGE_KEY } from '../key'
 import { RequestHandler } from 'express'
 
 // eslint-disable-next-line
-function IsKeyValid(a: any): boolean {
+function IsKeyValid (a: any): boolean {
   if (typeof a !== 'string') return false
   return a === MANAGE_KEY
 }
