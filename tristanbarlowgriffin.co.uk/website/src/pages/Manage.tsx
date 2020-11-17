@@ -1,47 +1,30 @@
 /* eslint jsx-a11y/anchor-is-valid: 0 */
-import React from 'react'
+import React, { useEffect } from 'react'
 import ImageManager from '../components/ImageManager'
 import ProjectManager from '../components/ProjectManager'
 import { Route, Switch, useHistory } from 'react-router'
+import { Link } from 'react-router-dom'
+import { Auth } from '../ts/Auth'
 
-enum Tabs {
-  PROJECTS = 'projects',
-  IMAGES = 'images'
-}
-
-interface Tab {
-  title: string
-  path: Tabs
-}
-const tabs: Tab[] = [
-  {
-    path: Tabs.PROJECTS,
-    title: 'Projects'
-  },
-  {
-    path: Tabs.IMAGES,
-    title: 'Images'
-  }
-]
-export default function Manage() {
+export default function Manage () {
   const history = useHistory()
-
-  function makeTab(t: Tab) {
-    return (
-      <li onClick={() => history.push(t.path)} ><a>{t.title}</a></li>
-    )
-  }
+  useEffect(() => {
+    if (!Auth.key) {
+      history.push('/admin/login')
+    }
+  }, [history])
 
   return (
     <div>
       <div className="tabs">
         <ul>
-          {tabs.map(x => makeTab(x))}
+          <Link to="/admin/images">Images</Link>
+          <Link to="/admin/projects">Projects</Link>
         </ul>
       </div>
       <div>
         <Switch>
-          <Route path="/images"><ImageManager /></Route>
+          <Route path="/admin/images"><ImageManager /></Route>
           <Route><ProjectManager /></Route>
         </Switch>
       </div>

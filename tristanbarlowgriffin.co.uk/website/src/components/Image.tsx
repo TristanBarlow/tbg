@@ -1,5 +1,4 @@
 import React from 'react'
-import Loading from './Loading'
 import { ImageMeta, isMeta } from '@tbg/types'
 
 interface Props {

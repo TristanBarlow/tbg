@@ -1,40 +1,45 @@
-import React from 'react'
-import ModalBase, { ModalBaseProps } from './ModalBase'
+import React, { useState } from 'react'
 import InputField from './InputField'
-import Loading from './Loading'
 import { Auth } from '../ts/Auth'
+import { Spinner } from '@chakra-ui/core'
+import { useHistory } from 'react-router'
 
 
 interface State {
   key: string
   loading: boolean
 }
-export default class Login extends ModalBase<{}, State>{
-  constructor (p: ModalBaseProps) {
-    super(p)
-    this.state = { key: '', loading: false }
+export default function Login () {
+  const history = useHistory()
+  const [key, setKey] = useState('')
+  const [loading, setLoading] = useState(false)
+  async function submit () {
+    setLoading(true)
+    if (!await Auth.validate(key)) {
+      setLoading(false)
+    }
+
+    history.length ? history.goBack() : history.push('/admin/')
   }
 
-  getBody (): JSX.Element {
-    return <InputField change={ (key) => this.setState({ key }) } label="Manage Key" value={ this.state.key } />
-  }
-
-  getTitle (): JSX.Element {
-    return <p className="title">Login</p>
-  }
-
-  async submit () {
-    this.setState({ loading: true })
-    if (!await Auth.validate(this.state.key))
-      this.setState({ loading: false })
-  }
-
-  getFooter (): JSX.Element {
-    if (this.state.loading) return <Loading size={ 3 } />
-
-    return (
-      <button className="button" onClick={ () => this.submit() }>Submit</button>
-    )
-  }
-
+  return (
+    <div className="modal is-active" style={ { width: '100vw', height: '100vh', position: 'fixed', zIndex: 1000 } }>
+      <div className="modal-background"></div>
+      <div className="modal-card">
+        <header className="modal-card-head has-background-white" style={ { border: 'none' } }>
+          <p className="title">Login</p>
+        </header>
+        <section className="modal-card-body">
+          <InputField change={ setKey } label="Manage Key" value={ key } />
+        </section>
+        <footer className="modal-card-foot has-background-white" style={ { border: 'none' } } >
+          {
+            loading ?
+              <Spinner size="lg" />
+              : <button className="button" onClick={ submit }>Submit</button>
+          }
+        </footer>
+      </div>
+    </div >
+  )
 }

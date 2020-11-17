@@ -1,88 +1,66 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ImageUpload from './ImageUpload'
 import { ImageMeta } from '../../../packages/types/src/project'
 import { apiRequest } from '../ts/request'
-import Loading from './Loading'
 import ImageEle from './Image'
+import { useImages } from '../ts/projects'
 
-interface State {
-  showImageUpload: boolean
-  images: ImageMeta[]
-  loading: boolean
-  activeImage: ImageMeta | null
-}
-export default class ImageManager extends React.Component<{}, State>{
-  state: State = { showImageUpload: false, images: [], loading: true, activeImage: null }
+export default function ImageManager () {
+  const [showImageUpload, setShowImageUpload] = useState(false)
+  const [refresh, setRefresh] = useState(false)
+  const [activeImage, setActiveImage] = useState<ImageMeta | null>(null)
+  const [images] = useImages(refresh)
 
-  constructor (p: {}) {
-    super(p)
-    this.loadImages()
-  }
-
-  async loadImages () {
-    this.setState({ loading: true })
-    const response = await apiRequest<ImageMeta[]>('/api/images', 'GET')
-    if (response.status === 200 && response.data)
-      this.setState({ images: response.data })
-    this.setState({ loading: false })
-  }
-
-  async delete (id: string) {
+  async function deleteImage (id: string) {
     await apiRequest('/api/image/' + id, 'DELETE')
-    this.loadImages()
+    setRefresh(!refresh)
   }
 
-  get imageElements (): JSX.Element {
-    if (this.state.loading)
-      return <Loading size={ 10 } />
-    return (
-      <div className="tile">
-        { this.state.images.map(x => (
-          <div key={ x.name } className="tile is-parent is-3">
-            <div className="tile is-child box col">
-              <p className="subtitle is-4">Name: { x.name }</p>
-              <p className="subtitle is-4">Views: { x.viewed }</p>
-              <p className="subtitle is-5">Description: { x.description }</p>
-              <ImageEle height='200px' meta={ x } />
-              <div className="center" style={ { marginTop: '10px' } }>
-                <button onClick={ () => this.setState({ showImageUpload: true, activeImage: x }) } className="button is-link"> Update</button>
-                <button onClick={ () => this.delete(x.name) } className="button is-danger"> Delete</button>
-
-              </div>
-            </div>
-          </div>
-        )) }
-      </div>
-    )
+  function showUpload (img: ImageMeta | null) {
+    setShowImageUpload(true)
+    setActiveImage(img)
+    setRefresh(!refresh)
   }
 
-  closeUpload () {
-    this.loadImages()
-    this.setState({ showImageUpload: false, activeImage: null })
+  function closeUpload () {
+    setShowImageUpload(false)
+    setActiveImage(null)
+    setRefresh(!refresh)
   }
 
-  get imageUpload (): JSX.Element | null {
-    if (!this.state.showImageUpload) return null
-    return <ImageUpload meta={ this.state.activeImage } close={ () => this.closeUpload() } />
-  }
-
-  render (): JSX.Element {
-    return (
-      <div className="tile is-ancestor">
-        <div className="tile is-parent is-vertical">
-          <div className="title">Images</div>
-          <div className="tile is-child">
-            <button
-              onClick={ () => this.setState({ showImageUpload: true }) }
-              style={ { width: 'fit-content' } }
-              className="button is-primary">
-              Upload New Image
+  return (
+    <div className="tile is-ancestor">
+      <div className="tile is-parent is-vertical">
+        <div className="title">Images</div>
+        <div className="tile is-child">
+          <button
+            onClick={ () => setShowImageUpload(true) }
+            style={ { width: 'fit-content' } }
+            className="button is-primary">
+            Upload New Image
           </button>
-          </div>
-          { this.imageElements }
         </div>
-        { this.imageUpload }
-      </div >
-    )
-  }
+        <div className="tile">
+          {
+            images.map(x => (
+              <div key={ x.name } className="tile is-parent is-3">
+                <div className="tile is-child box col">
+                  <p className="subtitle is-4">Name: { x.name }</p>
+                  <p className="subtitle is-4">Views: { x.viewed }</p>
+                  <p className="subtitle is-5">Description: { x.description }</p>
+                  <ImageEle height='200px' meta={ x } />
+                  <div className="center" style={ { marginTop: '10px' } }>
+                    <button onClick={ () => showUpload(x) } className="button is-link"> Update</button>
+                    <button onClick={ () => deleteImage(x.name) } className="button is-danger"> Delete</button>
+
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      { showImageUpload && <ImageUpload meta={ activeImage } close={ closeUpload } /> }
+    </div >
+  )
 }
