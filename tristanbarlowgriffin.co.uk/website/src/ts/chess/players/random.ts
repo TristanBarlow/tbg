@@ -8,7 +8,7 @@ export class RandomBot extends ChessPlayer {
   isHuman = false
   lastNumberOfMoves = 0
 
-  async getMove (fen: string): Promise<MoveResponse | null> {
+  async getMove(fen: string): Promise<MoveResponse | null> {
     const strt = performance.now()
     const game = newBoard(fen)
     const possibleMoves = game.moves()
@@ -17,10 +17,10 @@ export class RandomBot extends ChessPlayer {
 
     let randomIndex = Math.floor(Math.random() * possibleMoves.length)
     const move = possibleMoves[randomIndex]
-    return { move, rating: 1, timeTaken: timeTaken(strt), details: 'I chose randomly' }
+    return { move, rating: 1, timeTaken: timeTaken(strt), details: 'I picked randomly' }
   }
 
-  get stats () {
-    return `I Had ${ this.lastNumberOfMoves } I could do, I picked randomly because I am an Idiot`
+  get stats() {
+    return `I Had ${this.lastNumberOfMoves} I could do, I picked randomly because I am an Idiot`
   }
 }
