@@ -1,9 +1,3 @@
-export function lastPart (str: string): string {
-  const parts = str.split('/')
-  const lastSegment = parts.pop() || parts.pop()
-  return lastSegment || 'Not found'
-}
-
 export function toTitle (str: string): string {
   let out = str.replace(/-[a-z]/g, (x) => {
     return x.replace('-', ' ').toUpperCase()

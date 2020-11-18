@@ -10,6 +10,7 @@ import Manage from './pages/Manage'
 import './css/main.css'
 import ChessPage from './pages/Chess'
 import Login from './components/Login'
+import { Flex } from '@chakra-ui/react'
 
 export default function App () {
   return (
@@ -17,17 +18,19 @@ export default function App () {
       { Background({ color: 'hsl(0, 0%, 96%)' }) }
       <BrowserRouter>
         <NavBar />
-        <div className="section">
-          <Switch>
-            <Route path="/contact" component={ Contact } />
-            <Route path="/projects/*" component={ ProjectView } />
-            <Route path="/projects" component={ Projects } />
-            <Route path="/chess" component={ ChessPage } />
-            <Route path="/admin/login" component={ Login } />
-            <Route path="/admin" component={ Manage } />
-            <Route path="/" component={ Home } />
-          </Switch>
-        </div>
+        <Flex flexDirection="column" alignItems="center">
+          <Flex pt={ 2 } px={ 1 } w="100%" maxW="1200px" >
+            <Switch>
+              <Route path="/contact" component={ Contact } />
+              <Route path="/projects/:pId" component={ ProjectView } />
+              <Route path="/projects" component={ Projects } />
+              <Route path="/chess" component={ ChessPage } />
+              <Route path="/admin/login" component={ Login } />
+              <Route path="/admin" component={ Manage } />
+              <Route path="/" component={ Home } />
+            </Switch>
+          </Flex>
+        </Flex>
       </BrowserRouter >
     </div>
   )
