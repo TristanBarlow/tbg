@@ -4,11 +4,6 @@ import { Auth } from '../ts/Auth'
 import { Spinner } from '@chakra-ui/react'
 import { useHistory } from 'react-router'
 
-
-interface State {
-  key: string
-  loading: boolean
-}
 export default function Login () {
   const history = useHistory()
   const [key, setKey] = useState('')
