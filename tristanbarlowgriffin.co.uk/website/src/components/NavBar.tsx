@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router'
+import Link from './MyLink'
 
 /* eslint-disable */
 export default function NavBar () {
@@ -15,18 +16,18 @@ export default function NavBar () {
   const menuClass = menuActive ? "navbar-menu is-active " : "navbar-menu "
 
   function makeItem (label: string, path: string): JSX.Element {
-    return (<a className="navbar-item " onClick={ () => navigate(path) }>
+    return (<Link as={ Link } to={ path } className="navbar-item " >
       { label }
-    </a>)
+    </Link>)
   }
 
   return (
     <div>
       <nav className="shadow-1 navbar is-primary" role="navigation">
         <div className="navbar-brand">
-          <a className="navbar-item" onClick={ () => navigate('/') }>
+          <Link _hover={ { textDecoration: '' } } className="navbar-item" to="/">
             <p className="title">TBG</p>
-          </a>
+          </Link>
           <a role="button" className={ burgerClass } onClick={ () => setMenuActive(!menuActive) } >
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
