@@ -11,9 +11,4 @@ describe('util test', () => {
     expect(toKebab('Foo Bar 123')).toBe('foo-bar-123')
     expect(toKebab('foo')).toBe('foo')
   })
-
-  it('Last Part', () => {
-    expect(lastPart('/foo/bar')).toBe('bar')
-    expect(lastPart('/foo/bar/')).toBe('bar')
-  })
 })

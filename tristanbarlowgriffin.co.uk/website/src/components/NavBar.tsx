@@ -1,70 +1,47 @@
-import React from 'react'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import React, { useState } from 'react'
+import { useHistory } from 'react-router'
 
 /* eslint-disable */
-type propsWithRouter = RouteComponentProps<{}>
-interface State {
-  menuActive: boolean
-}
-export class NavBar extends React.Component<propsWithRouter, State> {
-  private static inst: NavBar
-  public static push (route: string) {
-    NavBar.inst.props.history.push(route)
+export default function NavBar () {
+  const history = useHistory()
+  const [menuActive, setMenuActive] = useState(false)
+  function navigate (loc: string) {
+    history.push(loc)
+    setMenuActive(false)
   }
 
-  constructor (p: propsWithRouter) {
-    super(p)
-    NavBar.inst = this
-    this.state = { menuActive: false }
-  }
 
-  navigate (loc: string) {
-    this.props.history.push(loc)
-    this.setState({ menuActive: false })
-  }
+  const burgerClass = menuActive ? "navbar-burger is-active " : "navbar-burger "
+  const menuClass = menuActive ? "navbar-menu is-active " : "navbar-menu "
 
-  burgerClass () {
-    if (this.state.menuActive) return "navbar-burger is-active"
-    return "navbar-burger "
-  }
-
-  get menu () {
-    if (this.state.menuActive) return "navbar-menu is-active"
-    return "navbar-menu "
-  }
-
-  makeItem (label: string, path: string): JSX.Element {
-    return (<a className="navbar-item " onClick={ () => this.navigate(path) }>
+  function makeItem (label: string, path: string): JSX.Element {
+    return (<a className="navbar-item " onClick={ () => navigate(path) }>
       { label }
     </a>)
   }
 
-  render () {
-    return (
-      <div>
-        <nav className="navbar is-primary" role="navigation">
-          <div className="navbar-brand">
-            <a className="navbar-item" onClick={ () => this.navigate('/') }>
-              <p className="title">TBG</p>
-            </a>
-            <a role="button" className={ this.burgerClass() } onClick={ () => this.setState({ menuActive: !this.state.menuActive }) }>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-            </a>
-          </div>
+  return (
+    <div>
+      <nav className="shadow-1 navbar is-primary" role="navigation">
+        <div className="navbar-brand">
+          <a className="navbar-item" onClick={ () => navigate('/') }>
+            <p className="title">TBG</p>
+          </a>
+          <a role="button" className={ burgerClass } onClick={ () => setMenuActive(!menuActive) } >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
 
-          <div id="navbarBasicExample" className={ this.menu }>
-            <div className="navbar-start">
-              { this.makeItem('Projects', '/projects') }
-              { this.makeItem('Chess', '/chess') }
-              { this.makeItem('Contact', '/contact') }
-            </div>
+        <div id="navbarBasicExample" className={ menuClass }>
+          <div className="navbar-start">
+            { makeItem('Projects', '/projects') }
+            { makeItem('Chess', '/chess') }
+            { makeItem('Contact', '/contact') }
           </div>
-        </nav >
-      </div >
-    )
-  }
+        </div>
+      </nav >
+    </div >
+  )
 }
-
-export default withRouter(NavBar)

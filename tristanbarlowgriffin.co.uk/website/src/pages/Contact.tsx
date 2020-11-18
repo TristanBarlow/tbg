@@ -1,8 +1,10 @@
 import React from 'react'
+import MyHelmet from '../components/MyHelmet'
 
 export default function Contact () {
   return (
     <div className="tile is-parent">
+      <MyHelmet title="TBG - Contact" description="This is the contact page of Tristan Barlow-Griffin - Fullstack Software Engineer - Cornwall UK" />
       <div className="title"></div>
       <div className="tile is-child center-a col flex">
         <p className="title is-1  is-size-4-mobile">Contact</p>
