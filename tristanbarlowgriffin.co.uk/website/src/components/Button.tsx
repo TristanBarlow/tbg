@@ -1,4 +1,4 @@
-import { ButtonProps, Button as CButton } from '@chakra-ui/core'
+import { ButtonProps, Button as CButton } from '@chakra-ui/react'
 import React from 'react'
 import Loading from './Loading'
 

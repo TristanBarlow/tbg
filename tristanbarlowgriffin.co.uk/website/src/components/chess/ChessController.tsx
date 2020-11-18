@@ -3,7 +3,7 @@ import { PlayersTypes, PlayerFactory, PlayerColour, MoveResponse } from '../../t
 import ChessBoard from './ChessBoard'
 import Button, { Colors } from '../Button'
 import MySelect from '../MySelect'
-import { Flex, Grid } from '@chakra-ui/core'
+import { Flex, Grid } from '@chakra-ui/react'
 import { getUnixTime } from 'date-fns'
 import ChessLog, { Log } from './ChessLog'
 

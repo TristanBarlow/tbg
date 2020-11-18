@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import InputField from './InputField'
 import { Auth } from '../ts/Auth'
-import { Spinner } from '@chakra-ui/core'
+import { Spinner } from '@chakra-ui/react'
 import { useHistory } from 'react-router'
 
 

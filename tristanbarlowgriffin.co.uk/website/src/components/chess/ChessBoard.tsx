@@ -6,6 +6,10 @@ import { MoveResponse } from '../../ts/chess/players'
 
 type SquaresCSS = Pick<Renderer['props'], 'squareStyles'>['squareStyles']
 
+const colorLookup: { 'w': 'white', 'b': 'black' } = {
+  'w': 'white',
+  'b': 'black'
+}
 interface Drop {
   sourceSquare: Square
   targetSquare: Square
@@ -38,7 +42,7 @@ export default class ChessBoard extends React.Component<Props, State>{
     this.state = {
       fen: this.game.fen(),
       history: [this.game.fen()],
-      orientation: this.currentIsHuman ? 'white' : 'black',
+      orientation: this.currentIsHuman ? 'w' : 'b',
       lastMove: null
     }
 
@@ -63,8 +67,7 @@ export default class ChessBoard extends React.Component<Props, State>{
   }
 
   get currentPlayerColour (): PlayerColour {
-    const turn = this.game.turn()
-    return turn === 'w' ? 'white' : 'black'
+    return this.game.turn()
   }
 
   get currentPlayer (): ChessPlayer {
@@ -74,7 +77,7 @@ export default class ChessBoard extends React.Component<Props, State>{
 
   get lastPlayerColour (): PlayerColour {
     const turn = this.game.turn()
-    return turn === 'w' ? 'black' : 'white'
+    return turn === 'w' ? 'b' : 'w'
   }
 
   get lastPlayer (): ChessPlayer {
@@ -180,7 +183,7 @@ export default class ChessBoard extends React.Component<Props, State>{
         <Renderer
           undo={ true }
           calcWidth={ () => window.outerWidth < 510 ? window.outerWidth - 10 : 500 }
-          orientation={ this.state.orientation }
+          orientation={ colorLookup[this.state.orientation] }
           showNotation={ true }
           draggable={ this.currentIsHuman }
           squareStyles={ this.tileColours }
