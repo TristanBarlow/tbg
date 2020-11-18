@@ -2,11 +2,13 @@ import React from 'react'
 import Me from '../assets/images/me.png'
 import LinkedIn from '../assets/images/linked-in.png'
 import GitHub from '../assets/images/git-hub.png'
+import MyHelmet from '../components/MyHelmet'
 
 export default function Home () {
   return (
     <div className="tile is-parent">
       <div className="title"></div>
+      <MyHelmet title="TBG - Home" description="This is the personal website of Tristan Barlow-Griffin - Fullstack Software Engineer - Cornwall UK" />
       <div className="tile is-child center-a col flex">
         <div className="section">
           <img className="shadow-1" alt="Its me :)" src={ Me } style={ { borderRadius: '25%', height: 'auto', width: '200px' } } />
