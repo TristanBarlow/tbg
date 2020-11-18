@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-
+process.env.TZ = 'Europe/London'
 export interface Env {
   PORT: string
   MODE: 'dev' | 'prod'
