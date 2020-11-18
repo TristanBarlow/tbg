@@ -31,6 +31,7 @@ export default function ProjectManager () {
   }
 
   const showProjectAdd = (proj: Project | null) => {
+    console.log(proj)
     setProjectAdd(true)
     setActiveProj(proj)
   }
@@ -49,7 +50,7 @@ export default function ProjectManager () {
           className="button is-primary">
           Upload New Project
           </button>
-        <div className="tile">
+        <Grid py={ 1 } w="100%" templateColumns="auto-fill">
           {
             projects.map(x =>
               <Flex className="shadow-1" padding={ 2 } bg="white" flexDirection="column" w="350px" key={ x.title }>
@@ -63,13 +64,13 @@ export default function ProjectManager () {
                   <Text fontWeight="600">Image: </Text>
                   <Text> { x.imageId }</Text>
                 </Grid>
-                <Flex mt={ 2 } w="100%" justifyContent="space-around" className="field is-grouped">
+                <Flex mt={ 2 } w="100%" justifyContent="space-around" >
                   <Button click={ () => showProjectAdd(x) } className="button is-link"> Update</Button>
                   <Button click={ () => deleteProj(x) } className="button is-danger"> Delete</Button>
                 </Flex>
               </Flex>
             ) }
-        </div>
+        </Grid>
       </div>
       { projectAdd && <ProjectAdd proj={ activeProject } close={ close } /> }
     </div >
