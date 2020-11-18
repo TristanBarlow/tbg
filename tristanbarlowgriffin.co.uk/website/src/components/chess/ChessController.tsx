@@ -19,7 +19,7 @@ export default function ChessController () {
   function updateStats (color: PlayerColour, response: MoveResponse) {
     const log: Log = {
       time: getUnixTime(new Date()),
-      botName: color === 'white' ? white.name : black.name,
+      botName: color === 'w' ? white.name : black.name,
       color,
       details: response.details
     }
@@ -54,17 +54,19 @@ export default function ChessController () {
               <Button
                 color={ Colors.INFO }
                 label={ paused ? 'Start' : 'Pause' }
-                onClick={ () => { setPaused(!paused) } } />
+                click={ () => { setPaused(!paused) } }
+              />
 
               <Button
                 color={ Colors.INFO }
                 label="Undo"
-                onClick={ () => {
+                click={ () => {
                   setPaused(true)
                   if (undo.current) {
                     undo.current()
                   }
-                } } />
+                } }
+              />
             </Flex>
           </Flex>
           <ChessLog logs={ logs } />
