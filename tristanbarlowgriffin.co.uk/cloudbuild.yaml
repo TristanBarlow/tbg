@@ -22,7 +22,7 @@ steps:
         "--image",
         "gcr.io/personal-251317/tbg",
         "--region",
-        "europe-west2",
+        "europe-west1",
         "--memory",
         "2Gi",
         "--platform",
