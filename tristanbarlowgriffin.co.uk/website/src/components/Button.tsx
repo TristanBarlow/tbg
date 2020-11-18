@@ -24,6 +24,6 @@ export default function Button (props: Props) {
     )
 
   return (
-    <CButton onClick={ () => props.click } className={ clazz }{ ...props }>{ props.label }</CButton>
+    <CButton onClick={ props.click } className={ clazz }{ ...props }>{ props.label }{ props.children }</CButton>
   )
 }
