@@ -1,6 +1,6 @@
 import { PlayersTypes, MoveResponse } from './types'
 
-export type PlayerColour = "black" | "white"
+export type PlayerColour = "b" | "w"
 export abstract class ChessPlayer {
   abstract name: PlayersTypes
   abstract isHuman: boolean

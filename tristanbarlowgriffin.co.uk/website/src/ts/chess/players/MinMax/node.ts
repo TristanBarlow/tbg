@@ -9,7 +9,7 @@ const MINIMAX_VALS: { [key in PieceType]: number } = {
   n: 3,
   b: 3,
   q: 9,
-  k: 1000,
+  k: 10,
 }
 
 export class MiniMacsNode {
@@ -23,14 +23,14 @@ export class MiniMacsNode {
   colour: PlayerColour
   moveCount = 0
 
-  constructor(fen: string) {
+  constructor (fen: string) {
     this.game = newBoard(fen)
-    this.colour = this.game.turn() === 'w' ? 'white' : 'black'
+    this.colour = this.game.turn()
     const moves = this.game.moves()
     this.moves = shuffle(moves)
   }
 
-  NewLayer(depth: number, isMaxing: boolean, a = Number.NEGATIVE_INFINITY, b = Number.POSITIVE_INFINITY): number {
+  NewLayer (depth: number, isMaxing: boolean, a = Number.NEGATIVE_INFINITY, b = Number.POSITIVE_INFINITY): number {
     if (depth === 0) {
       return this.EvaluateBoard()
     }
@@ -74,8 +74,16 @@ export class MiniMacsNode {
     return best_value
   }
 
-  EvaluateBoard() {
+  get isMyGo () {
+    return this.game.turn() === this.colour
+  }
+
+  EvaluateBoard () {
     const board = this.game.board()
+
+    if (this.game.in_checkmate()) {
+      return this.isMyGo() ? -100 : 100
+    }
 
     let b = 0
     let w = 0
@@ -89,19 +97,19 @@ export class MiniMacsNode {
         else b += val
       }
 
-    return this.colour === 'white' ? w - b : b - w
+    return this.colour === 'w' ? w - b : b - w
   }
 
 }
 
-export function quickGetMove(fen: string): MoveResponse {
+export function quickGetMove (fen: string): MoveResponse {
   const node = new MiniMacsNode(fen)
   const strt = performance.now()
   const rating = node.NewLayer(4, true)
   return {
     move: node.bestMove,
     rating,
-    details: `Searched ${node.moveCount} different moves`,
+    details: `Searched ${ node.moveCount } different moves`,
     timeTaken: timeTaken(strt)
   }
 }
