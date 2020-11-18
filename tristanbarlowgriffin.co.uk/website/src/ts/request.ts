@@ -1,6 +1,6 @@
 import { Auth } from './Auth'
 
-export type APIResponse<T> = { status: 200, data: T } | { status: number }
+export type APIResponse<T> = { status: 200, success: true, data: T } | { status: number, success: false }
 
 export async function apiRequest<T> (
   path: string,
@@ -25,17 +25,20 @@ export async function apiRequest<T> (
   const res = await fetch(`${ process.env.REACT_APP_SERVER_URL }${ path }`, { body, method, headers })
   if (res.status !== 200) {
     return {
+      success: false,
       status: res.status
     }
   }
 
   try {
     return {
+      success: true,
       data: await res.json(),
       status: res.status
     }
   } catch (e) {
     return {
+      success: false,
       status: res.status
     }
   }
