@@ -1,4 +1,4 @@
-import { toTitle, lastPart, toKebab } from './util'
+import { toTitle, toKebab } from './util'
 
 describe('util test', () => {
   it('To Title', () => {
