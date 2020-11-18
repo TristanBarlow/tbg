@@ -36,7 +36,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build && cp -r build ../../server",
+    "build": "react-app-rewired build && cp -r build ../server",
     "test": "react-app-rewired test"
   },
   "eslintConfig": {
