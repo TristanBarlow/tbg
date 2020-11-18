@@ -8,11 +8,6 @@ import LoadingModal from './LoadingModal'
 import { Flex, Grid, Link, Text } from '@chakra-ui/react'
 import Button from './Button'
 
-interface State {
-  showProjectAdd: boolean
-  projects: Project[]
-  activeProject: Project | null
-}
 export default function ProjectManager () {
   const [refresh, setRefresh] = useState(false)
   const [projects, loading] = useProjects(refresh)
