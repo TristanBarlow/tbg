@@ -5,7 +5,7 @@ import { apiRequest } from '../ts/request'
 import { toKebab } from '@tbg/util'
 import { useProjects } from '../ts/projects'
 import LoadingModal from './LoadingModal'
-import { Flex, Grid, Link, Text } from '@chakra-ui/core'
+import { Flex, Grid, Link, Text } from '@chakra-ui/react'
 import Button from './Button'
 
 interface State {
@@ -57,7 +57,7 @@ export default function ProjectManager () {
                   <Text fontWeight="600">Title: </Text>
                   <Text> { x.title }</Text>
                   <Text fontWeight="600">link: </Text>
-                  <Link as="a" src={ x.link }> { x.link }</Link>
+                  <Link to={ x.link }> { x.link }</Link>
                   <Text fontWeight="600">GIF: </Text>
                   <Text> { x.gifId }</Text>
                   <Text fontWeight="600">Image: </Text>

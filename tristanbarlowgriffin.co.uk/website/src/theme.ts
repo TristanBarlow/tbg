@@ -1,6 +1,6 @@
-import { DefaultTheme, theme } from '@chakra-ui/core'
+import { theme, Theme } from '@chakra-ui/react'
 
-export const myTheme: DefaultTheme = {
+export const myTheme: Theme = {
     ...theme,
     fonts: {
         body: ' BlinkMacSystemFont,-apple-system,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue","Helvetica","Arial",sans-serif',

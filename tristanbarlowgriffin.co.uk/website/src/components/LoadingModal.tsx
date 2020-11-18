@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Spinner } from '@chakra-ui/core'
+import { Flex, Spinner } from '@chakra-ui/react'
 
 interface Props {
   hideBG?: boolean

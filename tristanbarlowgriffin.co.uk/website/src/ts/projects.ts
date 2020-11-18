@@ -12,7 +12,7 @@ export function useProjects (refresh?: boolean): [Project[], boolean] {
     apiRequest<Project[]>('/api/projects', 'GET')
       .then(x => {
         setLoading(false)
-        if (x.status === 200) {
+        if (x.success) {
           console.log('Got Projects', x.data)
           setProjects(x.data)
         }
@@ -36,7 +36,7 @@ export function useImages (refresh?: boolean): [ImageMeta[], boolean] {
     apiRequest<ImageMeta[]>('/api/images', 'GET')
       .then(x => {
         setLoading(false)
-        if (x.status === 200) {
+        if (x.success) {
           console.log('Got Projects', x.data)
           setImages(x.data)
         }
