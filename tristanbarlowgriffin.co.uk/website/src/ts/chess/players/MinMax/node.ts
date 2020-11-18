@@ -82,7 +82,7 @@ export class MiniMacsNode {
     const board = this.game.board()
 
     if (this.game.in_checkmate()) {
-      return this.isMyGo() ? -100 : 100
+      return this.isMyGo ? -100 : 100
     }
 
     let b = 0

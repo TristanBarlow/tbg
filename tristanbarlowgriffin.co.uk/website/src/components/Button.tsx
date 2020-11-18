@@ -1,5 +1,5 @@
 import { ButtonProps, Button as CButton } from '@chakra-ui/core'
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 import Loading from './Loading'
 
 export enum Colors {
@@ -9,13 +9,13 @@ export enum Colors {
   DANGER = ' is-danger '
 }
 
-interface Props extends ButtonProps {
+interface Props extends Partial<ButtonProps> {
   label?: string
   loading?: boolean
   color?: Colors
   click: () => void
 }
-export default function Button (props: PropsWithChildren<Props>) {
+export default function Button (props: Props) {
   const clazz = `button ${ props.color }`
 
   if (props.loading)
