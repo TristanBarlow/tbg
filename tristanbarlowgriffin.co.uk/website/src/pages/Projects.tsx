@@ -1,28 +1,27 @@
 import React from 'react'
 import { Project } from '../../../packages/types/src/project'
 import { toKebab } from '@tbg/util'
-import { useHistory } from 'react-router'
 import { useProjects } from '../ts/projects'
 import { Flex, Grid, Text } from '@chakra-ui/react'
 import ImageEle from '../components/Image'
 import MyHelmet from '../components/MyHelmet'
+import MyLink from '../components/MyLink'
 
 function ProjectTile ({ imageId, title }: Project): JSX.Element {
-  const history = useHistory()
   return (
-    <Grid
-      cursor="pointer"
+    <MyLink
+      display="flex"
+      flexDir="column"
       bg="white"
       w="fit-content"
       minH="200px"
       className="shadow-1"
       borderRadius="10px"
-      templateColumns="auto"
-      onClick={ () => history.push(`/projects/${ toKebab(title) }`) }
+      to={ `/projects/${ toKebab(title) }` }
     >
       <Text mb={ 2 } mt={ 2 } mx={ 2 } fontWeight="bold" fontSize="2xl">{ title }</Text>
       <ImageEle width="300px" meta={ imageId } />
-    </Grid>
+    </MyLink>
   )
 }
 
