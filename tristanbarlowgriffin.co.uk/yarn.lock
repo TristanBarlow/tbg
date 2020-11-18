@@ -3206,12 +3206,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:*, @types/react-dom@npm:^16.8.3, @types/react-dom@npm:^16.9.0":
+"@types/react-dom@npm:*, @types/react-dom@npm:^16.8.3":
   version: 16.9.8
   resolution: "@types/react-dom@npm:16.9.8"
   dependencies:
     "@types/react": "*"
   checksum: 53a223c0266178bca9161301d18ee6199e8f75f88caed5c4601c5aaedaf4c68f03bd72f6aafa979254beb20759f0b68a542ce04295d704eb67ae179769c50813
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:^16.9.9":
+  version: 16.9.9
+  resolution: "@types/react-dom@npm:16.9.9"
+  dependencies:
+    "@types/react": "*"
+  checksum: d92c166f5bcd483f175311eec9c472893216d486106a5b5402eb293840c0b0d1aafb484a3fe3f0f4622ae1f6dff46c9fe970873d4dac7fdf70a50931d3cab4a0
   languageName: node
   linkType: hard
 
@@ -3236,13 +3245,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^16.8.10, @types/react@npm:^16.9.0":
+"@types/react@npm:*, @types/react@npm:^16.8.10":
   version: 16.9.49
   resolution: "@types/react@npm:16.9.49"
   dependencies:
     "@types/prop-types": "*"
     csstype: ^3.0.2
   checksum: cf5dabe1e9c893a19a338002ac4bf5a86c9bc3cd88eb07aece54e6d2e5af35debe2a8c72d211ad9133391543ce115219cd7c7f2a6f649b81caf4548e1cc99061
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^16.9.56":
+  version: 16.9.56
+  resolution: "@types/react@npm:16.9.56"
+  dependencies:
+    "@types/prop-types": "*"
+    csstype: ^3.0.2
+  checksum: 139867e2b3d577723b9361234f105d0cf1b143202f51fef207355332f972dd74030cfb3918037cb311eefd203ee06e0a370c37755204eefdd35734f0fde070a1
   languageName: node
   linkType: hard
 
@@ -18043,8 +18062,8 @@ typescript@~3.7.2:
     "@testing-library/user-event": ^7.1.2
     "@types/jest": ^24.0.0
     "@types/node": ^12.0.0
-    "@types/react": ^16.9.0
-    "@types/react-dom": ^16.9.0
+    "@types/react": ^16.9.56
+    "@types/react-dom": ^16.9.9
     "@types/react-router": ^5
     "@types/react-router-dom": ^5
     chessboardjsx: ^2.4.2
