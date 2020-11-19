@@ -4,7 +4,7 @@ import { ImageMeta } from '../../../packages/types/src/project'
 import { apiRequest } from '../ts/request'
 import ImageEle from './Image'
 import { useImages } from '../ts/projects'
-import { Flex, Grid, Text } from '@chakra-ui/react'
+import { Flex, Text } from '@chakra-ui/react'
 import Button from './Button'
 
 export default function ImageManager () {
