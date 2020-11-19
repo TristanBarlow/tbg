@@ -4,6 +4,8 @@ import { ImageMeta } from '../../../packages/types/src/project'
 import { apiRequest } from '../ts/request'
 import ImageEle from './Image'
 import { useImages } from '../ts/projects'
+import { Flex, Grid, Text } from '@chakra-ui/react'
+import Button from './Button'
 
 export default function ImageManager () {
   const [showImageUpload, setShowImageUpload] = useState(false)
@@ -29,38 +31,30 @@ export default function ImageManager () {
   }
 
   return (
-    <div className="tile is-ancestor">
-      <div className="tile is-parent is-vertical">
-        <div className="title">Images</div>
-        <div className="tile is-child">
-          <button
-            onClick={ () => setShowImageUpload(true) }
-            style={ { width: 'fit-content' } }
-            className="button is-primary">
-            Upload New Image
-          </button>
-        </div>
-        <div className="tile">
-          {
-            images.map(x => (
-              <div key={ x.name } className="tile is-parent is-3">
-                <div className="tile is-child box col">
-                  <p className="subtitle is-4">Name: { x.name }</p>
-                  <p className="subtitle is-4">Views: { x.viewed }</p>
-                  <p className="subtitle is-5">Description: { x.description }</p>
-                  <ImageEle height='200px' meta={ x } />
-                  <div className="center" style={ { marginTop: '10px' } }>
-                    <button onClick={ () => showUpload(x) } className="button is-link"> Update</button>
-                    <button onClick={ () => deleteImage(x.name) } className="button is-danger"> Delete</button>
+    <Flex flexDir="column" w="100%">
+      <Button
+        click={ () => setShowImageUpload(true) }
+        style={ { width: 'fit-content' } }
+        className="button is-primary">
+        Upload New Image
+          </Button>
 
-                  </div>
-                </div>
-              </div>
-            ))
-          }
-        </div>
-      </div>
+      <Flex w="100%" flexWrap="wrap" py={ 2 }>
+        {
+          images.map(x => (
+            <Flex mr={ 2 } p={ 2 } bg="white" className="shadow-1" borderRadius="4px" flexDirection="column" w="300px" key={ x.name } >
+              <Text fontSize="lg">Name: { x.name }</Text>
+              <Text fontSize="lg">Views: { x.viewed }</Text>
+              <ImageEle height='200px' meta={ x } />
+              <Flex w="100%" className="center" mt={ 1 } justifyContent="space-around">
+                <button onClick={ () => showUpload(x) } className="button is-link"> Update</button>
+                <button onClick={ () => deleteImage(x.name) } className="button is-danger"> Delete</button>
+              </Flex>
+            </Flex>
+          ))
+        }
+      </Flex>
       { showImageUpload && <ImageUpload meta={ activeImage } close={ closeUpload } /> }
-    </div >
+    </Flex>
   )
 }
