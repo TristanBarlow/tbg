@@ -5,7 +5,7 @@ import { apiRequest } from '../ts/request'
 import { toKebab } from '@tbg/util'
 import { useProjects } from '../ts/projects'
 import LoadingModal from './LoadingModal'
-import { Flex, Grid, Link, Text } from '@chakra-ui/react'
+import { Flex, Grid, Text } from '@chakra-ui/react'
 import Button from './Button'
 
 export default function ProjectManager () {
@@ -36,38 +36,34 @@ export default function ProjectManager () {
   }
 
   return (
-    <div className="tile is-ancestor">
-      <div className="tile is-parent is-vertical">
-        <div className="title">Projects</div>
-        <button
-          onClick={ () => setProjectAdd(true) }
-          style={ { width: 'fit-content' } }
-          className="button is-primary">
-          Upload New Project
+    <Flex flexDir="column" w="100%">
+      <Text className="title">Projects</Text>
+      <button
+        onClick={ () => setProjectAdd(true) }
+        style={ { width: 'fit-content' } }
+        className="button is-primary">
+        Upload New Project
           </button>
-        <Grid py={ 1 } w="100%" templateColumns="auto-fill">
-          {
-            projects.map(x =>
-              <Flex className="shadow-1" padding={ 2 } bg="white" flexDirection="column" w="350px" key={ x.title }>
-                <Grid rowGap={ 2 } overflowX="hidden" columnGap={ 2 } templateColumns="100px auto">
-                  <Text fontWeight="600">Title: </Text>
-                  <Text> { x.title }</Text>
-                  <Text fontWeight="600">link: </Text>
-                  <Link to={ x.link }> { x.link }</Link>
-                  <Text fontWeight="600">GIF: </Text>
-                  <Text> { x.gifId }</Text>
-                  <Text fontWeight="600">Image: </Text>
-                  <Text> { x.imageId }</Text>
-                </Grid>
-                <Flex mt={ 2 } w="100%" justifyContent="space-around" >
-                  <Button click={ () => showProjectAdd(x) } className="button is-link"> Update</Button>
-                  <Button click={ () => deleteProj(x) } className="button is-danger"> Delete</Button>
-                </Flex>
+      <Grid py={ 1 } w="100%" rowGap={ 1 } columnGap={ 2 } templateColumns="repeat(auto-fill, 350px)">
+        {
+          projects.map(x =>
+            <Flex className="shadow-1" padding={ 2 } bg="white" flexDirection="column" w="350px" key={ x.title }>
+              <Grid rowGap={ 2 } overflowX="hidden" columnGap={ 2 } templateColumns="100px auto">
+                <Text fontWeight="600">Title: </Text>
+                <Text> { x.title }</Text>
+                <Text fontWeight="600">GIF: </Text>
+                <Text> { x.gifId }</Text>
+                <Text fontWeight="600">Image: </Text>
+                <Text> { x.imageId }</Text>
+              </Grid>
+              <Flex mt="auto" w="100%" justifyContent="space-around" >
+                <Button click={ () => showProjectAdd(x) } className="button is-link"> Update</Button>
+                <Button click={ () => deleteProj(x) } className="button is-danger"> Delete</Button>
               </Flex>
-            ) }
-        </Grid>
-      </div>
+            </Flex>
+          ) }
+      </Grid>
       { projectAdd && <ProjectAdd proj={ activeProject } close={ close } /> }
-    </div >
+    </Flex>
   )
 }
