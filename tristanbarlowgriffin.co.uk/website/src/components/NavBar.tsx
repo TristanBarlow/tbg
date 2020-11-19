@@ -1,16 +1,10 @@
+import { Box } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router'
 import Link from './MyLink'
 
-/* eslint-disable */
 export default function NavBar () {
-  const history = useHistory()
   const [menuActive, setMenuActive] = useState(false)
-  function navigate (loc: string) {
-    history.push(loc)
-    setMenuActive(false)
-  }
-
 
   const burgerClass = menuActive ? "navbar-burger is-active " : "navbar-burger "
   const menuClass = menuActive ? "navbar-menu is-active " : "navbar-menu "
@@ -35,13 +29,13 @@ export default function NavBar () {
           </a>
         </div>
 
-        <div id="navbarBasicExample" className={ menuClass }>
-          <div className="navbar-start">
+        <Box bg="brand.1" id="navbarBasicExample" className={ menuClass }>
+          <Box bg="brand.1" className="navbar-start">
             { makeItem('Projects', '/projects') }
             { makeItem('Chess', '/chess') }
             { makeItem('Contact', '/contact') }
-          </div>
-        </div>
+          </Box>
+        </Box>
       </nav >
     </div >
   )

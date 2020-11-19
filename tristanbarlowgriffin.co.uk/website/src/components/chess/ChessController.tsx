@@ -5,6 +5,7 @@ import Button, { Colors } from '../Button'
 import MySelect from '../MySelect'
 import { Flex, Grid } from '@chakra-ui/react'
 import { getUnixTime } from 'date-fns'
+import { useWindowSize } from '../../ts/resize'
 import ChessLog, { Log } from './ChessLog'
 
 const playerOptions = Object.values(PlayersTypes)
@@ -12,6 +13,7 @@ export default function ChessController () {
   const [paused, setPaused] = useState(false)
   const [black, setBlack] = useState(PlayerFactory(PlayersTypes.RANDOM))
   const [white, setWhite] = useState(PlayerFactory(PlayersTypes.RANDOM))
+  const [w, h] = useWindowSize()
   const [logs, setLogs] = useState<Log[]>([])
 
   const undo = useRef<() => void>()
@@ -26,9 +28,10 @@ export default function ChessController () {
     setLogs([...logs, log])
   }
 
+  const columns = `repeat(auto-fill, ${ w > 500 ? 500 : 325 }px)`
   return (
     <Flex w="100%" justifyContent="center">
-      <Grid w="100%" maxW="1020px" columnGap="10px" rowGap={ 2 } justifyContent="center" templateColumns="repeat(auto-fill, 500px)">
+      <Grid w="100%" maxW="1020px" columnGap="10px" rowGap={ 2 } justifyContent="center" templateColumns={ columns }>
         <ChessBoard
           setUndo={ (x) => undo.current = x }
           onMove={ updateStats }
@@ -72,5 +75,5 @@ export default function ChessController () {
           <ChessLog logs={ logs } />
         </Flex>
       </Grid>
-    </Flex>)
+    </Flex >)
 }
