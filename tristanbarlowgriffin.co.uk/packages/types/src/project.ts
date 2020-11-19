@@ -1,10 +1,15 @@
 export interface Project {
   title: string
   description: string
-  link: string
+  links: ProjectLink[]
   imageId: string
   gifId: string
   order: number
+}
+
+export interface ProjectLink {
+  label: string
+  link: string
 }
 
 function isStr (x: string | undefined | null): x is string {
@@ -16,7 +21,7 @@ export function isProject (proj: Partial<Project> | null | undefined): proj is P
     && isStr(proj.description)
     && isStr(proj.gifId)
     && isStr(proj.imageId)
-    && isStr(proj.link)
+    && proj.links instanceof Array
     && isStr(proj.title)
 }
 

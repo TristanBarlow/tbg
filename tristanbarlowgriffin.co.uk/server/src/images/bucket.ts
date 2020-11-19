@@ -22,6 +22,7 @@ export async function deleteImage (id: string): Promise<void> {
 export function asyncPipe (w: Writable, r: Readable): Promise<boolean> {
   return new Promise<boolean>((resolve) => {
     r.on('error', () => resolve(false))
+    r.on('end', () => resolve(true))
     r.on('close', () => resolve(true))
     r.pipe(w)
   })
