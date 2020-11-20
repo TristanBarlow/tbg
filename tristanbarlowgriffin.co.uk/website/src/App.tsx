@@ -15,7 +15,7 @@ import { Flex } from '@chakra-ui/react'
 export default function App () {
   return (
     <div>
-      { Background({ color: 'hsl(0, 0%, 96%)' }) }
+      <Background color='hsl(0, 0%, 96%)' />
       <BrowserRouter>
         <NavBar />
         <Flex flexDirection="column" alignItems="center">
