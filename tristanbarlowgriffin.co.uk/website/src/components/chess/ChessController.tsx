@@ -13,7 +13,7 @@ export default function ChessController () {
   const [paused, setPaused] = useState(false)
   const [black, setBlack] = useState(PlayerFactory(PlayersTypes.RANDOM))
   const [white, setWhite] = useState(PlayerFactory(PlayersTypes.RANDOM))
-  const [w, h] = useWindowSize()
+  const [w] = useWindowSize()
   const [logs, setLogs] = useState<Log[]>([])
 
   const undo = useRef<() => void>()
@@ -28,10 +28,10 @@ export default function ChessController () {
     setLogs([...logs, log])
   }
 
-  const columns = `repeat(auto-fill, ${ w > 500 ? 500 : 325 }px)`
+  const columns = `repeat(auto-fill, ${ w > 500 ? 500 : 320 }px)`
   return (
     <Flex w="100%" justifyContent="center">
-      <Grid w="100%" maxW="1020px" columnGap="10px" rowGap={ 2 } justifyContent="center" templateColumns={ columns }>
+      <Grid py={ 1 } w="100%" maxW="1020px" columnGap="10px" rowGap={ 2 } justifyContent="center" templateColumns={ columns }>
         <ChessBoard
           setUndo={ (x) => undo.current = x }
           onMove={ updateStats }

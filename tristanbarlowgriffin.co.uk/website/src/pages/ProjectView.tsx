@@ -47,9 +47,9 @@ export default function ProjectView () {
       <MyHelmet title={ `TBG - ${ activeProj.title }` } description={ activeProj.description } />
       <Flex flexDir="column" w="100%" maxW="1200px">
         <p className="title is-3">{ activeProj.title }</p>
-        <Grid justifyItems="center" justifyContent="center" w="100%" rowGap={ 4 } columnGap={ 2 } templateColumns="repeat(auto-fill, 500px)">
+        <Grid justifyItems="center" justifyContent="center" w="100%" rowGap={ 4 } columnGap={ 2 } templateColumns="repeat(auto-fill, minmax(100%, 500px))">
           <Text maxW="600px" my={ 4 }>{ activeProj.description }</Text>
-          <ImageEle width="400px" meta={ activeProj.gifId } />
+          <ImageEle px={ 1 } width="400px" meta={ activeProj.gifId } />
           <ImageEle width="400px" meta={ activeProj.imageId } />
           <Flex flexDir="column" alignItems="flex-start" rowGap={ 4 } templateColumns="auto" w="100%">
             {

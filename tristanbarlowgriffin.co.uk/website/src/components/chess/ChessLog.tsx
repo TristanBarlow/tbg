@@ -13,10 +13,10 @@ interface Props {
 }
 export default function ChessLog ({ logs }: Props) {
   const endRef = useRef<HTMLDivElement | null>(null)
-  useEffect(() => {
-    if (!endRef.current) return
-    endRef.current.scrollIntoView({ behavior: 'smooth' })
-  }, [logs])
+  // useEffect(() => {
+  //   if (!endRef.current) return
+  //   endRef.current.scrollIntoView({ behavior: 'smooth' })
+  // }, [logs])
   return (
     <Flex py={ 1 } px={ 2 } overflowX="scroll" bg="white" mt={ 2 } className="shadow-1" flexDirection="column" h="300px">
       {

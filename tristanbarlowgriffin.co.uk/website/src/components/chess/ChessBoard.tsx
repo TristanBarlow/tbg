@@ -182,7 +182,7 @@ export default class ChessBoard extends React.Component<Props, State>{
       <div className="shadow-1">
         <Renderer
           undo={ true }
-          calcWidth={ () => window.outerWidth > 500 ? 500 : 340 }
+          calcWidth={ () => window.outerWidth > 500 ? 500 : 320 }
           orientation={ colorLookup[this.state.orientation] }
           showNotation={ true }
           draggable={ this.currentIsHuman }
