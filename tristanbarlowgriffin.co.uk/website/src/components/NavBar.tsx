@@ -1,6 +1,5 @@
 import { Box } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { useHistory } from 'react-router'
 import Link from './MyLink'
 
 export default function NavBar () {
@@ -10,7 +9,7 @@ export default function NavBar () {
   const menuClass = menuActive ? "navbar-menu is-active " : "navbar-menu "
 
   function makeItem (label: string, path: string): JSX.Element {
-    return (<Link as={ Link } to={ path } className="navbar-item " >
+    return (<Link onClick={ () => setMenuActive(false) } as={ Link } to={ path } className="navbar-item " >
       { label }
     </Link>)
   }
