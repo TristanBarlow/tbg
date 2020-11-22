@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { apiRequest } from '../ts/request'
 import { Project, ProjectLink } from '@tbg/types'
 import InputField from './InputField'
@@ -33,7 +33,11 @@ interface Props {
   close: () => void
 }
 export default function ProjectAdd (props: Props) {
-  const [project, setProject] = useState(props.proj || defaultProje)
+  const [project, setProject] = useState(props.proj || { ...defaultProje })
+
+  useEffect(() => {
+    setProject(props.proj || { ...defaultProje })
+  }, [props.proj])
 
   function update (u: Partial<Project>) {
     setProject({ ...project, ...u })
