@@ -20,7 +20,7 @@ function ProjectTile ({ imageId, title }: Project): JSX.Element {
       to={ `/projects/${ toKebab(title) }` }
     >
       <Text mb={ 2 } mt={ 2 } mx={ 2 } fontWeight="bold" fontSize="2xl">{ title }</Text>
-      <ImageEle mt="auto" width="300px" meta={ imageId } />
+      <ImageEle maxH="300px" mt="auto" width="300px" meta={ imageId } />
     </MyLink>
   )
 }
