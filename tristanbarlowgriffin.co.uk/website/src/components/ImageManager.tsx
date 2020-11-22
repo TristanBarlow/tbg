@@ -42,7 +42,7 @@ export default function ImageManager () {
       <Flex w="100%" flexWrap="wrap" py={ 2 }>
         {
           images.map(x => (
-            <Flex mr={ 2 } p={ 2 } bg="white" className="shadow-1" borderRadius="4px" flexDirection="column" w="300px" key={ x.name } >
+            <Flex mb={ 2 } mr={ 2 } p={ 2 } bg="white" className="shadow-1" borderRadius="4px" flexDirection="column" w="300px" key={ x.name } >
               <Text fontSize="lg">Name: { x.name }</Text>
               <Text fontSize="lg">Views: { x.viewed }</Text>
               <ImageEle height='200px' meta={ x } />

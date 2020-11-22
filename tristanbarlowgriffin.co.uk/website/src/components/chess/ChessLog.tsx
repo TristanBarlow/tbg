@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { Flex, Text } from '@chakra-ui/react'
 
 export interface Log {
