@@ -13,8 +13,12 @@ export default function ImageEle (props: Props) {
   const src = `${ process.env.REACT_APP_SERVER_URL }/api/image/${ isMeta(meta) ? meta.name : meta }`
   const description = isMeta(meta) && meta.description
   return <Image
-    alt={ description || 'no description' }
-    style={ { width, height, objectFit: 'contain', borderRadius: '3%' } }
+    width="100%"
+    maxW={ width }
+    maxH={ height }
+    objectFit='contain'
+    borderRadius="8px"
+    alt={ description || '' }
     src={ src }
     { ...props }
   />
