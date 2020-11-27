@@ -12,6 +12,10 @@
     "packages/*"
   ],
   "dependencies": {
+    "sharp": "^0.26.3",
     "ts-node": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/sharp": "^0"
   }
 }
