@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { apiRequest } from '../ts/request'
 import { ImageMeta } from '@tbg/types'
 import InputField from './InputField'
@@ -9,10 +9,15 @@ interface Props {
   close: () => void
 }
 export default function ImageUpload ({ meta, close }: Props) {
-  const [name, setName] = useState('')
+  const [name, setName] = useState(meta?.name || '')
   const [loading, setLoading] = useState(false)
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState(meta?.description || '')
   const fileElement = useRef<HTMLInputElement | null>(null)
+
+  useEffect(()=>{
+    setName(meta?.name || '')
+    setDescription(meta?.description || '')
+  }, [meta])
 
   async function submit (): Promise<void> {
     const ele = fileElement.current
