@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import { Flex, Text } from '@chakra-ui/react'
 
 export interface Log {
+  id: string
   time: number
   color: string
   botName: string
@@ -21,7 +22,7 @@ export default function ChessLog ({ logs }: Props) {
     <Flex py={ 1 } px={ 2 } overflowX="scroll" bg="white" mt={ 2 } className="shadow-1" flexDirection="column" h="300px">
       {
         logs.map(log => (
-          <Flex mb={ 1 } flexDirection="column" key={ log.time }>
+          <Flex mb={ 1 } flexDirection="column" key={ log.id }>
             <Flex flexDirection="row">
               <Text fontWeight="600" mr={ 1 }>{ log.color }</Text>
               <Text>{ log.botName }:</Text>
