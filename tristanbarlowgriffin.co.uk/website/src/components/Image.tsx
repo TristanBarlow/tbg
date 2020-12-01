@@ -1,25 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ImageMeta, isMeta } from '@tbg/types'
-import { Image, ImageProps } from '@chakra-ui/react'
+import { Image, Skeleton, SkeletonProps } from '@chakra-ui/react'
 
-interface Props extends ImageProps {
+interface Props extends SkeletonProps {
   meta: ImageMeta | string
   loadSize?: number
-  width?: string,
-  height?: string
 }
 export default function ImageEle (props: Props) {
-  const { meta, width, height } = props
+  const [loaded, setLoaded] = useState(false)
+  const { meta } = props
   const src = `${ process.env.REACT_APP_SERVER_URL }/api/image/${ isMeta(meta) ? meta.name : meta }`
   const description = isMeta(meta) && meta.description
-  return <Image
-    width="100%"
-    maxW={ width }
-    maxH={ height }
-    objectFit='contain'
-    borderRadius="8px"
-    alt={ description || '' }
-    src={ src }
-    { ...props }
-  />
+  return <Skeleton
+    display="flex"
+    pos="relative"
+    isLoaded={ loaded } { ...props }
+    overflow="hidden"
+  >
+    <Image
+      mt="auto"
+      w="100%"
+      h="100%"
+      onLoad={ () => setLoaded(true) }
+      objectFit='cover'
+      alt={ description || '' }
+      src={ src }
+    />
+  </Skeleton>
 }

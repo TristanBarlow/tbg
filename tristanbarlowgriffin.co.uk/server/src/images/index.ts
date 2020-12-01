@@ -7,9 +7,6 @@ import { getAll } from './firestore'
 
 export async function createImage (id: string, description: string, contentType: string, r: Readable): Promise<WriteResult> {
   console.log('Creating write stream for File: ', id, ' Type: ', contentType)
-  if(contentType !== 'image/gif'){
-    
-  }
   const w = createWriteStream(id, contentType)
   const success = await asyncPipe(w, r)
   if (!success)
