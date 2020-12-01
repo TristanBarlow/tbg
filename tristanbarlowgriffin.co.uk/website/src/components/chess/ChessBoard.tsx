@@ -124,7 +124,10 @@ export default class ChessBoard extends React.Component<Props, State>{
 
     await this.updateBoard()
     if (this.checkGameOver()) {
-      setTimeout(() => this.game.reset(), 3000)
+      setTimeout(() => {
+        this.game.reset()
+        this.getMove()
+      }, 3000)
       return
     }
 

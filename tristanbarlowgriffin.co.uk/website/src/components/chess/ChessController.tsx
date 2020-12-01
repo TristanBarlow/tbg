@@ -19,8 +19,10 @@ export default function ChessController () {
   const undo = useRef<() => void>()
 
   function updateStats (color: PlayerColour, response: MoveResponse) {
+    const time = getUnixTime(new Date())
     const log: Log = {
-      time: getUnixTime(new Date()),
+      id: `${ color }-${ time }`,
+      time,
       botName: color === 'w' ? white.name : black.name,
       color,
       details: response.details
