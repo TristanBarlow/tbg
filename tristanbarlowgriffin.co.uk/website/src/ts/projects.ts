@@ -14,7 +14,7 @@ export function useProjects (refresh?: boolean): [Project[], boolean] {
         setLoading(false)
         if (x.success) {
           console.log('Got Projects', x.data)
-          setProjects(x.data)
+          setProjects(x.data.sort((a, b)=> a.order - b.order))
         }
       })
       .catch((e) => {
