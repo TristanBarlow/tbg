@@ -21,5 +21,7 @@ jobs:
       TEST: "test"
       FOO: "BAR"
     steps:
-      - run: echo "{"Parameters":${{toJson(env)}}" >> foo.json
-      - run: cat foo.json
+       - name: Create ENV file
+         run: echo '${{toJson(env)}}' >> .env.json
+       - run: ls -al
+       - run: pwd
