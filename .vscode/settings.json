@@ -1,0 +1,5 @@
+{
+  "rust-analyzer.linkedProjects": [
+    "tristanbarlowgriffin.co.uk/rust-server/Cargo.toml"
+  ]
+}

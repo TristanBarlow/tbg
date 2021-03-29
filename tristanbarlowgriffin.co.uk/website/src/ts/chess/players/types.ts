@@ -2,15 +2,18 @@ import { ChessPlayer } from './chessPlayer'
 import { Human } from './human'
 import { MinMaxBot } from './MinMax'
 import { RandomBot } from './random'
+import {TreeSearch} from './treeSearch'
 
 export enum PlayersTypes {
   HUMAN = "Human",
+  TreeSearch = "TreeSearch",
   MINMAX = "MinMax",
   RANDOM = "Random"
 }
 
 export const Players: { [key in PlayersTypes]: () => ChessPlayer } = {
   Human: () => new Human(),
+  TreeSearch: () => new TreeSearch(),
   MinMax: () => new MinMaxBot(),
   Random: () => new RandomBot()
 }

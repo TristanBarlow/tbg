@@ -11,8 +11,8 @@ import ChessLog, { Log } from './ChessLog'
 const playerOptions = Object.values(PlayersTypes)
 export default function ChessController () {
   const [paused, setPaused] = useState(false)
-  const [black, setBlack] = useState(PlayerFactory(PlayersTypes.RANDOM))
-  const [white, setWhite] = useState(PlayerFactory(PlayersTypes.RANDOM))
+  const [black, setBlack] = useState(PlayerFactory(PlayersTypes.MINMAX))
+  const [white, setWhite] = useState(PlayerFactory(PlayersTypes.TreeSearch))
   const [w] = useWindowSize()
   const [logs, setLogs] = useState<Log[]>([])
 

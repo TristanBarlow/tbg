@@ -19,6 +19,7 @@ export class MinMaxBot extends ChessPlayer {
 
   async getMove (fen: string): Promise<MoveResponse | null> {
     const result = await this.worker.getMove(fen)
+    console.log(result)
     return result
   }
 

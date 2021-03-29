@@ -114,7 +114,7 @@ export default class ChessBoard extends React.Component<Props, State>{
   async makeMove (move: ShortMove | string): Promise<void> {
     if (this.props.pause) return
 
-    const result = this.game.move(move)
+    const result = this.game.move(move, { sloppy: true})
     if (result === null) {
       console.log('Illegal move')
       return
