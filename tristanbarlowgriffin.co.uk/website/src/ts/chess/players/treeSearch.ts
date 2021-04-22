@@ -8,7 +8,7 @@ export class TreeSearch extends ChessPlayer {
   statHistory = ''
 
   async getMove (fen: string): Promise<MoveResponse | null> {
-    const res = await fetch(`${CFG.REACT_APP_CHESS_SERVER}/chess/move`, {
+    const res = await fetch(`${CFG.REACT_APP_CHESS_SERVER}/chess/foo/move`, {
       method:'POST',
       headers: new Headers([['Content-Type', 'application/json']]),
       body: JSON.stringify({
