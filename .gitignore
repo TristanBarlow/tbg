@@ -1,5 +1,6 @@
 **node_modules
 **build
+target
 **/.DS_Store
 tristanbarlowgriffin.co.uk/server/image-manager-SA.json
 tristanbarlowgriffin.co.uk/server/src/key.ts
