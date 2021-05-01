@@ -1,8 +1,10 @@
-import '../styles/globals.css'
+import Header from 'components/Header'
+import 'styles/hamburger.css'
+import 'styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
   return <div>
-    container
+    <Header />
     <Component {...pageProps} />
   </div>
 }

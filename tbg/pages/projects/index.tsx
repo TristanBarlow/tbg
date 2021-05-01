@@ -1,6 +1,6 @@
 import { InferGetStaticPropsType, GetStaticPropsResult } from "next"
 import Head from "next/head"
-import { firestore } from "../../common/firestore"
+import { getAllProjects } from "common/projects"
 import { toTitle } from "../../common/util"
 import { Project } from "../../types/project"
 import styles from './projects.module.css'
@@ -29,11 +29,11 @@ interface ProjectsPage {
   projects: Project[]
 }
 export async function getStaticProps(): Promise<GetStaticPropsResult<ProjectsPage>> {
-  const projects = await firestore().collection('projects').get()
+  const projects = await getAllProjects()
 
   return {
     props: {
-      projects: projects.docs.map(x => x.data()) as Project[]
+      projects
     },
     revalidate: 60
   }
