@@ -1,0 +1,41 @@
+.container {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+}
+
+.main {
+  margin-top: 50px;
+  display: grid;
+  justify-items: center;
+  max-width: 500px;
+  align-items: center;
+  row-gap: 1rem;
+  font-weight: 600;
+}
+
+.main p {
+  margin: 5px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.main div {
+  width: fit-content;
+}
+
+.name {
+  font-size: 1.5rem !important;
+}
+
+.icons {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.me {
+  border-radius: 25%; 
+  height: auto; 
+  width: 200px
+}
