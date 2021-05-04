@@ -4,12 +4,12 @@ import styles from './Home.module.css'
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <main className="pageContainer">
       <PageMeta 
         title="Home - Tristan Barlow-Griffin"
         description="This is the personal website of Tristan Barlow-Griffin - Fullstack Software Engineer - Cornwall UK"
       />
-      <main className={styles.main}>
+      <article className={styles.main}>
         <Image className={"shadow1 " + styles.me}  alt="Its me :)" src="/me.png" width={200} height={150}/>
         <p className={styles.name}>Tristan Barlow-Griffin</p>
         <p>Full Stack Software Engineer</p>
@@ -23,7 +23,7 @@ export default function Home() {
             <Image alt="Link to github" src="/git-hub.png" width={70} height={70}  />
           </a>
         </section>
-      </main>
-    </div>
+      </article>
+    </main>
   )
 }

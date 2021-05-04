@@ -1,5 +1,44 @@
 .navBar {
   background-color: #68c374;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   padding: .5rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  column-gap: .5rem;
+  height: 51px;
+}
+
+.active {
+  height: auto;
+}
+
+.navBar menu {
+  display: grid;
+  padding-left: 0;
+  position: absolute;
+  font-size: 1.3rem;
+  margin-left: 70px;
+  height: 35px;
+  align-items: center;
+  column-gap: .5rem;
+  grid-template-columns: repeat(3, min-content);
+}
+
+.navBarMobile  {
+  grid-template-columns: auto;
+}
+
+.tbg {
+  text-decoration: none !important;
+  height: 35px;
+  width: 70px;
+}
+
+.menuIcon {
+  position: absolute;
+  color: #363636 !important;
+  left: calc(100% - 70px);
+  margin-left: auto;
 }
