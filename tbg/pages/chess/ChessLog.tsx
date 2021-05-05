@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { Flex, Text } from '@chakra-ui/react'
 
 export interface Log {
   id: string
@@ -19,19 +18,19 @@ export default function ChessLog ({ logs }: Props) {
   //   endRef.current.scrollIntoView({ behavior: 'smooth' })
   // }, [logs])
   return (
-    <Flex py={ 1 } px={ 2 } overflowX="scroll" bg="white" mt={ 2 } className="shadow-1" flexDirection="column" h="300px">
+    <div>
       {
         logs.map(log => (
-          <Flex mb={ 1 } flexDirection="column" key={ log.id }>
-            <Flex flexDirection="row">
-              <Text fontWeight="600" mr={ 1 }>{ log.color }</Text>
-              <Text>{ log.botName }:</Text>
-            </Flex>
-            <Flex ml={ 5 }>{ log.details }</Flex>
-          </Flex>
+          <div key={ log.id }>
+            <div>
+              <p >{ log.color }</p>
+              <p>{ log.botName }:</p>
+            </div>
+            <div >{ log.details }</div>
+          </div>
         ))
       }
       <div ref={ r => endRef.current = r } />
-    </Flex >
+    </div >
   )
 }

@@ -20,9 +20,9 @@ export default function MySelect<T extends string> (props: MySelectProps<T>) {
     <div>
       { label }
       <div style={ { width: 'fit-content' } } className="select">
-        <select { ...selectProps } as="select" >
+        <div { ...selectProps } as="select" >
           { props.options.map(x => (<option key={ x } value={ x }>{ x }</option>)) }
-        </select>
+        </div>
       </div>
     </div>
   )

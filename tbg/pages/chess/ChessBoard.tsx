@@ -1,8 +1,7 @@
 import React from 'react'
 import Renderer, { Piece } from 'chessboardjsx'
-import { newBoard, ChessInstance, Square, ShortMove, Move } from '../../ts/chess/chess'
-import { ChessPlayer, PlayerColour } from '../../ts/chess/players/chessPlayer'
-import { MoveResponse } from '../../ts/chess/players'
+import { newBoard, ChessInstance, Square, ShortMove, Move } from 'ts/chess'
+import { ChessPlayer, PlayerColour, MoveResponse } from '../../ts/chess/players'
 
 type SquaresCSS = Pick<Renderer['props'], 'squareStyles'>['squareStyles']
 
