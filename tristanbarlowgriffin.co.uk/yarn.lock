@@ -17227,7 +17227,6 @@ resolve@1.18.1:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@types/sharp": ^0
     sharp: ^0.26.3
     ts-node: ^9.0.0
   languageName: unknown
