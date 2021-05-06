@@ -39,6 +39,8 @@ jobs:
       - name: API - Build
         working-directory: tristanbarlowgriffin.co.uk/api
         run: yarn build
+      - name: GCP - Configure Docker
+        run: gcloud auth configure-docker
       - name: Docker - Build, Push
         working-directory: tristanbarlowgriffin.co.uk
         run: |
