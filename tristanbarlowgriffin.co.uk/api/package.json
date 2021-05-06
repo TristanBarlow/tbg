@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "api",
   "version": "1.0.0",
   "main": "/build/index.js",
   "author": "Tristan Barlow-Griffin",
@@ -21,6 +21,7 @@
   },
   "scripts": {
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
+    "build": "tsc",
     "start": "yarn nodemon --watch 'src/**/*.ts' --exec 'yarn lint && yarn ts-node ./src'"
   },
   "dependencies": {
