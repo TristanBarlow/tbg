@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ImageMeta, Project } from '../../../packages/types/src/project'
+import { ImageMeta, Project } from '@tbg/types/src/project'
 import { apiRequest } from './request'
 
 

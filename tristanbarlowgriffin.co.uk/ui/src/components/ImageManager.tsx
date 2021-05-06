@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ImageUpload from './ImageUpload'
-import { ImageMeta } from '../../../packages/types/src/project'
+import { ImageMeta } from '@tbg/types/src/project'
 import { apiRequest } from '../ts/request'
 import ImageEle from './Image'
 import { useImages } from '../ts/projects'

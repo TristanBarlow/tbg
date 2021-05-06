@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ProjectAdd from './ProjectAdd'
-import { Project } from '../../../packages/types/src/project'
+import { Project } from '@tbg/types/src/project'
 import { apiRequest } from '../ts/request'
 import { toKebab } from '@tbg/util'
 import { useProjects } from '../ts/projects'
