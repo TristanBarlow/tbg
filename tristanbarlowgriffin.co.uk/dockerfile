@@ -3,6 +3,7 @@ FROM node:16-slim
 ENV MODE prod
 
 WORKDIR /usr/src/app
-COPY ./api .
-# Run the web service on container startup.
+COPY . . 
+
+WORKDIR /usr/src/app/api
 CMD ["node", "dist" ]
