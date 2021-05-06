@@ -21,11 +21,11 @@ export default function NavBar () {
           <Link _hover={ { textDecoration: '' } } className="navbar-item" to="/">
             <p className="title">TBG</p>
           </Link>
-          <a role="button" className={ burgerClass } onClick={ () => setMenuActive(!menuActive) } >
+          <div  className={ burgerClass } onClick={ () => setMenuActive(!menuActive) } >
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
-          </a>
+          </div>
         </div>
 
         <Box bg="brand.1" id="navbarBasicExample" className={ menuClass }>
