@@ -27,9 +27,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '16.x'
+      - name: YARN - Build Packages
+        working-directory: tristanbarlowgriffin.co.uk
+        run: yarn build:p
       - name: YARN - Install
         working-directory: tristanbarlowgriffin.co.uk
-        run: yarn install
+        run: yarn
       - name: UI - Build
         working-directory: tristanbarlowgriffin.co.uk/ui
         run: yarn build
