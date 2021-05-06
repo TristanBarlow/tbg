@@ -48,7 +48,7 @@ jobs:
           docker push gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
       - name: GCP - Deploy
         run: |
-          gcloud deploy tbg --image gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg --region europe-west1 --memory 2Gi --platform managed
+          gcloud run deploy tbg --image gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg --region europe-west1 --memory 2Gi --platform managed
 
 
 
