@@ -10,7 +10,8 @@ name: Deploy tristanbarlowgriffin.co.uk
 
 on:
   push:
-    branches: [master]
+    tags: 
+      - tbg/*
 
 jobs:
   deploy:
