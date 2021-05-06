@@ -42,7 +42,7 @@ jobs:
       - name: Docker - Build, Push
         working-directory: tristanbarlowgriffin.co.uk
         run: |
-          docker build tristanbarlowgriffin.co.uk -t gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
+          docker build . -t gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
           docker push gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
       - name: GCP - Deploy
         run: |
