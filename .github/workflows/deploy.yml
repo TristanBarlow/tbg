@@ -37,11 +37,14 @@ jobs:
         working-directory: tristanbarlowgriffin.co.uk/api
         run: yarn build
       - name: Docker - Build, Push
+        working-directory: tristanbarlowgriffin.co.uk
         run: |
           docker build tristanbarlowgriffin.co.uk -t gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
           docker push gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
       - name: GCP - Deploy
-        
+        run: |
+          gcloud deploy tbg --image gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg --region europe-west1 --memory 2Gi --platform managed
+
 
 
       
