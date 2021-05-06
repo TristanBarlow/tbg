@@ -1,5 +1,5 @@
 import React from 'react'
-import { Project } from '../../../packages/types/src/project'
+import { Project } from '@tbg/types/src/project'
 import { toKebab } from '@tbg/util'
 import { useProjects } from '../ts/projects'
 import { Flex, Grid, Text } from '@chakra-ui/react'

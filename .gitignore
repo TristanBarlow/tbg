@@ -1,9 +1,9 @@
 **node_modules
 **build
 **/.DS_Store
-tristanbarlowgriffin.co.uk/server/image-manager-SA.json
-tristanbarlowgriffin.co.uk/server/src/key.ts
-tristanbarlowgriffin.co.uk/server/yarn-error.log
+tristanbarlowgriffin.co.uk/api/image-manager-SA.json
+tristanbarlowgriffin.co.uk/api/src/key.ts
+tristanbarlowgriffin.co.uk/api/yarn-error.log
 tristanbarlowgriffin.co.uk/.yarn/unplugged/.DS_Store
 tristanbarlowgriffin.co.uk/.yarn/install-state.gz
 tristanbarlowgriffin.co.uk/.yarn/build-state.yml

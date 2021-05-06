@@ -7,15 +7,12 @@
     "build:p": "yarn workspace @tbg/types build && yarn workspace @tbg/util build"
   },
   "workspaces": [
-    "server",
-    "website",
+    "api",
+    "ui",
     "packages/*"
   ],
   "dependencies": {
     "sharp": "^0.26.3",
     "ts-node": "^9.0.0"
-  },
-  "devDependencies": {
-    "@types/sharp": "^0"
   }
 }

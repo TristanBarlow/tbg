@@ -1,5 +1,5 @@
 {
-  "name": "website",
+  "name": "ui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -37,7 +37,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build && cp -r build ../server",
+    "build": "react-app-rewired build && cp -r build ../api",
     "test": "react-app-rewired test"
   },
   "eslintConfig": {
