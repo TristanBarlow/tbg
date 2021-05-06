@@ -1,12 +1,8 @@
-FROM node:12-slim
+FROM node:16-slim
 
 ENV MODE prod
 
 WORKDIR /usr/src/app
-COPY . .
-RUN yarn
-
-RUN yarn build 
-WORKDIR /usr/src/app/server
+COPY ./api .
 # Run the web service on container startup.
-CMD ["yarn", "ts-node", "src/index.ts" ]
+CMD ["node", "dist" ]
