@@ -6,7 +6,7 @@
 # This workflow will install Deno and run tests across stable and nightly builds on Windows, Ubuntu and macOS.
 # For more information see: https://github.com/denolib/setup-deno
 
-name: Deploy tristanbarlowgriffin.co.uk
+name: Deploy tbarlowg.com
 
 on:
   push:
@@ -29,23 +29,23 @@ jobs:
         with:
           node-version: '16.x'
       - name: YARN - Install
-        working-directory: tristanbarlowgriffin.co.uk
+        working-directory: tbarlowg.com
         run: yarn
       - name: YARN - Build Packages
-        working-directory: tristanbarlowgriffin.co.uk
+        working-directory: tbarlowg.com
         run: yarn build:p
       - name: UI - Build
-        working-directory: tristanbarlowgriffin.co.uk/ui
+        working-directory: tbarlowg.com/ui
         run: yarn build
       - name: API - Build
-        working-directory: tristanbarlowgriffin.co.uk/api
+        working-directory: tbarlowg.com/api
         run: yarn build
       - name: NPM - Prune
         run: npm prune --production
       - name: GCP - Configure Docker
         run: gcloud auth configure-docker
       - name: Docker - Build, Push
-        working-directory: tristanbarlowgriffin.co.uk
+        working-directory: tbarlowg.com
         run: |
           docker build . -t gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
           docker push gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
