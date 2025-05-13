@@ -6,11 +6,6 @@
     "start:server": "yarn workspace server start",
     "build:p": "yarn workspace @tbg/types build && yarn workspace @tbg/util build"
   },
-  "workspaces": [
-    "api",
-    "ui",
-    "packages/*"
-  ],
   "dependencies": {
     "sharp": "0.34.1",
     "ts-node": "^9.0.0"
