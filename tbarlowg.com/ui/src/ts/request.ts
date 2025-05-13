@@ -1,3 +1,4 @@
+import { CFG } from '../env'
 import { Auth } from './Auth'
 
 export type APIResponse<T> = { status: 200, success: true, data: T } | { status: number, success: false }
@@ -22,7 +23,7 @@ export async function apiRequest<T> (
     headers.append('key', Auth.key || '')
   }
 
-  const res = await fetch(`${ process.env.REACT_APP_SERVER_URL }${ path }`, { body, method, headers })
+  const res = await fetch(`${ CFG.SERVER_URL }${ path }`, { body, method, headers })
   if (res.status !== 200) {
     return {
       success: false,
