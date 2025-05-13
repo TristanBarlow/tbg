@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import InputField from './InputField'
 import { Auth } from '../ts/Auth'
 import { Spinner } from '@chakra-ui/react'
-import { useHistory } from 'react-router'
+import { useNavigate } from 'react-router'
 
 export default function Login () {
-  const history = useHistory()
+  const navigate = useNavigate()
   const [key, setKey] = useState('')
   const [loading, setLoading] = useState(false)
   async function submit () {
@@ -14,7 +14,7 @@ export default function Login () {
       setLoading(false)
     }
 
-    history.length ? history.goBack() : history.push('/admin/')
+    navigate(-1)
   }
 
   return (

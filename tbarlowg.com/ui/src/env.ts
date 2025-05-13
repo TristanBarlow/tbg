@@ -11,8 +11,9 @@ const envSchema = z.object({
 })
 
 function parseEnv() {
+  console.log(import.meta.env)
   const entries = Object
-  .values(import.meta.env)
+  .entries(import.meta.env)
   .map(([key, value]) => [key.replace('VITE_', ''), value])
 
   return envSchema.parse(Object.fromEntries(entries))

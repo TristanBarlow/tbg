@@ -2,18 +2,18 @@
 import React, { useEffect } from 'react'
 import ImageManager from '../components/ImageManager'
 import ProjectManager from '../components/ProjectManager'
-import { Route, Switch, useHistory } from 'react-router'
+import { Route, Routes, useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import { Auth } from '../ts/Auth'
 import { Flex } from '@chakra-ui/react'
 
 export default function Manage () {
-  const history = useHistory()
+  const navigate = useNavigate()
   useEffect(() => {
     if (!Auth.key) {
-      history.push('/admin/login')
+      navigate('/admin/login')
     }
-  }, [history])
+  }, [navigate])
 
   return (
     <Flex flexDirection="column" w="100%">
@@ -23,10 +23,14 @@ export default function Manage () {
           <Link to="/admin/projects">Projects</Link>
         </ul>
       </div>
-      <Switch>
-        <Route path="/admin/images"><ImageManager /></Route>
-        <Route><ProjectManager /></Route>
-      </Switch>
+      <Routes>
+        <Route path="/admin/images">
+        <ImageManager />
+        </Route>
+        <Route>
+          <ProjectManager />
+        </Route>
+      </Routes>
     </Flex>
   )
 }

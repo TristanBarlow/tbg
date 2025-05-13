@@ -7,7 +7,7 @@ import ImageEle from '../components/Image'
 import MyHelmet from '../components/MyHelmet'
 import MyLink from '../components/MyLink'
 
-function ProjectTile ({ imageId, title }: Project): JSX.Element {
+function ProjectTile ({ imageId, title }: Project): React.JSX.Element {
   return (
     <MyLink
       display="flex"

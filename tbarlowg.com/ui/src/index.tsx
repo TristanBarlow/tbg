@@ -1,14 +1,15 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import {createRoot} from 'react-dom/client'
 import './css/index.css'
 import App from './App'
 import { myTheme } from './theme'
-import { ThemeProvider } from '@emotion/react'
+import { ChakraProvider } from '@chakra-ui/react'
 
 
-ReactDOM.render(
-    <ThemeProvider theme={ myTheme }>
+const root = createRoot(document.getElementById('root')!)
+
+root.render(
+    <ChakraProvider value={myTheme}>
         <App />
-    </ThemeProvider>,
-    document.getElementById('root')
+    </ChakraProvider>
 )

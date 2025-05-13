@@ -16,7 +16,7 @@ export default function ChessController () {
   const [w] = useWindowSize()
   const [logs, setLogs] = useState<Log[]>([])
 
-  const undo = useRef<() => void>()
+  const undo = useRef<(() => void) | null>(null)
 
   function updateStats (color: PlayerColour, response: MoveResponse) {
     const time = getUnixTime(new Date())
