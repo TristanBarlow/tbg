@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ImageMeta, isMeta } from '@tbg/types'
 import { Image, Skeleton, SkeletonProps } from '@chakra-ui/react'
+import { CFG } from '../env'
 
 interface Props extends SkeletonProps {
   meta: ImageMeta | string
@@ -9,7 +10,7 @@ interface Props extends SkeletonProps {
 export default function ImageEle (props: Props) {
   const [loaded, setLoaded] = useState(false)
   const { meta } = props
-  const src = `${ process.env.REACT_APP_SERVER_URL }/api/image/${ isMeta(meta) ? meta.name : meta }`
+  const src = `${ CFG.SERVER_URL }/api/image/${ isMeta(meta) ? meta.name : meta }`
   const description = isMeta(meta) && meta.description
   return <Skeleton
     display="flex"
