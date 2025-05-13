@@ -46,12 +46,12 @@ export default function ImageUpload ({ meta, close }: Props) {
             <InputField value={ description || '' } label="Description" change={ setDescription } />
             <div className="field">
               <p className="label">Choose file</p>
-              <input ref={ (x) => fileElement.current = x } className="input" type="file" />
+              <input ref={fileElement} className="input" type="file" />
             </div>
           </div>
         </section>
         <footer className="modal-card-foot has-background-white" style={ { border: 'none' } } >
-          { <Button isLoading={ loading } click={ submit } className="button is-primary" >UPLOAD</Button> }
+          { <Button loading={ loading } click={ submit } className="button is-primary" >UPLOAD</Button> }
         </ footer>
       </div>
     </div>

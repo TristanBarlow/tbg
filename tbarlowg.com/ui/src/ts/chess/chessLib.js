@@ -34,7 +34,7 @@
  * https://github.com/jhlywa/chess.js/blob/master/LICENSE
  */
 
-var Chess = function (fen) {
+export var Chess = function (fen) {
   var BLACK = 'b'
   var WHITE = 'w'
 

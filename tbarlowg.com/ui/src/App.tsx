@@ -12,14 +12,16 @@ import ChessPage from './pages/Chess'
 import Login from './components/Login'
 import { Flex } from '@chakra-ui/react'
 import ReactGA from 'react-ga'
-import { CFG, ENV, Mode } from './env'
+import { CFG, Mode } from './env'
 
 
 export default function App () {
   return (
     <div>
+      <BrowserRouter>
       <Background color='hsl(0, 0%, 96%)' />
-
+      <Router/>
+      </BrowserRouter>
     </div>
   )
 }
@@ -36,20 +38,20 @@ function Router() {
     ReactGA.pageview(location.pathname + location.search)
   }, [location])
 
-return    <BrowserRouter>
+return<>
         <NavBar />
         <Flex flexDirection="column" alignItems="center">
           <Flex pt={ 2 } px={ 1 } w="100%" maxW="1200px" >
             <Routes>
               <Route path="/contact" element={ <Contact/> } />
-              <Route path="/projects/:pId" component={ ProjectView } />
-              <Route path="/projects" component={ Projects } />
-              <Route path="/chess" component={ ChessPage } />
-              <Route path="/admin/login" component={ Login } />
-              <Route path="/admin" component={ Manage } />
-              <Route path="/" component={ Home } />
+              <Route path="/projects/:pId" element={ <ProjectView/> } />
+              <Route path="/projects" element={ <Projects/> } />
+              <Route path="/chess" element={ <ChessPage/> } />
+              <Route path="/admin/login" element={ <Login/> } />
+              <Route path="/admin" element={ <Manage/> } />
+              <Route path="/" element={ <Home/> } />
             </Routes>
           </Flex>
         </Flex>
-      </BrowserRouter >
+      </>
 }

@@ -8,7 +8,7 @@ export default function NavBar () {
   const burgerClass = menuActive ? "navbar-burger is-active " : "navbar-burger "
   const menuClass = menuActive ? "navbar-menu is-active " : "navbar-menu "
 
-  function makeItem (label: string, path: string): JSX.Element {
+  function makeItem (label: string, path: string): React.JSX.Element {
     return (<Link onClick={ () => setMenuActive(false) } as={ Link } to={ path } className="navbar-item " >
       { label }
     </Link>)

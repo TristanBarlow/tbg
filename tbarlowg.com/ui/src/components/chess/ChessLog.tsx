@@ -31,7 +31,7 @@ export default function ChessLog ({ logs }: Props) {
           </Flex>
         ))
       }
-      <div ref={ r => endRef.current = r } />
+      <div ref={endRef} />
     </Flex >
   )
 }

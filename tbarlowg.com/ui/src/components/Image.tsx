@@ -15,7 +15,8 @@ export default function ImageEle (props: Props) {
   return <Skeleton
     display="flex"
     pos="relative"
-    isLoaded={ loaded } { ...props }
+    loading={ loaded }
+    { ...props }
     overflow="hidden"
   >
     <Image

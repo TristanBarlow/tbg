@@ -4,11 +4,11 @@ export interface ModalBaseProps {
   close?: () => void
 }
 export default abstract class ModalBase<T, S> extends React.Component<T & ModalBaseProps, S>{
-  abstract getBody (): JSX.Element | null
-  abstract getTitle (): JSX.Element | null
-  abstract getFooter (): JSX.Element | null
+  abstract getBody (): React.JSX.Element | null
+  abstract getTitle (): React.JSX.Element | null
+  abstract getFooter (): React.JSX.Element | null
 
-  private footer (): JSX.Element | null {
+  private footer (): React.JSX.Element | null {
     if (!this.getFooter()) return null
     return (
       <footer className="modal-card-foot has-background-white" style={ { border: 'none' } } >
@@ -22,7 +22,7 @@ export default abstract class ModalBase<T, S> extends React.Component<T & ModalB
       this.props.close()
   }
 
-  private get closeEle (): JSX.Element | null {
+  private get closeEle (): React.JSX.Element | null {
     if (typeof this.props.close === 'function')
       return (
         <i className="button material-icons is-danger is-size-6" onClick={ () => this.close() }>close</i>
@@ -31,7 +31,7 @@ export default abstract class ModalBase<T, S> extends React.Component<T & ModalB
     return null
   }
 
-  render (): JSX.Element | null {
+  render (): React.JSX.Element | null {
     return (
       <div className="modal is-active" style={ { width: '100vw', height: '100vh', position: 'fixed', zIndex: 1000 } }>
         <div className="modal-background"></div>
