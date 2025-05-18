@@ -1,5 +1,4 @@
-/* eslint jsx-a11y/anchor-is-valid: 0 */
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import ImageManager from '../components/ImageManager'
 import ProjectManager from '../components/ProjectManager'
 import { Route, Routes, useNavigate } from 'react-router'
@@ -7,11 +6,11 @@ import { Link } from 'react-router-dom'
 import { Auth } from '../ts/Auth'
 import { Flex } from '@chakra-ui/react'
 
-export default function Manage () {
+export default function Manage() {
   const navigate = useNavigate()
   useEffect(() => {
     if (!Auth.key) {
-      navigate('/admin/login')
+      void navigate('/admin/login')
     }
   }, [navigate])
 
@@ -25,7 +24,7 @@ export default function Manage () {
       </div>
       <Routes>
         <Route path="/admin/images">
-        <ImageManager />
+          <ImageManager />
         </Route>
         <Route>
           <ProjectManager />

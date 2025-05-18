@@ -8,7 +8,7 @@ export class MinMaxBot extends ChessPlayer {
   isHuman = false
   statHistory: string = ''
   static _woker: MoveWorker
-  get worker (): MoveWorker {
+  get worker(): MoveWorker {
     if (!MinMaxBot._woker) {
       MinMaxBot._woker = MinMaxWorker
     }
@@ -16,13 +16,12 @@ export class MinMaxBot extends ChessPlayer {
     return MinMaxBot._woker
   }
 
-
-  async getMove (fen: string): Promise<MoveResponse | null> {
-    const result = await this.worker.getMove(fen)
-    return result
+  getMove(fen: string): Promise<MoveResponse | null> {
+    const result = this.worker.getMove(fen)
+    return Promise.resolve(result)
   }
 
-  get stats (): string {
+  get stats(): string {
     return this.statHistory
   }
 }

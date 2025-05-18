@@ -7,39 +7,41 @@ export class Auth {
   private _isAuthed: boolean = false
   private authStateListners: { [id: string]: AuthListner } = {}
 
-  static get inst (): Auth {
+  static get inst(): Auth {
     return Auth._inst ? Auth._inst : Auth._inst = new Auth()
   }
 
-  static get key (): string {
+  static get key(): string {
     return Auth.inst._key || ''
   }
 
-  static get isAuthed (): boolean {
+  static get isAuthed(): boolean {
     return Auth.inst._isAuthed || false
   }
 
-  static validate (key: string): Promise<boolean> {
+  static validate(key: string): Promise<boolean> {
     return Auth.inst.validate(key)
   }
 
-  static registerListner (id: string, cb: AuthListner) {
+  static registerListner(id: string, cb: AuthListner) {
     Auth.inst.authStateListners[id] = cb
   }
 
-  private notifyListners () {
+  private notifyListners() {
     for (const key in this.authStateListners) {
       const listner = this.authStateListners[key]
       try {
         listner(this._isAuthed)
-      } catch (e) {
+      }
+      catch (e: unknown) {
+        console.error(e)
         console.log('Removing listner: ', key)
         delete this.authStateListners[key]
       }
     }
   }
 
-  private async validate (key: string): Promise<boolean> {
+  private async validate(key: string): Promise<boolean> {
     this._key = ''
     this._isAuthed = false
     const response = await apiRequest('/api/validate', 'POST', { key })
@@ -52,5 +54,5 @@ export class Auth {
     return this._isAuthed
   }
 
-  private constructor () { }
+  private constructor() { }
 }
