@@ -1,5 +1,5 @@
-import React from 'react'
 import { Flex, Box, Text } from '@chakra-ui/react'
+import { isString } from '@chakra-ui/react/dist/types/utils'
 
 export interface MySelectProps<T extends string> {
   label?: string
@@ -7,22 +7,29 @@ export interface MySelectProps<T extends string> {
   change: (t: T | null) => void
   options: string[]
 }
-export default function MySelect<T extends string> (props: MySelectProps<T>) {
-  const label = props.label && <Text mb={ 1 } fontWeight="700"> { props.label }</Text>
+export default function MySelect<T extends string>(props: MySelectProps<T>) {
+  const label = props.label && (
+    <Text mb={1} fontWeight="700">
+      {' '}
+      { props.label }
+    </Text>
+  )
   const selectProps = {
     value: props.value,
-    onChange: (v: any) => {
-      const str = v.target.value
-      props.change(str || null)
-    }
-  } as any
+    onChange: ({ target }: React.FormEvent<HTMLDivElement>) => {
+      if ('value' in target && isString(target.value)) {
+        const str = target.value as T
+        props.change(str || null)
+      }
+    },
+  }
 
   return (
-    <Flex minW="100px" flexDirection="column" { ...props }>
+    <Flex minW="100px" flexDirection="column" {...props}>
       { label }
-      <Flex style={ { width: 'fit-content' } } className="select">
-        <Box { ...selectProps } as="select" >
-          { props.options.map(x => (<option key={ x } value={ x }>{ x }</option>)) }
+      <Flex style={{ width: 'fit-content' }} className="select">
+        <Box {...selectProps} as="select">
+          { props.options.map(x => (<option key={x} value={x}>{ x }</option>)) }
         </Box>
       </Flex>
     </Flex>

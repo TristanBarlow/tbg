@@ -1,7 +1,7 @@
 import express from 'express'
 import { CONFIG } from './env'
 import { imageUploadHandler, getImageHandler, getAllImageHandler, deleteImageHandler } from './images'
-import { createHandler, getProjects, deleteProjectHandler, } from './projects'
+import { createHandler, getProjects, deleteProjectHandler } from './projects'
 import { validateKeyBody, validateKeyHeader } from './auth/auth'
 import { resolve } from 'path'
 import cors from 'cors'
@@ -10,14 +10,13 @@ const app = express()
 app
   .use(cors({
     allowedHeaders: '*',
-    origin: '*'
+    origin: '*',
   }))
   .use(express.json())
   .use((req, res, next) => {
     console.log('PATH: ', req.path, 'METHOD: ', req.method, ' QUERY: ', req.query, ' IP: ', req.ip)
     next()
   })
-
 
 app.get('/api/projects', getProjects)
 app.get('/api/image/:id', getImageHandler)

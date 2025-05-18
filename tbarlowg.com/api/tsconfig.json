@@ -8,6 +8,9 @@
     "rootDir": "src",
     "outDir": "./dist",
     "esModuleInterop": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+  },
+  "exclude": [
+    "build"
+  ]
 }

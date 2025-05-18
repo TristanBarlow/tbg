@@ -1,6 +1,6 @@
 import { Chess, ChessInstance } from './chessLib'
 
-export function newBoard (fen?: string): ChessInstance {
+export function newBoard(fen?: string): ChessInstance {
   return Chess(fen)
 }
 

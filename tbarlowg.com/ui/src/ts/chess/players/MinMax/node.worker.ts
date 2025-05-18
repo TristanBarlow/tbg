@@ -1,5 +1,5 @@
 import { quickGetMove } from './node'
 
-export async function getMove (fen: string) {
+export function getMove(fen: string) {
   return quickGetMove(fen)
 }
