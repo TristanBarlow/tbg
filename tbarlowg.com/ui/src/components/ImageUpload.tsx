@@ -34,7 +34,7 @@ export default function ImageUpload({ meta, close }: Props) {
 
   return (
     <div className="modal is-active" style={{ width: '100vw', height: '100vh', position: 'fixed', zIndex: 1000 }}>
-      <div className="modal-background"></div>
+      <div className="modal-background" />
       <div className="modal-card">
         <header className="modal-card-head has-background-white" style={{ border: 'none' }}>
           <p className="modal-card-title">Uploading Image</p>
@@ -51,7 +51,7 @@ export default function ImageUpload({ meta, close }: Props) {
           </div>
         </section>
         <footer className="modal-card-foot has-background-white" style={{ border: 'none' }}>
-          <Button loading={loading} click={submit} className="button is-primary">UPLOAD</Button>
+          <Button loading={loading} onClick={submit} className="button is-primary">UPLOAD</Button>
         </footer>
       </div>
     </div>

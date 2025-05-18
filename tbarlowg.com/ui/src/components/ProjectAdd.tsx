@@ -15,7 +15,7 @@ function LinkInput({ value, update }: LinkInputProps) {
     <Flex mt={2} w="100%" h="100%" alignItems="flex-end">
       <InputField label="Label" value={label} change={x => update({ ...value, label: x })} />
       <InputField label="Link" value={link} change={x => update({ ...value, link: x })} />
-      <Button label="X" click={() => update(null)} />
+      <Button label="X" onClick={() => update(null)} />
     </Flex>
   )
 }
@@ -65,7 +65,7 @@ export default function ProjectAdd(props: Props) {
 
   return (
     <div className="modal is-active" style={{ width: '100vw', height: '100vh', position: 'fixed', zIndex: 1000 }}>
-      <div className="modal-background"></div>
+      <div className="modal-background" />
       <div className="modal-card">
         <header className="modal-card-head has-background-white" style={{ border: 'none' }}>
           <p className="modal-card-title">Making Project</p>
@@ -84,7 +84,7 @@ export default function ProjectAdd(props: Props) {
           <InputField label="Image ID" value={project.imageId} change={x => update({ imageId: x })} />
           <InputField label="Gif ID" value={project.gifId} change={x => update({ gifId: x })} />
           <InputField label="Order" type="number" value={project.order.toString()} change={x => update({ order: parseInt(x) })} />
-          <Button w="fit-content" mt={2} click={addLink} label="Add Link" />
+          <Button w="fit-content" mt={2} onClick={addLink} label="Add Link" />
           <Flex flexDir="column">
             {
               project.links.map((link, i) => (

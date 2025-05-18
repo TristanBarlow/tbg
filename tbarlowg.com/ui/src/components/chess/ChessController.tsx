@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { PlayersTypes, PlayerFactory, PlayerColour, MoveResponse } from '../../ts/chess/players'
-import ChessBoard from './ChessBoard'
+import { ChessboardWithControls } from './ChessBoard'
 import Button, { Colors } from '../Button'
 import MySelect from '../MySelect'
 import { Flex, Grid } from '@chakra-ui/react'
@@ -15,8 +15,6 @@ export default function ChessController() {
   const [white, setWhite] = useState(PlayerFactory(PlayersTypes.RANDOM))
   const [w] = useWindowSize()
   const [logs, setLogs] = useState<Log[]>([])
-
-  const undo = useRef<(() => void) | null>(null)
 
   function updateStats(color: PlayerColour, response: MoveResponse) {
     const time = getUnixTime(new Date())
@@ -34,11 +32,10 @@ export default function ChessController() {
   return (
     <Flex w="100%" justifyContent="center">
       <Grid py={1} w="100%" maxW="1020px" columnGap="10px" rowGap={2} justifyContent="center" templateColumns={columns}>
-        <ChessBoard
-          setUndo={x => undo.current = x}
+        <ChessboardWithControls
           onMove={updateStats}
           black={black}
-          pause={paused}
+          isPaused={paused}
           white={white}
         />
         <Flex flexDir="column">
@@ -50,7 +47,6 @@ export default function ChessController() {
                 options={playerOptions}
                 change={x => x && setWhite(PlayerFactory(x))}
               />
-
               <MySelect
                 label="Black"
                 value={black.name}
@@ -62,18 +58,7 @@ export default function ChessController() {
               <Button
                 color={Colors.INFO}
                 label={paused ? 'Start' : 'Pause'}
-                click={() => { setPaused(!paused) }}
-              />
-
-              <Button
-                color={Colors.INFO}
-                label="Undo"
-                click={() => {
-                  setPaused(true)
-                  if (undo.current) {
-                    undo.current()
-                  }
-                }}
+                onClick={() => { setPaused(!paused) }}
               />
             </Flex>
           </Flex>

@@ -53,7 +53,7 @@ export const getAllImageHandler: RequestHandler = async (req, res) => {
     const images = await getAll()
 
     res.contentType('application/json')
-    return res.send(images)
+    res.send(images)
   }
   catch (e) {
     console.error(e)

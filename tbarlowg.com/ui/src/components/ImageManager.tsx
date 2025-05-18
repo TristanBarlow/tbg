@@ -33,7 +33,7 @@ export default function ImageManager() {
   return (
     <Flex flexDir="column" w="100%">
       <Button
-        click={() => setShowImageUpload(true)}
+        onClick={() => setShowImageUpload(true)}
         style={{ width: 'fit-content' }}
         className="button is-primary"
       >
