@@ -1,199 +1,163 @@
-import React from 'react'
-import Renderer, { Piece } from 'chessboardjsx'
-import { newBoard, ChessInstance, Square, ShortMove, Move } from '../../ts/chess/chess'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Chessboard } from 'react-chessboard'
 import { ChessPlayer, PlayerColour } from '../../ts/chess/players/chessPlayer'
 import { MoveResponse } from '../../ts/chess/players'
-
-type SquaresCSS = Pick<Renderer['props'], 'squareStyles'>['squareStyles']
+import { Chess, Color, Move, Square } from 'chess.js'
+import { CustomSquareStyles } from 'react-chessboard/dist/chessboard/types'
+import { Flex } from '@chakra-ui/react'
+import Button from '../Button'
 
 const colorLookup: { w: 'white', b: 'black' } = {
   w: 'white',
   b: 'black',
 }
-interface Drop {
-  sourceSquare: Square
-  targetSquare: Square
-  piece: Piece
-}
 
 interface Props {
   white: ChessPlayer
   black: ChessPlayer
-  pause: boolean
+  isPaused: boolean
   onMove: (player: PlayerColour, moveResponse: MoveResponse) => void
-  setUndo: (undo: () => void) => void
-}
-interface State {
-  fen: string
-  history: string[]
-  orientation: PlayerColour
-  lastMove: Move | null
 }
 
-export default class ChessBoard extends React.Component<Props, State> {
-  game: ChessInstance
+const TIME_BETWEEN_MOVES = 3000
+export function ChessboardWithControls(props: Props) {
+  const { black, onMove, isPaused, white } = props
+  const [fen, setFen] = useState(new Chess().fen())
+  const game = useMemo(() => new Chess(fen), [fen])
 
-  constructor(p: Props) {
-    super(p)
-    p.setUndo(this.undo)
+  const currentPlayerColour = game.turn()
+  const currentPlayer: ChessPlayer = currentPlayerColour === 'w'
+    ? white
+    : black
 
-    this.game = newBoard()
-    this.state = {
-      fen: this.game.fen(),
-      history: [this.game.fen()],
-      orientation: this.currentIsHuman ? 'w' : 'b',
-      lastMove: null,
-    }
+  const lastPlayerColour: Color = currentPlayerColour === 'w' ? 'b' : 'w'
+  const lastPlayer: ChessPlayer = currentPlayerColour === 'w'
+    ? white
+    : black
 
-    this.getMove()
-      .catch(console.error)
-  }
+  const currentIsHuman: boolean = currentPlayer.isHuman
+  const orientation: PlayerColour = !currentIsHuman
+    ? 'w'
+    : (currentIsHuman ? currentPlayerColour : lastPlayerColour)
 
-  undo = () => {
-    const lastMove = this.game.undo()
+  const history = useState<string[]>([game.fen()])
+  const [lastMove, setLastMove] = useState<Move | null>(null)
+  const [isFinished, setIsFinished] = useState(false)
+
+  const undo = useCallback(() => {
+    const lastMove = game.undo()
     console.log('UNDO', lastMove)
     if (!lastMove) {
       console.log('NO MOVE TO UNDO')
       return
     }
 
-    this.setState({ lastMove: null, fen: this.game.fen() }, () => {
-      this.forceUpdate()
-    })
-  }
+    setLastMove(null)
+    setFen(game.fen())
+  }, [game])
 
-  get currentIsHuman(): boolean {
-    return this.currentPlayer.isHuman
-  }
+  const updateBoard = useCallback(() => {
+    setFen(game.fen())
+    lastMoveAt.current = new Date()
+  }, [game])
 
-  get currentPlayerColour(): PlayerColour {
-    return this.game.turn()
-  }
+  const checkGameOver = useCallback(() => {
+    return game.isGameOver()
+      || game.isDraw()
+  }, [game])
 
-  get currentPlayer(): ChessPlayer {
-    const turn = this.game.turn()
-    return turn === 'w' ? this.props.white : this.props.black
-  }
+  const makeMove = useCallback((move: Parameters<Chess['move']>[0] | string): boolean => {
+    if (isPaused) return false
 
-  get lastPlayerColour(): PlayerColour {
-    const turn = this.game.turn()
-    return turn === 'w' ? 'b' : 'w'
-  }
-
-  get lastPlayer(): ChessPlayer {
-    const turn = this.game.turn()
-    return turn === 'w' ? this.props.black : this.props.white
-  }
-
-  async getMove() {
-    if (this.currentIsHuman || this.props.pause) {
-      return
-    }
-
-    const response = await this.currentPlayer.getMove(this.game.fen())
-    if (!response?.move) {
-      this.checkGameOver()
-      return
-    }
-
-    await this.makeMove(response.move)
-    this.props.onMove(this.lastPlayerColour, response)
-  }
-
-  checkGameOver() {
-    return this.game.game_over()
-      || this.game.in_draw()
-  }
-
-  updateBoard(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      this.setState({ fen: this.game.fen() }, resolve)
-    })
-  }
-
-  async makeMove(move: ShortMove | string): Promise<void> {
-    if (this.props.pause) return
-
-    const result = this.game.move(move)
+    const result = game.move(move)
     if (result === null) {
       console.log('Illegal move')
+      return false
+    }
+
+    setLastMove(result)
+
+    updateBoard()
+    if (checkGameOver()) {
+      setIsFinished(true)
+      return true
+    }
+
+    return true
+  }, [checkGameOver, game, isPaused, updateBoard])
+
+  const tryMakeMove = useCallback(async () => {
+    if (currentIsHuman || isPaused) {
       return
     }
 
-    this.setState({ lastMove: result })
-
-    await this.updateBoard()
-    if (this.checkGameOver()) {
-      setTimeout(() => {
-        this.game.reset()
-        this.getMove()
-      }, 3000)
+    const response = await currentPlayer.getMove(game.fen())
+    if (!response?.move) {
+      checkGameOver()
       return
     }
 
-    setTimeout(() => this.getMove(), 1000)
-  }
+    makeMove(response.move)
+    onMove(lastPlayerColour, response)
+  }, [checkGameOver, currentIsHuman, currentPlayer, game, isPaused, lastPlayerColour, makeMove, onMove])
 
-  onDrop(drop: Drop) {
-    if (!this.currentIsHuman) {
-      return
+  const onDrop = useCallback((from: Square, to: Square) => {
+    if (!currentIsHuman) {
+      return false
     }
 
-    this.makeMove({
-      from: drop.sourceSquare,
-      to: drop.targetSquare,
+    return makeMove({
+      from,
+      to,
       promotion: 'q',
     })
+  }, [currentIsHuman, makeMove])
+
+  const lastMoveAt = useRef<Date>(new Date())
+  useEffect(() => {
+    if (currentIsHuman || isPaused) return
+    const timeElapsed = new Date().getTime() - lastMoveAt.current.getTime()
+    const timeToWait = TIME_BETWEEN_MOVES - timeElapsed
+    const timeout = setTimeout(() => {
+      tryMakeMove().catch(console.error)
+    }, timeToWait)
+
+    return () => clearTimeout(timeout)
+  }, [currentIsHuman, game, tryMakeMove, isPaused])
+
+  const fromCSS: React.CSSProperties = {
+    backgroundColor: 'grey',
+    transitionDuration: '0.1s',
   }
 
-  async componentDidUpdate(prev: Props) {
-    if (!this.props.pause && prev.pause) {
-      return this.getMove()
-    }
-
-    if ((this.props.white !== prev.white)
-      || (this.props.black !== prev.black)) {
-      return this.getMove()
-    }
+  const toCSS: React.CSSProperties = {
+    backgroundColor: 'yellow',
+    transitionDuration: '0.2s',
   }
 
-  get fromCSS(): React.CSSProperties {
-    return {
-      backgroundColor: 'grey',
-      transitionDuration: '0.1s',
-    }
-  }
-
-  get toCSS(): React.CSSProperties {
-    return {
-      backgroundColor: 'yellow',
-      transitionDuration: '0.2s',
-    }
-  }
-
-  get tileColours(): SquaresCSS {
-    const move = this.state.lastMove
+  function tileColours(): CustomSquareStyles {
+    const move = lastMove
     if (!move) return {}
     return {
-      [move.to]: this.toCSS,
+      [move.to]: toCSS,
     }
   }
 
-  render() {
-    console.log('FENN', this.state.fen)
-    return (
+  return (
+    <Flex flexDirection="column" width="100%">
       <div className="shadow-1">
-        <Renderer
-          undo={true}
-          calcWidth={() => window.outerWidth > 500 ? 500 : 320}
-          orientation={colorLookup[this.state.orientation]}
-          showNotation={true}
-          draggable={this.currentIsHuman}
-          squareStyles={this.tileColours}
-          position={this.state.fen}
-          onDrop={(x: Drop) => this.onDrop(x)}
+        <Chessboard
+          position={fen}
+          boardOrientation={colorLookup[orientation]}
+          onPieceDrop={onDrop}
+          customSquareStyles={tileColours()}
         />
       </div>
-    )
-  }
+      <Flex mt=".5rem">
+        <Button onClick={() => setFen(new Chess().fen())}>
+          Reset
+        </Button>
+      </Flex>
+    </Flex>
+  )
 }

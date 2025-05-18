@@ -7,13 +7,15 @@
     "@emotion/react": "^11.14.0",
     "@tbg/types": "workspace:*",
     "@tbg/util": "workspace:*",
+    "@types/lodash": "4.17.16",
     "@types/node": "22",
     "@types/react": "19.1.4",
     "@types/react-dom": "19.1.5",
-    "chessboardjsx": "^2.4.2",
-    "chessground": "^7.9.2",
+    "chess.js": "1.2.0",
     "date-fns": "^2.16.1",
+    "lodash": "4.17.21",
     "react": "19",
+    "react-chessboard": "4.7.3",
     "react-dom": "19",
     "react-ga": "^3.3.0",
     "react-helmet": "^6.1.0",
@@ -32,6 +34,7 @@
   "scripts": {
     "start": "vite",
     "build": "vite build && cp -r build ../api",
+    "lint": "pnpm eslint .",
     "preview": "vite preview"
   },
   "eslintConfig": {

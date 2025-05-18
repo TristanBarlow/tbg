@@ -10,10 +10,10 @@ export const createHandler: RequestHandler = async (req, res) => {
     }
 
     await writeProject(data)
-    return res.sendStatus(200)
+    res.sendStatus(200)
   }
   catch (e) {
     console.error(e)
-    return res.sendStatus(400)
+    res.sendStatus(400)
   }
 }

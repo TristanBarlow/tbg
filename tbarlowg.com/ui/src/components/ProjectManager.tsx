@@ -67,8 +67,8 @@ export default function ProjectManager() {
                 </Text>
               </Grid>
               <Flex mt="auto" w="100%" justifyContent="space-around">
-                <Button click={() => showProjectAdd(x)} className="button is-link"> Update</Button>
-                <Button click={() => deleteProj(x)} className="button is-danger"> Delete</Button>
+                <Button onClick={() => showProjectAdd(x)} className="button is-link"> Update</Button>
+                <Button onClick={() => deleteProj(x)} className="button is-danger"> Delete</Button>
               </Flex>
             </Flex>
           ),

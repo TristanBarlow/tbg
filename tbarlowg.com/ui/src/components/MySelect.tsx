@@ -1,5 +1,5 @@
 import { Flex, Box, Text } from '@chakra-ui/react'
-import { isString } from '@chakra-ui/react/dist/types/utils'
+import { isString } from 'lodash'
 
 export interface MySelectProps<T extends string> {
   label?: string

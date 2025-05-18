@@ -1,6 +1,7 @@
+import { Color } from 'chess.js'
 import { PlayersTypes, MoveResponse } from './types'
 
-export type PlayerColour = 'b' | 'w'
+export type PlayerColour = Color
 export abstract class ChessPlayer {
   abstract name: PlayersTypes
   abstract isHuman: boolean

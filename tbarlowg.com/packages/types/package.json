@@ -10,7 +10,9 @@
     "build": "yarn tsc -b"
   },
   "dependencies": {
+    "@types/lodash": "4.17.16",
     "date-fns": "^2.15.0",
+    "lodash": "4.17.21",
     "short-uuid": "^3.1.1",
     "typescript": "^5.8.3"
   }

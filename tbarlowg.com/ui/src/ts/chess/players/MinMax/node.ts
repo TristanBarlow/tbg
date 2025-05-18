@@ -1,9 +1,10 @@
-import { ChessInstance, newBoard, PieceType } from '../../chess'
+import { newBoard } from '../../chess'
 import { PlayerColour } from '../chessPlayer'
 import { shuffle } from '../../../util'
 import { MoveResponse, timeTaken } from '../types'
+import { Chess, PieceSymbol } from 'chess.js'
 
-const MINIMAX_VALS: { [key in PieceType]: number } = {
+const MINIMAX_VALS: { [key in PieceSymbol]: number } = {
   p: 1,
   r: 5,
   n: 3,
@@ -13,7 +14,7 @@ const MINIMAX_VALS: { [key in PieceType]: number } = {
 }
 
 export class MiniMacsNode {
-  game: ChessInstance
+  game: Chess
   isDone = false
   moves: string[]
   bestValue = Number.NEGATIVE_INFINITY
@@ -37,7 +38,7 @@ export class MiniMacsNode {
 
     let best_move: string | null = null
     const fen = this.game.fen()
-    const moves = shuffle(this.game.moves(true))
+    const moves = shuffle(this.game.moves())
     let best_value = isMaxing ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
 
     for (let i = 0; i < moves.length; i++) {
@@ -64,7 +65,7 @@ export class MiniMacsNode {
         b = Math.min(b, value)
       }
 
-      this.game.load(fen, false)
+      this.game.load(fen, { skipValidation: true })
       if (b <= a) {
         break
       }
@@ -81,7 +82,7 @@ export class MiniMacsNode {
   EvaluateBoard() {
     const board = this.game.board()
 
-    if (this.game.in_checkmate()) {
+    if (this.game.isCheckmate()) {
       return this.isMyGo ? -100 : 100
     }
 

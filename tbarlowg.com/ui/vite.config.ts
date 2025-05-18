@@ -7,6 +7,10 @@ export default defineConfig({
     checker({
       // e.g. use TypeScript check
       typescript: true,
+      eslint: {
+        lintCommand: 'lint',
+        useFlatConfig: true,
+      },
     }),
     react(),
   ],

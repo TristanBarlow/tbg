@@ -12,7 +12,6 @@ interface Props extends Partial<ButtonProps> {
   label?: string
   loading?: boolean
   color?: Colors
-  click: () => void
 }
 export default function Button(props: Props) {
   const clazz = `button ${props.color}`
@@ -23,7 +22,7 @@ export default function Button(props: Props) {
     )
 
   return (
-    <CButton onClick={props.click} className={clazz}{...props}>
+    <CButton className={clazz}{...props}>
       { props.label }
       { props.children }
     </CButton>
