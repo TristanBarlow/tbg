@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Chessboard } from 'react-chessboard'
-import { ChessPlayer, PlayerColour } from '../../ts/chess/players/chessPlayer'
-import { MoveResponse } from '../../ts/chess/players'
+import { ChessPlayer, PlayerColour } from './players/chessPlayer'
+import { MoveResponse } from './players'
 import { Chess, Color, Move, Square } from 'chess.js'
 import { CustomSquareStyles } from 'react-chessboard/dist/chessboard/types'
 import { Flex } from '@chakra-ui/react'
-import Button from '../Button'
+import Button from '../components/Button'
 
 const colorLookup: { w: 'white', b: 'black' } = {
   w: 'white',

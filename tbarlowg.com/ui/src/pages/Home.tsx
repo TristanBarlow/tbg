@@ -6,7 +6,7 @@ import MyHelmet from '../components/MyHelmet'
 export default function Home() {
   return (
     <div className="tile is-parent">
-      <div className="title"></div>
+      <div className="title" />
       <MyHelmet title="TBG - Home" description="This is the personal website of Tristan Barlow-Griffin - Fullstack Software Engineer - Cornwall UK" />
       <div className="tile is-child center-a col flex">
         <div className="section">
