@@ -1,6 +1,6 @@
 import { newBoard } from '../../chess'
 import { PlayerColour } from '../chessPlayer'
-import { shuffle } from '../../../util'
+import { shuffle } from '../../../ts/util'
 import { MoveResponse, timeTaken } from '../types'
 import { Chess, PieceSymbol } from 'chess.js'
 

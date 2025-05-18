@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
-import { PlayersTypes, PlayerFactory, PlayerColour, MoveResponse } from '../../ts/chess/players'
+import { PlayersTypes, PlayerFactory, PlayerColour, MoveResponse } from './players'
 import { ChessboardWithControls } from './ChessBoard'
-import Button, { Colors } from '../Button'
-import MySelect from '../MySelect'
+import Button, { Colors } from '../components/Button'
+import MySelect from '../components/MySelect'
 import { Flex, Grid } from '@chakra-ui/react'
 import { getUnixTime } from 'date-fns'
-import { useWindowSize } from '../../ts/resize'
+import { useWindowSize } from '../ts/resize'
 import ChessLog, { Log } from './ChessLog'
 
 const playerOptions = Object.values(PlayersTypes)

@@ -8,11 +8,11 @@ import Background from './components/Background'
 import ProjectView from './pages/ProjectView'
 import Manage from './pages/Manage'
 import './css/main.css'
-import ChessPage from './pages/Chess'
 import Login from './components/Login'
 import { Flex } from '@chakra-ui/react'
 import ReactGA from 'react-ga'
 import { CFG, Mode } from './env'
+import { ChessPage } from './Chess/ChessPage'
 
 export default function App() {
   return (
