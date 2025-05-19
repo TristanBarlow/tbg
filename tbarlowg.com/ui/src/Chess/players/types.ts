@@ -16,7 +16,6 @@ export const Players: { [key in PlayersTypes]: () => ChessPlayer } = {
 }
 
 export function PlayerFactory(player: PlayersTypes): ChessPlayer {
-  console.log('Player', player)
   return Players[player]()
 }
 

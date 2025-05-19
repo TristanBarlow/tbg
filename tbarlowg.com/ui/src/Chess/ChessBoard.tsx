@@ -4,7 +4,7 @@ import { ChessPlayer, PlayerColour } from './players/chessPlayer'
 import { MoveResponse } from './players'
 import { Chess, Color, Move, Square } from 'chess.js'
 import { CustomSquareStyles } from 'react-chessboard/dist/chessboard/types'
-import { Flex } from '@chakra-ui/react'
+import { Alert, Flex } from '@chakra-ui/react'
 import Button from '../components/Button'
 
 const colorLookup: { w: 'white', b: 'black' } = {
@@ -15,13 +15,12 @@ const colorLookup: { w: 'white', b: 'black' } = {
 interface Props {
   white: ChessPlayer
   black: ChessPlayer
-  isPaused: boolean
   onMove: (player: PlayerColour, moveResponse: MoveResponse) => void
 }
 
 const TIME_BETWEEN_MOVES = 3000
 export function ChessboardWithControls(props: Props) {
-  const { black, onMove, isPaused, white } = props
+  const { black, onMove, white } = props
   const [fen, setFen] = useState(new Chess().fen())
   const game = useMemo(() => new Chess(fen), [fen])
 
@@ -31,30 +30,30 @@ export function ChessboardWithControls(props: Props) {
     : black
 
   const lastPlayerColour: Color = currentPlayerColour === 'w' ? 'b' : 'w'
-  const lastPlayer: ChessPlayer = currentPlayerColour === 'w'
-    ? white
-    : black
 
   const currentIsHuman: boolean = currentPlayer.isHuman
   const orientation: PlayerColour = !currentIsHuman
     ? 'w'
     : (currentIsHuman ? currentPlayerColour : lastPlayerColour)
 
-  const history = useState<string[]>([game.fen()])
+  const [history, setHistory] = useState<string[]>([game.fen()])
   const [lastMove, setLastMove] = useState<Move | null>(null)
   const [isFinished, setIsFinished] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
 
   const undo = useCallback(() => {
-    const lastMove = game.undo()
-    console.log('UNDO', lastMove)
-    if (!lastMove) {
+    const newHistory = [...history]
+    const previousState = newHistory.pop()
+    if (!previousState) {
       console.log('NO MOVE TO UNDO')
       return
     }
 
     setLastMove(null)
-    setFen(game.fen())
-  }, [game])
+    setIsPaused(true)
+    setFen(previousState)
+    setHistory(newHistory)
+  }, [history])
 
   const updateBoard = useCallback(() => {
     setFen(game.fen())
@@ -69,12 +68,14 @@ export function ChessboardWithControls(props: Props) {
   const makeMove = useCallback((move: Parameters<Chess['move']>[0] | string): boolean => {
     if (isPaused) return false
 
+    const prev = game.fen()
     const result = game.move(move)
     if (result === null) {
       console.log('Illegal move')
       return false
     }
 
+    setHistory(old => [...old, prev])
     setLastMove(result)
 
     updateBoard()
@@ -125,11 +126,6 @@ export function ChessboardWithControls(props: Props) {
     return () => clearTimeout(timeout)
   }, [currentIsHuman, game, tryMakeMove, isPaused])
 
-  const fromCSS: React.CSSProperties = {
-    backgroundColor: 'grey',
-    transitionDuration: '0.1s',
-  }
-
   const toCSS: React.CSSProperties = {
     backgroundColor: 'yellow',
     transitionDuration: '0.2s',
@@ -145,6 +141,17 @@ export function ChessboardWithControls(props: Props) {
 
   return (
     <Flex flexDirection="column" width="100%">
+      {
+        isFinished && (
+          <Alert.Root>
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title>Game Over</Alert.Title>
+              <Alert.Description />
+            </Alert.Content>
+          </Alert.Root>
+        )
+      }
       <div className="shadow-1">
         <Chessboard
           position={fen}
@@ -153,11 +160,19 @@ export function ChessboardWithControls(props: Props) {
           customSquareStyles={tileColours()}
         />
       </div>
-      <Flex mt=".5rem">
+      <Flex mt=".5rem" gridGap=".5rem">
         <Button onClick={() => setFen(new Chess().fen())}>
           Reset
         </Button>
+        <Button onClick={undo}>
+          Undo
+        </Button>
+        <Button
+          label={isPaused ? 'Start' : 'Pause'}
+          onClick={() => setIsPaused(!isPaused)}
+        />
       </Flex>
+
     </Flex>
   )
 }

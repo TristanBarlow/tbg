@@ -1,25 +1,12 @@
-import { ChessPlayer } from '../chessPlayer'
-import { PlayersTypes, MoveResponse } from '../types'
-import * as MinMaxWorker from './node.worker'
+import { WebWorkerChessPlayer } from '../chessPlayerMultiThreaded'
+import { PlayersTypes } from '../types'
+import MinMaxWorker from './node.worker?worker&url'
 
-type MoveWorker = typeof MinMaxWorker
-export class MinMaxBot extends ChessPlayer {
+export class MinMaxBot extends WebWorkerChessPlayer {
   name = PlayersTypes.MINMAX
   isHuman = false
   statHistory: string = ''
-  static _woker: MoveWorker
-  get worker(): MoveWorker {
-    if (!MinMaxBot._woker) {
-      MinMaxBot._woker = MinMaxWorker
-    }
-
-    return MinMaxBot._woker
-  }
-
-  getMove(fen: string): Promise<MoveResponse | null> {
-    const result = this.worker.getMove(fen)
-    return Promise.resolve(result)
-  }
+  inlineWorkerStr = MinMaxWorker
 
   get stats(): string {
     return this.statHistory

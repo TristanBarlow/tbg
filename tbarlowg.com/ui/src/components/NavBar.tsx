@@ -24,9 +24,9 @@ export default function NavBar() {
             <p className="title">TBG</p>
           </Link>
           <div className={burgerClass} onClick={() => setMenuActive(!menuActive)}>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
           </div>
         </div>
 

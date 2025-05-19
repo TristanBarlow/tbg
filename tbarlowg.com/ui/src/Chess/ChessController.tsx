@@ -1,7 +1,6 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { PlayersTypes, PlayerFactory, PlayerColour, MoveResponse } from './players'
 import { ChessboardWithControls } from './ChessBoard'
-import Button, { Colors } from '../components/Button'
 import MySelect from '../components/MySelect'
 import { Flex, Grid } from '@chakra-ui/react'
 import { getUnixTime } from 'date-fns'
@@ -10,7 +9,6 @@ import ChessLog, { Log } from './ChessLog'
 
 const playerOptions = Object.values(PlayersTypes)
 export default function ChessController() {
-  const [paused, setPaused] = useState(false)
   const [black, setBlack] = useState(PlayerFactory(PlayersTypes.RANDOM))
   const [white, setWhite] = useState(PlayerFactory(PlayersTypes.RANDOM))
   const [w] = useWindowSize()
@@ -35,7 +33,6 @@ export default function ChessController() {
         <ChessboardWithControls
           onMove={updateStats}
           black={black}
-          isPaused={paused}
           white={white}
         />
         <Flex flexDir="column">
@@ -52,13 +49,6 @@ export default function ChessController() {
                 value={black.name}
                 options={playerOptions}
                 change={x => x && setBlack(PlayerFactory(x))}
-              />
-            </Flex>
-            <Flex w="100%" justifyContent="space-around">
-              <Button
-                color={Colors.INFO}
-                label={paused ? 'Start' : 'Pause'}
-                onClick={() => { setPaused(!paused) }}
               />
             </Flex>
           </Flex>
