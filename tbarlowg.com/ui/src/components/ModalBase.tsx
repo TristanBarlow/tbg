@@ -34,7 +34,7 @@ export default abstract class ModalBase<T, S> extends React.Component<T & ModalB
   render(): React.JSX.Element | null {
     return (
       <div className="modal is-active" style={{ width: '100vw', height: '100vh', position: 'fixed', zIndex: 1000 }}>
-        <div className="modal-background"></div>
+        <div className="modal-background" />
         <div className="modal-card">
           <header className="modal-card-head has-background-white" style={{ border: 'none' }}>
             { this.getTitle() }

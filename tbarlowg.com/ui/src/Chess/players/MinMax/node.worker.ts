@@ -1,5 +1,6 @@
 import { quickGetMove } from './node'
 
-export function getMove(fen: string) {
-  return quickGetMove(fen)
+onmessage = async (e) => {
+  const move = quickGetMove(e.data)
+  postMessage(move)
 }
