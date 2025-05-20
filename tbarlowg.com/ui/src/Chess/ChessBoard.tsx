@@ -6,20 +6,21 @@ import { Chess, Color, Move, Square } from 'chess.js'
 import { CustomSquareStyles } from 'react-chessboard/dist/chessboard/types'
 import { Alert, Flex } from '@chakra-ui/react'
 import Button from '../components/Button'
+import { toTitle } from '@tbg/util'
 
 const colorLookup: { w: 'white', b: 'black' } = {
   w: 'white',
   b: 'black',
 }
 
-interface Props {
+export interface ChessboardWithControlsProps {
   white: ChessPlayer
   black: ChessPlayer
   onMove: (player: PlayerColour, moveResponse: MoveResponse) => void
 }
 
 const TIME_BETWEEN_MOVES = 3000
-export function ChessboardWithControls(props: Props) {
+export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   const { black, onMove, white } = props
   const [fen, setFen] = useState(new Chess().fen())
   const game = useMemo(() => new Chess(fen), [fen])
@@ -38,7 +39,6 @@ export function ChessboardWithControls(props: Props) {
 
   const [history, setHistory] = useState<string[]>([game.fen()])
   const [lastMove, setLastMove] = useState<Move | null>(null)
-  const [isFinished, setIsFinished] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
 
   const undo = useCallback(() => {
@@ -66,8 +66,6 @@ export function ChessboardWithControls(props: Props) {
   }, [game])
 
   const makeMove = useCallback((move: Parameters<Chess['move']>[0] | string): boolean => {
-    if (isPaused) return false
-
     const prev = game.fen()
     const result = game.move(move)
     if (result === null) {
@@ -80,12 +78,11 @@ export function ChessboardWithControls(props: Props) {
 
     updateBoard()
     if (checkGameOver()) {
-      setIsFinished(true)
       return true
     }
 
     return true
-  }, [checkGameOver, game, isPaused, updateBoard])
+  }, [checkGameOver, game, updateBoard])
 
   const tryMakeMove = useCallback(async () => {
     if (currentIsHuman || isPaused) {
@@ -99,13 +96,15 @@ export function ChessboardWithControls(props: Props) {
     }
 
     makeMove(response.move)
-    onMove(lastPlayerColour, response)
-  }, [checkGameOver, currentIsHuman, currentPlayer, game, isPaused, lastPlayerColour, makeMove, onMove])
+    onMove(currentPlayerColour, response)
+  }, [checkGameOver, currentIsHuman, currentPlayer, currentPlayerColour, game, isPaused, makeMove, onMove])
 
   const onDrop = useCallback((from: Square, to: Square) => {
     if (!currentIsHuman) {
       return false
     }
+
+    setIsPaused(false)
 
     return makeMove({
       from,
@@ -141,17 +140,7 @@ export function ChessboardWithControls(props: Props) {
 
   return (
     <Flex flexDirection="column" width="100%">
-      {
-        isFinished && (
-          <Alert.Root>
-            <Alert.Indicator />
-            <Alert.Content>
-              <Alert.Title>Game Over</Alert.Title>
-              <Alert.Description />
-            </Alert.Content>
-          </Alert.Root>
-        )
-      }
+      <ChessBoardEndStatus game={game} />
       <div className="shadow-1">
         <Chessboard
           position={fen}
@@ -174,5 +163,35 @@ export function ChessboardWithControls(props: Props) {
       </Flex>
 
     </Flex>
+  )
+}
+
+export interface ChessBoardEndStatusProps {
+  game: Chess
+}
+function ChessBoardEndStatus({ game }: ChessBoardEndStatusProps) {
+  const message = useMemo(() => {
+    const isDraw = game.isDraw()
+    if (isDraw) {
+      return 'It is a draw!'
+    }
+    const isCheckmate = game.isCheckmate()
+    if (!isCheckmate) return null
+    const loser = game.turn()
+    return `${toTitle(colorLookup[loser])} is the winner!`
+  }, [game])
+
+  if (!message) return null
+
+  return (
+    <Alert.Root status="info">
+      <Alert.Indicator />
+      <Alert.Content>
+        <Alert.Title>The game has finished.</Alert.Title>
+        <Alert.Description>
+          {message}
+        </Alert.Description>
+      </Alert.Content>
+    </Alert.Root>
   )
 }
