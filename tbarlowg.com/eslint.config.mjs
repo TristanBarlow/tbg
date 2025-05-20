@@ -9,6 +9,7 @@ export default [
   {
     ignores: [
       '**/build/**/*.js',
+      '**/dist/**/*.js',
     ],
   },
   ...tseslint.config(
@@ -24,7 +25,7 @@ export default [
       languageOptions: {
         parserOptions: {
           projectService: {
-            allowDefaultProject: ['api/jest.config.js', 'eslint.config.mjs'],
+            allowDefaultProject: ['api/jest.config.js', 'eslint.config.mjs', '*/vite.config.ts'],
           },
           sourceType: 'module',
           tsconfigRootDir: import.meta.dirname,
