@@ -1,0 +1,28 @@
+name: "Sets up tbarlowg.com"
+description: "Sets up tbarlowg.com"
+runs:
+  using: "composite"
+  steps:
+    - name: Node - Setup
+      uses: actions/setup-node@v4
+      with:
+        node-version: "22"
+
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 9.1
+
+    - name: Pnpm - Install
+      shell: bash
+      working-directory: tbarlowg.com
+      run: pnpm i
+
+    - name: Pnpm - API Build
+      shell: bash
+      working-directory: tbarlowg.com/api
+      run: pnpm build
+
+    - name: Pnpm - UI Build
+      shell: bash
+      working-directory: tbarlowg.com/ui
+      run: pnpm build
