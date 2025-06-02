@@ -7,7 +7,15 @@ provider "google" {
   region  = "europe-west1"
 }
 
-resource "google_cloud_run_v2_service" "default" {
+
+terraform {
+  backend "gcs" {
+    bucket = "tb-personal-tf-state"
+    prefix = "api/state"
+  }
+}
+
+resource "google_cloud_run_v2_service" "tbarlowg" {
   name                = "tbarlowg"
   location            = "europe-west1"
   deletion_protection = false
@@ -38,9 +46,9 @@ data "google_iam_policy" "noauth" {
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth" {
-  location = google_cloud_run_v2_service.default.location
-  project  = google_cloud_run_v2_service.default.project
-  service  = google_cloud_run_v2_service.default.name
+  location = google_cloud_run_v2_service.tbarlowg.location
+  project  = google_cloud_run_v2_service.tbarlowg.project
+  service  = google_cloud_run_v2_service.tbarlowg.name
 
   policy_data = data.google_iam_policy.noauth.policy_data
 }
