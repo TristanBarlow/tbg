@@ -9,4 +9,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/workflows/setup
-      - run: pnpm -r lint
+      - run: pnpm lint
+        working-directory: tbarlowg.com
