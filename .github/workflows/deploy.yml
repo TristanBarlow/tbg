@@ -17,7 +17,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: GCP - Setup
         uses: google-github-actions/setup-gcloud@master
         with:
@@ -25,25 +25,12 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - name: Node - Setup
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
+      - uses: hashicorp/setup-terraform@v3
+      - uses: ./.github/workflows/setup
 
-      - name: Pnpm - Install
+      - name: PNPM Pack
         working-directory: tbarlowg.com
-        run: pnpm i
-
-      - name: Pnpm - API Build
-        working-directory: tbarlowg.com/api
-        run: pnpm build
-
-      - name: Pnpm - UI Build
-        working-directory: tbarlowg.com/ui
-        run: pnpm build
-
-      - name: NPM - Prune
-        run: npm prune --production
+        run: pnpm --filter @tbg/api --prod deploy packed
 
       - name: GCP - Configure Docker
         run: gcloud auth configure-docker
@@ -54,6 +41,5 @@ jobs:
           docker build . -t gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
           docker push gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
 
-      - name: GCP - Deploy
-        run: |
-          gcloud run deploy tbg --image gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg --region europe-west1 --memory 2Gi --platform managed
+      - name: Deploy
+        run: TF_VAR_gcp_project_id='${{secrets.GCP_PROJECT_ID}}' terraform apply
