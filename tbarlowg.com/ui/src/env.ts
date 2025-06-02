@@ -6,12 +6,11 @@ export enum Mode {
 }
 
 const envSchema = z.object({
-  SERVER_URL: z.string().url(),
+  SERVER_URL: z.string().optional(),
   MODE: z.nativeEnum(Mode),
 })
 
 function parseEnv() {
-  console.log(import.meta.env)
   const entries = Object
     .entries(import.meta.env)
     .map(([key, value]) => [key.replace('VITE_', ''), value])

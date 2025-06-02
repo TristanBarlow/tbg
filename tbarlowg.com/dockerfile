@@ -5,4 +5,4 @@ ENV MODE prod
 WORKDIR /usr/src/app
 COPY ./packed .
 
-CMD ["node", "dist" ]
+CMD ["node", "build/main.js" ]

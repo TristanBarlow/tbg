@@ -25,4 +25,4 @@ runs:
     - name: Pnpm - UI Build
       shell: bash
       working-directory: tbarlowg.com/ui
-      run: pnpm build
+      run: pnpm build:prod
