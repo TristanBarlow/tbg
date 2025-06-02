@@ -40,4 +40,4 @@ jobs:
         working-directory: tbarlowg.com/deploy
         run: |
           terraform init
-          TF_VAR_gcp_project_id='${{secrets.GCP_PROJECT_ID}}' terraform apply
+          TF_VAR_gcp_project_id='${{secrets.GCP_PROJECT_ID}}' terraform apply -auto-approve
