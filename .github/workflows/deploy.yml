@@ -38,4 +38,6 @@ jobs:
 
       - name: Deploy
         working-directory: tbarlowg.com/deploy
-        run: TF_VAR_gcp_project_id='${{secrets.GCP_PROJECT_ID}}' terraform apply
+        run: |
+          terraform init
+          TF_VAR_gcp_project_id='${{secrets.GCP_PROJECT_ID}}' terraform apply
