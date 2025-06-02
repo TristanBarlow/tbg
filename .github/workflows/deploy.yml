@@ -37,5 +37,5 @@ jobs:
           docker push europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/latest
 
       - name: Deploy
-        working-directory: deploy
+        working-directory: tbarlowg.com/deploy
         run: TF_VAR_gcp_project_id='${{secrets.GCP_PROJECT_ID}}' terraform apply
