@@ -19,7 +19,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          export_default_credentials: true
 
       - uses: hashicorp/setup-terraform@v3
       - uses: ./.github/workflows/setup
@@ -38,4 +37,5 @@ jobs:
           docker push europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/latest
 
       - name: Deploy
+        working-directory: deploy
         run: TF_VAR_gcp_project_id='${{secrets.GCP_PROJECT_ID}}' terraform apply
