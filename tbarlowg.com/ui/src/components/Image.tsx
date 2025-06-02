@@ -8,7 +8,7 @@ interface Props extends SkeletonProps {
   loadSize?: number
 }
 export default function ImageEle(props: Props) {
-  const [loaded, setLoaded] = useState(false)
+  const [loading, setIsLoading] = useState(true)
   const { meta } = props
   const src = `${CFG.SERVER_URL}/api/image/${isMeta(meta) ? meta.name : meta}`
   const description = isMeta(meta) && meta.description
@@ -16,7 +16,7 @@ export default function ImageEle(props: Props) {
     <Skeleton
       display="flex"
       pos="relative"
-      loading={loaded}
+      loading={loading}
       {...props}
       overflow="hidden"
     >
@@ -24,7 +24,8 @@ export default function ImageEle(props: Props) {
         mt="auto"
         w="100%"
         h="100%"
-        onLoad={() => setLoaded(true)}
+        onLoadStart={() => setIsLoading(true)}
+        onLoad={() => setIsLoading(false)}
         objectFit="cover"
         alt={description || ''}
         src={src}
