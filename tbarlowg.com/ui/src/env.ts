@@ -6,7 +6,7 @@ export enum Mode {
 }
 
 const envSchema = z.object({
-  SERVER_URL: z.string().url(),
+  SERVER_URL: z.string().optional(),
   MODE: z.nativeEnum(Mode),
 })
 
