@@ -15,7 +15,7 @@ resource "google_cloud_run_v2_service" "default" {
 
   template {
     containers {
-      image = "gcr.io/${var.gcp_project_id}/tbg"
+      image = "europe-west1-docker.pkg.dev/${var.gcp_project_id}/api/latest"
       resources {
         limits = {
           cpu    = "1"

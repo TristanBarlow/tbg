@@ -1,0 +1,38 @@
+{
+  "name": "@tbg/api",
+  "version": "1.0.0",
+  "main": "/build/index.js",
+  "author": "Tristan Barlow-Griffin",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/cors": "^2",
+    "@types/express": "^5.0.2",
+    "@types/jest": "^25.1.3",
+    "@types/node": "22",
+    "@types/sharp": "^0",
+    "jest": "^25.1.0",
+    "tslib": "^1.11.0",
+    "typescript": "5.8.3",
+    "tsc-watch": "6.3.1",
+    "esbuild": "0.25.4"
+  },
+  "scripts": {
+    "lint": "pnpm eslint ./src",
+    "build": "pnpm tsc && pnpm esbuild src/index.ts --platform=node --external:sharp --external:@google-cloud/firestore --external:@google-cloud/storage --bundle --outfile=build/main.js",
+    "build:run": "pnpm build && node ./build/main.js",
+    "start": "pnpm tsc-watch --onSuccess \"pnpm build:run\""
+  },
+  "files": [
+    "build",
+    "node_modules"
+  ],
+  "dependencies": {
+    "@google-cloud/firestore": "^3.5.1",
+    "@google-cloud/storage": "^4.3.1",
+    "@tbg/types": "workspace:*",
+    "@tbg/util": "workspace:*",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "sharp": "0.34.1"
+  }
+}

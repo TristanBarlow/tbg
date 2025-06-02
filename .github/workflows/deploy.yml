@@ -30,8 +30,8 @@ jobs:
       - name: Docker - Build, Push
         working-directory: tbarlowg.com
         run: |
-          docker build . -t gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
-          docker push gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
+          docker build -t europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/latest .
+          docker push europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/latest
 
       - name: Deploy
         run: TF_VAR_gcp_project_id='${{secrets.GCP_PROJECT_ID}}' terraform apply
