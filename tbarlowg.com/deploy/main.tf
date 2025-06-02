@@ -52,3 +52,19 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 
   policy_data = data.google_iam_policy.noauth.policy_data
 }
+
+
+resource "google_cloud_run_domain_mapping" "tbarlowg" {
+  location = "europe-west1"
+  name     = "tbarlowg.com"
+  metadata {
+    annotations = {}
+    labels      = {}
+    namespace   = var.gcp_project_id
+  }
+  spec {
+    certificate_mode = "AUTOMATIC"
+    force_override   = false
+    route_name       = google_cloud_run_v2_service.tbarlowg.name
+  }
+}
