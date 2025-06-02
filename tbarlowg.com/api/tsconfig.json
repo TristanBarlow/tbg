@@ -3,6 +3,7 @@
     "allowJs": false,
     "alwaysStrict": true,
     "strict": true,
+    "noEmit": true,
     "target": "ESNext",
     "module": "CommonJS",
     "rootDir": "src",
