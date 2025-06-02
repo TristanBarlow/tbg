@@ -33,8 +33,8 @@ jobs:
       - name: Docker - Build, Push
         working-directory: tbarlowg.com
         run: |
-          docker build -t europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/latest .
-          docker push europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/latest
+          docker build -t europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/main .
+          docker push europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/main
 
       - name: Deploy
         working-directory: tbarlowg.com/deploy

@@ -23,7 +23,7 @@ resource "google_cloud_run_v2_service" "tbarlowg" {
 
   template {
     containers {
-      image = "europe-west1-docker.pkg.dev/${var.gcp_project_id}/api/latest"
+      image = "europe-west1-docker.pkg.dev/${var.gcp_project_id}/api/main:latest"
       resources {
         limits = {
           cpu    = "1"
