@@ -33,11 +33,14 @@ jobs:
       - name: Docker - Build, Push
         working-directory: tbarlowg.com
         run: |
-          docker build -t europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/main:latest .
-          docker push europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/main:latest
+          docker build -t europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/${{github.ref_name}} .
+          docker push europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/${{github.ref_name}}
 
       - name: Deploy
         working-directory: tbarlowg.com/deploy
+        env:
+          TF_VAR_gcp_project_id: ${{secrets.GCP_PROJECT_ID}}
+          TF_VAR_api_image_revision: ${{github.ref_name}}
         run: |
           terraform init
-          TF_VAR_gcp_project_id='${{secrets.GCP_PROJECT_ID}}' terraform apply -auto-approve
+          terraform apply -auto-approve

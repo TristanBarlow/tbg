@@ -2,6 +2,11 @@ variable "gcp_project_id" {
   type = string
 }
 
+variable "api_image_revision" {
+  type = string
+}
+
+
 provider "google" {
   project = var.gcp_project_id
   region  = "europe-west1"
@@ -23,7 +28,7 @@ resource "google_cloud_run_v2_service" "tbarlowg" {
 
   template {
     containers {
-      image = "europe-west1-docker.pkg.dev/${var.gcp_project_id}/api/main:latest"
+      image = "europe-west1-docker.pkg.dev/${var.gcp_project_id}/api/${var.api_image_revision}"
       resources {
         limits = {
           cpu    = "1"
