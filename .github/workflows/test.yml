@@ -3,7 +3,8 @@ name: Lint & Build
 on: [pull_request]
 
 jobs:
-  deploy:
+  lint-build:
+    name: Lint & Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
