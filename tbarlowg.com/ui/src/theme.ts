@@ -1,16 +1,18 @@
-import { theme } from '@chakra-ui/react'
+import { createSystem, defaultConfig } from '@chakra-ui/react'
 
-export const myTheme = {
-    ...theme,
-    colors: {
+export const myTheme = createSystem(defaultConfig, {
+  theme: {
+    tokens: {
+      colors: {
         brand: {
-            1:'#68c374'
+          primary: { value: '#68c374' },
         },
-        ...theme.colors
+      },
+      fonts: {
+        body: { value: ' BlinkMacSystemFont,-apple-system,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue","Helvetica","Arial",sans-serif' },
+        heading: { value: ' BlinkMacSystemFont,-apple-system,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue","Helvetica","Arial",sans-serif' },
+        mono: { value: ' BlinkMacSystemFont,-apple-system,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue","Helvetica","Arial",sans-serif' },
+      },
     },
-    fonts: {
-        body: ' BlinkMacSystemFont,-apple-system,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue","Helvetica","Arial",sans-serif',
-        heading: ' BlinkMacSystemFont,-apple-system,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue","Helvetica","Arial",sans-serif',
-        mono: ' BlinkMacSystemFont,-apple-system,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue","Helvetica","Arial",sans-serif'
-    }
-}
+  },
+})

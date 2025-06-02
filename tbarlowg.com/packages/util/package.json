@@ -2,13 +2,17 @@
   "name": "@tbg/util",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "module": "src/index.ts",
   "types": "src/index.ts",
   "license": "MIT",
   "private": true,
   "scripts": {
     "build": "tsc -b "
   },
+  "devDependencies": {
+    "typescript": "5.8.3"
+  },
   "dependencies": {
-    "typescript": "^3.9.6"
+    "zod": "3.24.4"
   }
 }

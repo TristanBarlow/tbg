@@ -1,4 +1,4 @@
-export function toTitle (str: string): string {
+export function toTitle(str: string): string {
   let out = str.replace(/-[a-z]/g, (x) => {
     return x.replace('-', ' ').toUpperCase()
   })
@@ -7,6 +7,6 @@ export function toTitle (str: string): string {
   return out
 }
 
-export function toKebab (str: string): string {
+export function toKebab(str: string): string {
   return str.replace(/ /g, '-').toLowerCase()
 }

@@ -1,20 +1,16 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import './css/index.css'
 import App from './App'
-import * as serviceWorker from './serviceWorker'
 import { myTheme } from './theme'
-import { ThemeProvider } from '@emotion/react'
+import { ChakraProvider } from '@chakra-ui/react'
 
+const rootEle = document.getElementById('root')
+if (rootEle) {
+  const root = createRoot(rootEle)
 
-ReactDOM.render(
-    <ThemeProvider theme={ myTheme }>
-        <App />
-    </ThemeProvider>
-    ,
-    document.getElementById('root'))
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister()
+  root.render(
+    <ChakraProvider value={myTheme}>
+      <App />
+    </ChakraProvider>,
+  )
+}

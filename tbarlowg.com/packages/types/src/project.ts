@@ -1,3 +1,5 @@
+import { isString } from 'lodash'
+
 export interface Project {
   title: string
   description: string
@@ -12,17 +14,13 @@ export interface ProjectLink {
   link: string
 }
 
-function isStr (x: string | undefined | null): x is string {
-  return typeof x === 'string'
-}
-
-export function isProject (proj: Partial<Project> | null | undefined): proj is Project {
+export function isProject(proj: Partial<Project> | null | undefined): proj is Project {
   return !!proj
-    && isStr(proj.description)
-    && isStr(proj.gifId)
-    && isStr(proj.imageId)
+    && isString(proj.description)
+    && isString(proj.gifId)
+    && isString(proj.imageId)
     && proj.links instanceof Array
-    && isStr(proj.title)
+    && isString(proj.title)
 }
 
 export interface ImageMeta {
@@ -31,9 +29,10 @@ export interface ImageMeta {
   description: string | null
 }
 
-export function isMeta (meta: Partial<ImageMeta> | null | undefined | any): meta is ImageMeta {
+export function isMeta(meta: Partial<ImageMeta> | null | undefined | string): meta is ImageMeta {
+  if (isString(meta)) return false
   return !!meta
-    && isStr(meta.name)
-    && (meta.description === null || isStr(meta.description))
+    && isString(meta.name)
+    && (meta.description === null || isString(meta.description))
     && typeof meta.viewed === 'number'
 }

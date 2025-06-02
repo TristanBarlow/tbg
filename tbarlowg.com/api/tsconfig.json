@@ -3,11 +3,15 @@
     "allowJs": false,
     "alwaysStrict": true,
     "strict": true,
+    "noEmit": true,
     "target": "ESNext",
     "module": "CommonJS",
     "rootDir": "src",
     "outDir": "./dist",
     "esModuleInterop": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+  },
+  "exclude": [
+    "build"
+  ]
 }

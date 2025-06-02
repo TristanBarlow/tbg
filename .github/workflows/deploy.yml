@@ -1,58 +1,37 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# This workflow will install Deno and run tests across stable and nightly builds on Windows, Ubuntu and macOS.
-# For more information see: https://github.com/denolib/setup-deno
-
 name: Deploy tbarlowg.com
 
 on:
   push:
-    tags: 
+    tags:
       - tbg/*
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: GCP - Setup
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
-      - name: NODE - Setup 
-        uses: actions/setup-node@v1
-        with:
-          node-version: '16.x'
-      - name: YARN - Install
+
+      - uses: hashicorp/setup-terraform@v3
+      - uses: ./.github/workflows/setup
+
+      - name: PNPM Pack
         working-directory: tbarlowg.com
-        run: yarn
-      - name: YARN - Build Packages
-        working-directory: tbarlowg.com
-        run: yarn build:p
-      - name: UI - Build
-        working-directory: tbarlowg.com/ui
-        run: yarn build
-      - name: API - Build
-        working-directory: tbarlowg.com/api
-        run: yarn build
-      - name: NPM - Prune
-        run: npm prune --production
+        run: pnpm --filter @tbg/api --prod deploy packed
+
       - name: GCP - Configure Docker
         run: gcloud auth configure-docker
+
       - name: Docker - Build, Push
         working-directory: tbarlowg.com
         run: |
           docker build . -t gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
           docker push gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg
-      - name: GCP - Deploy
-        run: |
-          gcloud run deploy tbg --image gcr.io/${{secrets.GCP_PROJECT_ID}}/tbg --region europe-west1 --memory 2Gi --platform managed
 
-
-
-      
+      - name: Deploy
+        run: TF_VAR_gcp_project_id='${{secrets.GCP_PROJECT_ID}}' terraform apply

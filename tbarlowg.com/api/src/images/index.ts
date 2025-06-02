@@ -5,12 +5,12 @@ import { Readable } from 'stream'
 import { writeMeta, viewed, deleteImageMeta } from './firestore'
 import { getAll } from './firestore'
 
-export async function createImage (id: string, description: string, contentType: string, r: Readable): Promise<WriteResult> {
+export async function createImage(id: string, description: string, contentType: string, r: Readable): Promise<WriteResult> {
   console.log('Creating write stream for File: ', id, ' Type: ', contentType)
   const w = createWriteStream(id, contentType)
   const success = await asyncPipe(w, r)
   if (!success)
-    throw Error(`Image Failed to upload to the bucket: ${ id }`)
+    throw Error(`Image Failed to upload to the bucket: ${id}`)
 
   console.log('Image written to bucket: ', id, ' Type: ', contentType)
   return writeMeta({ name: id, description, viewed: 0 })
@@ -22,7 +22,8 @@ export const deleteImageHandler: RequestHandler = async (req, res) => {
     console.log('DELETING IMAGE: ', id)
     await Promise.all([deleteImageMeta(id), deleteImage(id)])
     res.sendStatus(200)
-  } catch (e) {
+  }
+  catch (e) {
     console.error(e)
     res.sendStatus(400)
   }
@@ -40,7 +41,8 @@ export const imageUploadHandler: RequestHandler = async (req, res) => {
 
     await createImage(id, descr, contentType, req)
     res.sendStatus(200)
-  } catch (e) {
+  }
+  catch (e) {
     console.error(e)
     res.sendStatus(400)
   }
@@ -51,8 +53,9 @@ export const getAllImageHandler: RequestHandler = async (req, res) => {
     const images = await getAll()
 
     res.contentType('application/json')
-    return res.send(images)
-  } catch (e) {
+    res.send(images)
+  }
+  catch (e) {
     console.error(e)
     res.sendStatus(400)
   }
@@ -68,7 +71,8 @@ export const getImageHandler: RequestHandler = async (req, res) => {
     await viewed(id)
 
     r.pipe(res.status(200))
-  } catch (e) {
+  }
+  catch (e) {
     console.error(e)
     res.sendStatus(400)
   }
