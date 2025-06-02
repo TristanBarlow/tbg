@@ -33,7 +33,9 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build && cp -r build ../api",
+    "copy-build": "cp -r build ../api",
+    "build": "vite build && pnpm copy-build",
+    "build:prod": "vite --mode=prod build && pnpm copy-build",
     "lint": "pnpm eslint .",
     "preview": "vite preview"
   },
