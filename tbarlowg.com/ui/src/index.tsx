@@ -14,3 +14,5 @@ if (rootEle) {
     </ChakraProvider>,
   )
 }
+
+const foo = ''
