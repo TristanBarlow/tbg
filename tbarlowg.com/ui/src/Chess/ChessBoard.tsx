@@ -114,6 +114,7 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   }, [currentIsHuman, makeMove])
 
   const lastMoveAt = useRef<Date>(new Date())
+
   useEffect(() => {
     if (currentIsHuman || isPaused) return
     const timeElapsed = new Date().getTime() - lastMoveAt.current.getTime()
@@ -139,7 +140,7 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   }
 
   return (
-    <Flex flexDirection="column" width="100%">
+    <Flex gridGap=".5rem" flexDirection="column" width="100%">
       <ChessBoardEndStatus game={game} />
       <div className="shadow-1">
         <Chessboard
@@ -149,7 +150,7 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
           customSquareStyles={tileColours()}
         />
       </div>
-      <Flex mt=".5rem" gridGap=".5rem">
+      <Flex gridGap=".5rem">
         <Button onClick={() => setFen(new Chess().fen())}>
           Reset
         </Button>
@@ -161,7 +162,6 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
           onClick={() => setIsPaused(!isPaused)}
         />
       </Flex>
-
     </Flex>
   )
 }

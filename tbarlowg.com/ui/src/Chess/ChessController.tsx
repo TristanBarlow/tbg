@@ -12,7 +12,7 @@ const playerOptions = Object.values(PlayersTypes)
 export default function ChessController() {
   const [black, setBlack] = useState(PlayerFactory(PlayersTypes.RANDOM))
   const [white, setWhite] = useState(PlayerFactory(PlayersTypes.RANDOM))
-  const [w] = useWindowSize()
+  const [windowWidth] = useWindowSize()
   const [logs, setLogs] = useState<Log[]>([])
 
   function updateStats(color: PlayerColour, response: MoveResponse) {
@@ -27,33 +27,31 @@ export default function ChessController() {
     setLogs([log, ...logs])
   }
 
-  const columns = `repeat(auto-fill, ${w > 500 ? 500 : 320}px)`
+  const columns = `repeat(auto-fill, ${windowWidth > 500 ? 500 : 310}px)`
   return (
     <Flex w="100%" justifyContent="center">
-      <Grid py={1} w="100%" maxW="1020px" columnGap="10px" rowGap={2} justifyContent="center" templateColumns={columns}>
-        <Flex flexDir="column">
-          <Flex flexDir="column" w="100%" h="fit-content">
-            <Flex mb={2} justifyContent="space-around" flexDirection="row" w="100%">
-              <MySelect
-                label="White"
-                value={white.name}
-                options={playerOptions}
-                change={x => x && setWhite(PlayerFactory(x))}
-              />
-              <MySelect
-                label="Black"
-                value={black.name}
-                options={playerOptions}
-                change={x => x && setBlack(PlayerFactory(x))}
-              />
-            </Flex>
+      <Grid py={1} w="100%" maxW="1020px" gridGap=".5rem" justifyContent="center" templateColumns={columns}>
+        <Flex flexDirection="column">
+          <Flex mb={2} justifyContent="space-around" flexDirection="row" w="100%">
+            <MySelect
+              label="White"
+              value={white.name}
+              options={playerOptions}
+              change={x => x && setWhite(PlayerFactory(x))}
+            />
+            <MySelect
+              label="Black"
+              value={black.name}
+              options={playerOptions}
+              change={x => x && setBlack(PlayerFactory(x))}
+            />
           </Flex>
+          <ChessboardWithControls
+            onMove={updateStats}
+            black={black}
+            white={white}
+          />
         </Flex>
-        <ChessboardWithControls
-          onMove={updateStats}
-          black={black}
-          white={white}
-        />
         <ChessLog logs={logs} />
       </Grid>
     </Flex>

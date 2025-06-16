@@ -20,10 +20,9 @@ export function ChessLog({ logs }: Props) {
       px={2}
       overflowX="scroll"
       bg="white"
-      mt={2}
       className="shadow-1"
       flexDirection="column"
-      h="300px"
+      h="400px"
     >
       {
         logs.map(log => (
