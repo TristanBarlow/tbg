@@ -6,8 +6,7 @@ export const getProjects: RequestHandler = async (req, res) => {
   try {
     const projs = await getAll()
     res.send(projs)
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e)
     res.sendStatus(400)
   }
@@ -20,8 +19,7 @@ export const deleteProjectHandler: RequestHandler = async (req, res) => {
       throw Error(`Malformed ID ${id}`)
     await deleteProject(id)
     res.sendStatus(200)
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e)
     res.sendStatus(400)
   }

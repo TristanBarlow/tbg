@@ -51,8 +51,7 @@ export default function ProjectAdd(props: Props) {
   function updateLink(i: number, link: ProjectLink | null) {
     if (!link) {
       project.links.splice(i, 1)
-    }
-    else {
+    } else {
       project.links[i] = link
     }
     update({ links: [...project.links] })

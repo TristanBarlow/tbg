@@ -21,8 +21,9 @@ export class MiniMacsNode {
   moves: string[]
   bestValue = Number.NEGATIVE_INFINITY
   bestMove: string | null = null
+  myMovesChecked = 0
+  opMovesChecked = 0
   colour: PlayerColour
-  moveCount = 0
 
   constructor(fen: string) {
     this.game = newBoard(fen)
@@ -43,7 +44,12 @@ export class MiniMacsNode {
 
     for (let i = 0; i < moves.length; i++) {
       const move = moves[i]
-      this.moveCount++
+      if (isMaxing) {
+        this.myMovesChecked++
+      } else {
+        this.opMovesChecked++
+      }
+
       if (!this.game.move(move)) {
         console.log('move failed')
         continue
@@ -57,8 +63,7 @@ export class MiniMacsNode {
           best_value = value
         }
         a = Math.max(a, value)
-      }
-      else {
+      } else {
         if (value < best_value) {
           best_move = move
           best_value = value
@@ -110,7 +115,7 @@ export function quickGetMove(fen: string): MoveResponse {
   return {
     move: node.bestMove,
     rating,
-    details: `Searched ${node.moveCount} different moves`,
+    details: `Total Moves Searched: ${node.myMovesChecked + node.opMovesChecked}. My Moves: ${node.myMovesChecked} Ops Moves: ${node.opMovesChecked}`,
     timeTaken: timeTaken(strt),
   }
 }

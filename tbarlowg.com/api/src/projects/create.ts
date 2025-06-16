@@ -11,8 +11,7 @@ export const createHandler: RequestHandler = async (req, res) => {
 
     await writeProject(data)
     res.sendStatus(200)
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e)
     res.sendStatus(400)
   }

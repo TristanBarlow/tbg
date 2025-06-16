@@ -8,8 +8,8 @@ import reactHooks from 'eslint-plugin-react-hooks'
 export default [
   {
     ignores: [
-      '**/build/**/*.js',
-      '**/dist/**/*.js',
+      '**/build/**/*',
+      '**/dist/**/*',
     ],
   },
   ...tseslint.config(
@@ -20,6 +20,7 @@ export default [
     reactHooks.configs['recommended-latest'],
     stylistic.configs.customize({
       indent: 2,
+      braceStyle: '1tbs',
     }),
     {
       languageOptions: {

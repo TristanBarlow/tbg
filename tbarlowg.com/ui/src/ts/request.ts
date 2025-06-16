@@ -30,8 +30,7 @@ export async function apiRequest<T>(
       data: await res.json() as T,
       status: res.status,
     }
-  }
-  catch (e: unknown) {
+  } catch (e: unknown) {
     console.error(e)
     return {
       success: false,

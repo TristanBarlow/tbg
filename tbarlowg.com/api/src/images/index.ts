@@ -22,8 +22,7 @@ export const deleteImageHandler: RequestHandler = async (req, res) => {
     console.log('DELETING IMAGE: ', id)
     await Promise.all([deleteImageMeta(id), deleteImage(id)])
     res.sendStatus(200)
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e)
     res.sendStatus(400)
   }
@@ -41,8 +40,7 @@ export const imageUploadHandler: RequestHandler = async (req, res) => {
 
     await createImage(id, descr, contentType, req)
     res.sendStatus(200)
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e)
     res.sendStatus(400)
   }
@@ -54,8 +52,7 @@ export const getAllImageHandler: RequestHandler = async (req, res) => {
 
     res.contentType('application/json')
     res.send(images)
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e)
     res.sendStatus(400)
   }
@@ -71,8 +68,7 @@ export const getImageHandler: RequestHandler = async (req, res) => {
     await viewed(id)
 
     r.pipe(res.status(200))
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e)
     res.sendStatus(400)
   }
