@@ -13,14 +13,14 @@ const MINIMAX_VALS: { [key in PieceSymbol]: number } = {
   k: 10,
 }
 
+const CHECK_MATE_VALUE = 50
+
 export class MiniMacsNode {
   game: Chess
   isDone = false
   moves: string[]
   bestValue = Number.NEGATIVE_INFINITY
   bestMove: string | null = null
-  a: number = Number.POSITIVE_INFINITY
-  b: number = Number.NEGATIVE_INFINITY
   colour: PlayerColour
   moveCount = 0
 
@@ -46,6 +46,7 @@ export class MiniMacsNode {
       this.moveCount++
       if (!this.game.move(move)) {
         console.log('move failed')
+        continue
       }
 
       const value = this.NewLayer(depth - 1, !isMaxing, a, b)
@@ -83,7 +84,7 @@ export class MiniMacsNode {
     const board = this.game.board()
 
     if (this.game.isCheckmate()) {
-      return this.isMyGo ? -100 : 100
+      return this.isMyGo ? CHECK_MATE_VALUE : -CHECK_MATE_VALUE
     }
 
     let b = 0

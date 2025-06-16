@@ -5,7 +5,8 @@ import MySelect from '../components/MySelect'
 import { Flex, Grid } from '@chakra-ui/react'
 import { getUnixTime } from 'date-fns'
 import { useWindowSize } from '../ts/resize'
-import ChessLog, { Log } from './ChessLog'
+import { Log, ChessLog } from './ChessLog'
+import { generate } from 'short-uuid'
 
 const playerOptions = Object.values(PlayersTypes)
 export default function ChessController() {
@@ -17,24 +18,19 @@ export default function ChessController() {
   function updateStats(color: PlayerColour, response: MoveResponse) {
     const time = getUnixTime(new Date())
     const log: Log = {
-      id: `${color}-${time}`,
+      id: generate(),
       time,
       botName: color === 'w' ? white.name : black.name,
       color,
       details: response.details,
     }
-    setLogs([...logs, log])
+    setLogs([log, ...logs])
   }
 
   const columns = `repeat(auto-fill, ${w > 500 ? 500 : 320}px)`
   return (
     <Flex w="100%" justifyContent="center">
       <Grid py={1} w="100%" maxW="1020px" columnGap="10px" rowGap={2} justifyContent="center" templateColumns={columns}>
-        <ChessboardWithControls
-          onMove={updateStats}
-          black={black}
-          white={white}
-        />
         <Flex flexDir="column">
           <Flex flexDir="column" w="100%" h="fit-content">
             <Flex mb={2} justifyContent="space-around" flexDirection="row" w="100%">
@@ -52,8 +48,13 @@ export default function ChessController() {
               />
             </Flex>
           </Flex>
-          <ChessLog logs={logs} />
         </Flex>
+        <ChessboardWithControls
+          onMove={updateStats}
+          black={black}
+          white={white}
+        />
+        <ChessLog logs={logs} />
       </Grid>
     </Flex>
   )

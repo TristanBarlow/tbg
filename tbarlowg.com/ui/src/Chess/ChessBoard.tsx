@@ -8,7 +8,7 @@ import { Alert, Flex } from '@chakra-ui/react'
 import Button from '../components/Button'
 import { toTitle } from '@tbg/util'
 
-const colorLookup: { w: 'white', b: 'black' } = {
+export const colourLookup: { w: 'white', b: 'black' } = {
   w: 'white',
   b: 'black',
 }
@@ -144,7 +144,7 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
       <div className="shadow-1">
         <Chessboard
           position={fen}
-          boardOrientation={colorLookup[orientation]}
+          boardOrientation={colourLookup[orientation]}
           onPieceDrop={onDrop}
           customSquareStyles={tileColours()}
         />
@@ -182,7 +182,7 @@ function ChessBoardEndStatus({ game }: ChessBoardEndStatusProps) {
     const isCheckmate = game.isCheckmate()
     if (!isCheckmate) return null
     const loser = invertColour(game.turn())
-    return `${toTitle(colorLookup[loser])} is the winner!`
+    return `${toTitle(colourLookup[loser])} is the winner!`
   }, [game])
 
   if (!message) return null
