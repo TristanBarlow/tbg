@@ -166,6 +166,10 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   )
 }
 
+function invertColour(colour: Color) {
+  return 'w' === colour ? 'b' : 'w'
+}
+
 export interface ChessBoardEndStatusProps {
   game: Chess
 }
@@ -177,7 +181,7 @@ function ChessBoardEndStatus({ game }: ChessBoardEndStatusProps) {
     }
     const isCheckmate = game.isCheckmate()
     if (!isCheckmate) return null
-    const loser = game.turn()
+    const loser = invertColour(game.turn())
     return `${toTitle(colorLookup[loser])} is the winner!`
   }, [game])
 
