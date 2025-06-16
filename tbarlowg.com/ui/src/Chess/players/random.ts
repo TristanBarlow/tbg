@@ -1,13 +1,13 @@
 import { ChessPlayer } from './chessPlayer'
 import { newBoard } from '../chess'
-import { PlayersTypes, MoveResponse, timeTaken } from './types'
+import { PlayersTypes, MoveResponse, timeTaken, MoveRequest } from './types'
 
 export class RandomBot extends ChessPlayer {
   name = PlayersTypes.RANDOM
   isHuman = false
   lastNumberOfMoves = 0
 
-  getMove(fen: string): Promise<MoveResponse | null> {
+  getMove({ fen }: MoveRequest): Promise<MoveResponse | null> {
     const strt = performance.now()
     const game = newBoard(fen)
     const possibleMoves = game.moves()

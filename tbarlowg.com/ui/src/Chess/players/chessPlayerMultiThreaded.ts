@@ -1,5 +1,5 @@
 import { ChessPlayer } from './chessPlayer'
-import { MoveResponse } from './types'
+import { MoveRequest, MoveResponse } from './types'
 
 export abstract class WebWorkerChessPlayer extends ChessPlayer {
   abstract inlineWorkerStr: string
@@ -12,13 +12,13 @@ export abstract class WebWorkerChessPlayer extends ChessPlayer {
     return this._worker
   }
 
-  getMove(fen: string): Promise<MoveResponse | null> {
+  getMove(request: MoveRequest): Promise<MoveResponse | null> {
     const worker = this.worker
     return new Promise((resolve) => {
       worker.onmessage = (msg) => {
         resolve(msg.data as MoveResponse)
       }
-      worker.postMessage(fen)
+      worker.postMessage(request)
     })
   }
 }

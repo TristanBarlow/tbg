@@ -1,7 +1,7 @@
 import { newBoard } from '../../chess'
 import { PlayerColour } from '../chessPlayer'
 import { shuffle } from '../../../ts/util'
-import { MoveResponse, timeTaken } from '../types'
+import { MoveRequest, MoveResponse, timeTaken } from '../types'
 import { Chess, PieceSymbol } from 'chess.js'
 
 const MINIMAX_VALS: { [key in PieceSymbol]: number } = {
@@ -108,7 +108,7 @@ export class MiniMacsNode {
   }
 }
 
-export function quickGetMove(fen: string): MoveResponse {
+export function quickGetMove({ fen }: MoveRequest): MoveResponse {
   const node = new MiniMacsNode(fen)
   const strt = performance.now()
   const rating = node.NewLayer(4, true)

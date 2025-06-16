@@ -89,7 +89,7 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
       return
     }
 
-    const response = await currentPlayer.getMove(game.fen())
+    const response = await currentPlayer.getMove({ fen: game.fen(), maxTime: TIME_BETWEEN_MOVES })
     if (!response?.move) {
       checkGameOver()
       return
