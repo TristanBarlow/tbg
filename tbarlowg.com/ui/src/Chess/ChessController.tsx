@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { PlayersTypes, PlayerFactory, PlayerColour, MoveResponse } from './players'
 import { ChessboardWithControls } from './ChessBoard'
 import MySelect from '../components/MySelect'
@@ -7,13 +7,19 @@ import { getUnixTime } from 'date-fns'
 import { useWindowSize } from '../ts/resize'
 import { Log, ChessLog } from './ChessLog'
 import { generate } from 'short-uuid'
+import { useLocalStorageState } from '../hooks/useLocalStorageState'
+import { z } from 'zod'
 
 const playerOptions = Object.values(PlayersTypes)
+const playerSchema = z.nativeEnum(PlayersTypes)
 export default function ChessController() {
-  const [black, setBlack] = useState(PlayerFactory(PlayersTypes.RANDOM))
-  const [white, setWhite] = useState(PlayerFactory(PlayersTypes.RANDOM))
+  const [blackType, setBlackType] = useLocalStorageState('black', playerSchema, PlayersTypes.RANDOM)
+  const [whiteType, setWhiteType] = useLocalStorageState('white', playerSchema, PlayersTypes.RANDOM)
   const [windowWidth] = useWindowSize()
   const [logs, setLogs] = useState<Log[]>([])
+
+  const white = useMemo(() => PlayerFactory(whiteType), [whiteType])
+  const black = useMemo(() => PlayerFactory(blackType), [blackType])
 
   function updateStats(color: PlayerColour, response: MoveResponse) {
     const time = getUnixTime(new Date())
@@ -37,13 +43,13 @@ export default function ChessController() {
               label="White"
               value={white.name}
               options={playerOptions}
-              change={x => x && setWhite(PlayerFactory(x))}
+              change={x => x && setWhiteType(x)}
             />
             <MySelect
               label="Black"
               value={black.name}
               options={playerOptions}
-              change={x => x && setBlack(PlayerFactory(x))}
+              change={x => x && setBlackType(x)}
             />
           </Flex>
           <ChessboardWithControls

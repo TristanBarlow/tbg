@@ -7,6 +7,7 @@ import { CustomSquareStyles } from 'react-chessboard/dist/chessboard/types'
 import { Alert, Flex } from '@chakra-ui/react'
 import Button from '../components/Button'
 import { toTitle } from '@tbg/util'
+import { invertColour } from './chess'
 
 export const colourLookup: { w: 'white', b: 'black' } = {
   w: 'white',
@@ -20,9 +21,10 @@ export interface ChessboardWithControlsProps {
 }
 
 const TIME_BETWEEN_MOVES = 3000
+const FEN = 'rnbqk1nr/ppppppbp/6p1/P7/8/1P6/2PPPPPP/RNBQKBNR w KQkq - 1 5'
 export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   const { black, onMove, white } = props
-  const [fen, setFen] = useState(new Chess().fen())
+  const [fen, setFen] = useState(new Chess(FEN).fen())
   const game = useMemo(() => new Chess(fen), [fen])
 
   const currentPlayerColour = game.turn()
@@ -164,10 +166,6 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
       </Flex>
     </Flex>
   )
-}
-
-function invertColour(colour: Color) {
-  return 'w' === colour ? 'b' : 'w'
 }
 
 export interface ChessBoardEndStatusProps {
