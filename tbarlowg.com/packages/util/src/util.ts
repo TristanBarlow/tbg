@@ -10,3 +10,7 @@ export function toTitle(str: string): string {
 export function toKebab(str: string): string {
   return str.replace(/ /g, '-').toLowerCase()
 }
+
+export function filterTruthy<T>(v?: T | null | undefined | false | ''): v is T {
+  return !!v
+}

@@ -20,13 +20,17 @@ export interface ChessboardWithControlsProps {
   onMove: (player: PlayerColour, moveResponse: MoveResponse) => void
 }
 
+const TEST_FENS = {
+  ATTACK: 'rnbqk2r/pppp2pp/4p2n/5pB1/1b1P4/2P5/PP2PPPP/RN1QKBNR w KQkq - 1 5',
+  DEFENCE: 'rnbqk1nr/ppppppbp/6p1/P7/8/1P6/2PPPPPP/RNBQKBNR w KQkq - 1 5',
+}
 const TIME_BETWEEN_MOVES = 3000
-const FEN = 'rnbqk1nr/ppppppbp/6p1/P7/8/1P6/2PPPPPP/RNBQKBNR w KQkq - 1 5'
 export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   const { black, onMove, white } = props
-  const [fen, setFen] = useState(new Chess(FEN).fen())
+  const [fen, setFen] = useState(new Chess(TEST_FENS.DEFENCE).fen())
   const game = useMemo(() => new Chess(fen), [fen])
 
+  console.log(fen)
   const currentPlayerColour = game.turn()
   const currentPlayer: ChessPlayer = currentPlayerColour === 'w'
     ? white

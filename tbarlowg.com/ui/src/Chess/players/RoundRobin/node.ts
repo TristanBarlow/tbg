@@ -1,184 +1,182 @@
 import { invertColour, newBoard } from '../../chess'
-import { PlayerColour } from '../chessPlayer'
 import { shuffle } from '../../../ts/util'
-import { MoveRequest, MoveResponse, timeTaken } from '../types'
+import { MoveRequest, MoveResponse } from '../types'
 import { Chess, Color, PieceSymbol } from 'chess.js'
+import { sumBy } from 'lodash'
 
 const ROUND_ROBIN_VALS: { [key in PieceSymbol]: number } = {
   p: 0.1,
   r: 0.5,
   n: 0.3,
-  b: 0.3,
+  b: 0.4,
   q: 0.9,
   k: 0.10,
 }
 
 const CHECK_MATE_VALUE = 1
-export class RoundRobin {
-  game: Chess
-  moves: string[]
-  maxDepth = 0
-  startedAt: number = performance.now()
-  colour: PlayerColour
-  rootNode: RoundRobinNode
-
-  constructor(private fen: string, private maxProcessingMs: number) {
-    this.game = newBoard(fen)
-    this.colour = this.game.turn()
-    const moves = this.game.moves()
-    this.moves = shuffle(moves)
-    this.rootNode = new RoundRobinNode(null, null, this.colour, this.game, this.fen, 1)
-  }
-
-  get isOutOfTime() {
-    return (performance.now() - this.startedAt) > this.maxProcessingMs
-  }
-
-  getMove() {
-    const moves = this.rootNode.populateNode()
-    while (!this.isOutOfTime) {
-      this.rootNode.iterateNode({
-        acc: 0,
-        max: 1000,
-      })
-    }
-
-    this.rootNode.updateScores()
-    console.log(this.rootNode)
-    const bestMove = this.rootNode.nodes?.at(0)
-    return {
-      move: bestMove?.move ?? moves[0],
-      rating: bestMove?.eval ?? 0,
-    }
-  }
-
-  get isMyGo() {
-    return this.game.turn() === this.colour
-  }
-}
 
 function loadGame(game: Chess, fen: string) {
   game.load(fen, { skipValidation: true })
 }
 
-type Counter = {
-  acc: number
-  max: number
+interface Node {
+  children: Node[]
+  move: string
+  eval: number
+  game: Chess
+  fen: string
+  isPopulated: boolean
+  moveColour: Color
+  parent: Node | null
+  depth: number
+  averageEval: number
 }
 
-class RoundRobinNode {
-  score: number
-  eval: number
-  playerMove: Color
-  opMoves = 0
-  myMoves = 0
-  nodes: RoundRobinNode[] | null = null
-  isMaximiser: boolean
+function evaluateBoard(game: Chess) {
+  const board = game.board()
+  const maxingColour = invertColour(game.turn())
 
-  constructor(private parentNode: RoundRobinNode | null, readonly move: string | null, public maxingColour: Color, private game: Chess, private fen: string, public depth: number) {
-    this.playerMove = invertColour(this.game.turn())
-    this.eval = this.evaluateBoard()
-    this.score = this.eval
-    this.isMaximiser = this.playerMove === maxingColour
-
-    let parent = this.parentNode
-    while (parent) {
-      if (!parent?.parentNode) {
-        const wasMyMove = this.playerMove === this.maxingColour
-        if (wasMyMove) {
-          parent.myMoves++
-        } else {
-          parent.opMoves++
-        }
-      }
-      parent = parent.parentNode
-    }
+  if (game.isCheckmate()) {
+    return CHECK_MATE_VALUE
   }
 
-  iterateNode(counter: Counter) {
-    if (counter.acc >= counter.max) return false
-    if (!this.nodes) {
-      this.populateNode()
-      return true
-    }
-    this.nodes.forEach((n) => {
-      const out = n.iterateNode(counter)
-      if (out) {
-        counter.acc++
-      }
-    })
-    this.updateScores()
-  }
+  let score = 0
+  for (let i = 0; i < board.length; i++)
+    for (let y = 0; y < board[i].length; y++) {
+      const piece = board[i][y]
+      if (!piece) continue
 
-  populateNode() {
-    loadGame(this.game, this.fen)
-    const moves = this.game.moves()
-    this.nodes = new Array(moves.length)
-    for (let i = 0; i < moves.length; i++) {
-      loadGame(this.game, this.fen)
-      const move = moves[i]
-      if (!this.game.move(move)) {
-        continue
-      }
-
-      const node = new RoundRobinNode(this, move, this.maxingColour, this.game, this.game.fen(), this.depth + 1)
-      this.nodes.push(node)
-    }
-    this.updateScores()
-    return moves
-  }
-
-  updateScores() {
-    if (!this.nodes) return
-    this.sortNode()
-    this.score = this.nodes.at(0)?.score ?? this.eval
-    if (this.parentNode) {
-      this.parentNode.updateScores()
-    }
-  }
-
-  sortNode() {
-    if (!this.nodes) return
-    this.nodes.sort((a, b) => {
-      if (this.isMaximiser) {
-        return a.score - b.score
-      }
-      return b.score - a.score
-    })
-  }
-
-  evaluateBoard() {
-    const board = this.game.board()
-
-    if (this.game.isCheckmate()) {
-      if (this.game.turn() === this.maxingColour) return -CHECK_MATE_VALUE
-      return CHECK_MATE_VALUE
+      const value = ROUND_ROBIN_VALS[piece.type]
+      score += maxingColour === piece.color
+        ? value
+        : -value
     }
 
-    let score = 0
-    for (let i = 0; i < board.length; i++)
-      for (let y = 0; y < board[i].length; y++) {
-        const piece = board[i][y]
-        if (!piece) continue
+  return score
+}
 
-        const value = ROUND_ROBIN_VALS[piece.type]
-        score += this.maxingColour === piece.color
-          ? value
-          : -value
-      }
+function makeNode(move: string, fen: string, game: Chess, parent: Node | null): Node | null {
+  const moveColour = game.turn()
+  loadGame(game, fen)
+  if (!game.move(move)) {
+    return null
+  }
 
-    return score
+  return {
+    children: [],
+    eval: evaluateBoard(game),
+    fen: game.fen(),
+    parent,
+    game,
+    move,
+    isPopulated: false,
+    moveColour: invertColour(moveColour),
+    depth: (parent?.depth ?? 0) + 1,
+    averageEval: 0,
+  }
+}
+
+function populateNode(node: Node) {
+  const game = node.game
+  loadGame(game, node.fen)
+  node.children = getNodeChildren(game, game.fen(), node)
+  node.children.sort((a, b) => b.eval - a.eval)
+  node.isPopulated = true
+  node.averageEval = sumBy(node.children, c => c.eval) / node.children.length
+}
+
+function iterateNode(node: Node) {
+  if (!node.isPopulated) {
+    populateNode(node)
+    return true
+  }
+
+  const child = node.children.find(c => !c.isPopulated)
+  if (child) {
+    populateNode(child)
+    return true
+  }
+}
+
+function getNodeChildren(game: Chess, fen: string, parentNode: Node | null) {
+  return shuffle(game.moves())
+    .map(move => makeNode(move, fen, game, parentNode))
+    .filter((v): v is Node => !!v)
+}
+
+interface Counter {
+  opMoves: number
+  playerMoves: number
+  opSum: number
+  playerSum: number
+}
+
+function getNodeScore(node: Node, maxingPlayer: Color, counter: Counter) {
+  if (node.moveColour === maxingPlayer) {
+    counter.playerSum += node.eval / node.depth
+    counter.playerMoves++
+  } else {
+    counter.opSum += node.eval / node.depth
+    counter.opMoves++
+  }
+
+  node.children.forEach(c => getNodeScore(c, maxingPlayer, counter))
+}
+
+function getMove(fen: string, maxTime: number) {
+  const start = performance.now()
+  const game = newBoard(fen)
+  const maxingColour = game.turn()
+  const rootNodes = getNodeChildren(game, fen, null)
+  let opMoves = 0
+  let myMoves = 0
+  while (performance.now() - start < maxTime) {
+    rootNodes.forEach(n => iterateNode(n))
+  }
+
+  const nodesWithCount = rootNodes.map((node) => {
+    const counter: Counter = {
+      opMoves: 0,
+      playerMoves: 0,
+      playerSum: 0,
+      opSum: 0,
+    }
+
+    getNodeScore(node, maxingColour, counter)
+
+    opMoves += counter.opMoves
+    myMoves += counter.playerMoves
+
+    const playerAvg = counter.playerSum / counter.playerMoves
+    const enemyAvg = counter.opSum / counter.opMoves
+    return {
+      node,
+      counter,
+      rating: playerAvg - enemyAvg,
+    }
+  })
+
+  nodesWithCount.sort((a, b) => {
+    return b.rating - a.rating
+  })
+
+  console.log(nodesWithCount)
+  const [{ node, rating }] = nodesWithCount
+  return {
+    opMoves,
+    myMoves,
+    move: node.move,
+    rating,
+    timeTaken: performance.now() - start,
   }
 }
 
 export function quickGetMove({ fen, maxTime }: MoveRequest): MoveResponse {
-  const player = new RoundRobin(fen, maxTime)
-  const strt = performance.now()
-  const { move, rating } = player.getMove()
+  const { move, rating, myMoves, opMoves, timeTaken } = getMove(fen, maxTime)
   return {
     move,
     rating,
-    details: `Total Moves Searched: ${player.rootNode.myMoves + player.rootNode.opMoves}. My Moves: ${player.rootNode.myMoves} Ops Moves: ${player.rootNode.opMoves}. Rating: ${rating}`,
-    timeTaken: timeTaken(strt),
+    details: `Total Moves Searched: ${myMoves + opMoves}. My Moves: ${myMoves} Ops Moves: ${opMoves}. Rating: ${rating}`,
+    timeTaken: timeTaken,
   }
 }
