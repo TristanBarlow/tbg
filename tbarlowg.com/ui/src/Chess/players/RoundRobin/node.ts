@@ -29,6 +29,7 @@ interface Node {
   moveColour: Color
   parent: Node | null
   depth: number
+  maxDepth: number
   averageEval: number
 }
 
@@ -62,6 +63,7 @@ function makeNode(move: string, fen: string, game: Chess, parent: Node | null): 
     return null
   }
 
+  const depth = (parent?.depth ?? 0) + 1
   return {
     children: [],
     eval: evaluateBoard(game),
@@ -71,8 +73,9 @@ function makeNode(move: string, fen: string, game: Chess, parent: Node | null): 
     move,
     isPopulated: false,
     moveColour: invertColour(moveColour),
-    depth: (parent?.depth ?? 0) + 1,
+    depth,
     averageEval: 0,
+    maxDepth: depth,
   }
 }
 
@@ -83,19 +86,27 @@ function populateNode(node: Node) {
   node.children.sort((a, b) => b.eval - a.eval)
   node.isPopulated = true
   node.averageEval = sumBy(node.children, c => c.eval) / node.children.length
+
+  let currentNode = node.parent
+  while (currentNode) {
+    currentNode.maxDepth = node.maxDepth + 1
+    currentNode = currentNode.parent
+  }
 }
 
-function iterateNode(node: Node) {
+const MAX_POPULATE_PER_ITERATION = 5
+function iterateNode(node: Node, counter: IteratedCounter) {
+  if (counter.populated > MAX_POPULATE_PER_ITERATION) return
   if (!node.isPopulated) {
+    counter.populated++
     populateNode(node)
-    return true
+    return
   }
 
-  const child = node.children.find(c => !c.isPopulated)
-  if (child) {
-    populateNode(child)
-    return true
-  }
+  node.children.sort((a, b) => a.maxDepth - b.maxDepth)
+  node.children.forEach((c) => {
+    iterateNode(c, counter)
+  })
 }
 
 function getNodeChildren(game: Chess, fen: string, parentNode: Node | null) {
@@ -104,14 +115,18 @@ function getNodeChildren(game: Chess, fen: string, parentNode: Node | null) {
     .filter((v): v is Node => !!v)
 }
 
-interface Counter {
+interface ScoreCounter {
   opMoves: number
   playerMoves: number
   opSum: number
   playerSum: number
 }
 
-function getNodeScore(node: Node, maxingPlayer: Color, counter: Counter) {
+interface IteratedCounter {
+  populated: number
+}
+
+function getNodeScore(node: Node, maxingPlayer: Color, counter: ScoreCounter) {
   if (node.moveColour === maxingPlayer) {
     counter.playerSum += node.eval / node.depth
     counter.playerMoves++
@@ -130,12 +145,16 @@ function getMove(fen: string, maxTime: number) {
   const rootNodes = getNodeChildren(game, fen, null)
   let opMoves = 0
   let myMoves = 0
+
   while (performance.now() - start < maxTime) {
-    rootNodes.forEach(n => iterateNode(n))
+    const counter: IteratedCounter = { populated: 0 }
+
+    rootNodes.sort((a, b) => a.maxDepth - b.maxDepth)
+    rootNodes.forEach(n => iterateNode(n, counter))
   }
 
   const nodesWithCount = rootNodes.map((node) => {
-    const counter: Counter = {
+    const counter: ScoreCounter = {
       opMoves: 0,
       playerMoves: 0,
       playerSum: 0,
@@ -150,7 +169,7 @@ function getMove(fen: string, maxTime: number) {
     const playerAvg = counter.playerSum / counter.playerMoves
     const enemyAvg = counter.opSum / counter.opMoves
     return {
-      node,
+      ...node,
       counter,
       rating: playerAvg - enemyAvg,
     }
@@ -161,11 +180,11 @@ function getMove(fen: string, maxTime: number) {
   })
 
   console.log(nodesWithCount)
-  const [{ node, rating }] = nodesWithCount
+  const [{ rating, move }] = nodesWithCount
   return {
     opMoves,
     myMoves,
-    move: node.move,
+    move,
     rating,
     timeTaken: performance.now() - start,
   }
