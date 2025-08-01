@@ -2,7 +2,6 @@ import { invertColour, newBoard } from '../../chess'
 import { shuffle } from '../../../ts/util'
 import { MoveRequest, MoveResponse } from '../types'
 import { Chess, Color, PieceSymbol } from 'chess.js'
-import { sumBy } from 'lodash'
 
 const ROUND_ROBIN_VALS: { [key in PieceSymbol]: number } = {
   p: 0.1,
@@ -138,7 +137,7 @@ function getNodeScore(node: Node, maxingPlayer: Color, counter: ScoreCounter) {
     }
   }
 
-  const best = node.children
+  node.children
     .sort((a, b) => b.eval - a.eval)
     .slice(0, BEST_N_MOVES)
     .forEach((b) => {
