@@ -7,7 +7,8 @@
 	"name": "tbarlowg",
 	"compatibility_date": "2025-08-01",
 	"assets": {
-		"directory": "./ui/build"
+		"directory": "./ui/build",
+		"not_found_handling": "single-page-application"
 	},
 	"observability": {
 		"enabled": true
