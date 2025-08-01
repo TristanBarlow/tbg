@@ -20,15 +20,10 @@ export interface ChessboardWithControlsProps {
   onMove: (player: PlayerColour, moveResponse: MoveResponse) => void
 }
 
-const TEST_FENS = {
-  ATTACK: 'rnbqk2r/pppp2pp/4p2n/5pB1/1b1P4/2P5/PP2PPPP/RN1QKBNR w KQkq - 1 5',
-  DEFENCE: 'rnbqk1nr/ppppppbp/6p1/P7/8/1P6/2PPPPPP/RNBQKBNR w KQkq - 1 5',
-  QUEEN_SACK: 'q3k1n1/p2rpp2/p1p3p1/8/Q1P5/5p1P/2K2P2/5B1R w',
-}
 const TIME_BETWEEN_MOVES = 3000
 export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   const { black, onMove, white } = props
-  const [fen, setFen] = useState(new Chess(TEST_FENS.QUEEN_SACK).fen())
+  const [fen, setFen] = useState(new Chess().fen())
   const game = useMemo(() => new Chess(fen), [fen])
 
   console.log(fen)
