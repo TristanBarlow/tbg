@@ -7,7 +7,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "yarn tsc -b"
+    "build": "tsc -b",
+    "prepare": "pnpm build"
   },
   "devDependencies": {
     "@types/lodash": "4.17.16",

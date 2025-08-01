@@ -1,17 +1,14 @@
 import { useState } from 'react'
-import { ImageMeta, isMeta } from '@tbg/types'
 import { Image, Skeleton, SkeletonProps } from '@chakra-ui/react'
-import { CFG } from '../env'
 
 interface Props extends SkeletonProps {
-  meta: ImageMeta | string
+  uri: string
   loadSize?: number
 }
-export default function ImageEle(props: Props) {
+
+export function ImageEle(props: Props) {
   const [loading, setIsLoading] = useState(true)
-  const { meta } = props
-  const src = `${CFG.SERVER_URL}/api/image/${isMeta(meta) ? meta.name : meta}`
-  const description = isMeta(meta) && meta.description
+  const { uri } = props
   return (
     <Skeleton
       display="flex"
@@ -27,8 +24,7 @@ export default function ImageEle(props: Props) {
         onLoadStart={() => setIsLoading(true)}
         onLoad={() => setIsLoading(false)}
         objectFit="cover"
-        alt={description || ''}
-        src={src}
+        src={`/images/${uri}`}
       />
     </Skeleton>
   )

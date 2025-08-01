@@ -6,7 +6,6 @@ import Projects from './pages/Projects'
 import NavBar from './components/NavBar'
 import Background from './components/Background'
 import ProjectView from './pages/ProjectView'
-import Manage from './pages/Manage'
 import './css/main.css'
 import Login from './components/Login'
 import { Flex } from '@chakra-ui/react'
@@ -48,7 +47,6 @@ function Router() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/chess" element={<ChessPage />} />
             <Route path="/admin/login" element={<Login />} />
-            <Route path="/admin" element={<Manage />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </Flex>
