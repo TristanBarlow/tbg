@@ -10,37 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: GCP - Auth
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-      - name: GCP - Setup
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-
-      - uses: hashicorp/setup-terraform@v3
       - uses: ./.github/workflows/setup
-
-      - name: PNPM Pack
-        working-directory: tbarlowg.com
-        run: pnpm --filter @tbg/api --prod deploy packed
-
-      - name: GCP - Configure Docker
-        run: gcloud auth configure-docker europe-west1-docker.pkg.dev
-
-      - name: Docker - Build, Push
-        working-directory: tbarlowg.com
-        run: |
-          docker build -t europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/${{github.ref_name}} .
-          docker push europe-west1-docker.pkg.dev/${{secrets.GCP_PROJECT_ID}}/api/${{github.ref_name}}
-
       - name: Deploy
-        working-directory: tbarlowg.com/deploy
-        env:
-          TF_VAR_gcp_project_id: ${{secrets.GCP_PROJECT_ID}}
-          TF_VAR_api_image_revision: ${{github.ref_name}}
-        run: |
-          terraform init
-          terraform apply -auto-approve
+        uses: cloudflare/wrangler-action@v3
+        with:
+          workingDirectory: tbarlowg.com
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

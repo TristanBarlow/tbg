@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { toKebab } from '@tbg/util'
-import { ProjectLink, Project } from '@tbg/types'
-import { useNavigate, useParams } from 'react-router'
+import { ProjectLink } from '@tbg/types'
+import { useParams } from 'react-router'
 import MyHelmet from '../components/MyHelmet'
-import { useProjects } from '../ts/projects'
 import LoadingModal from '../components/LoadingModal'
 import { Flex, Grid, Link, Text } from '@chakra-ui/react'
-import ImageEle from '../components/Image'
+import { ImageEle } from '../components/Image'
+import { projects } from '../ts/projects'
 
 type RouterParams = {
   pId: string
@@ -27,23 +27,7 @@ function LinkView({ label, link }: ProjectLink) {
 
 export default function ProjectView() {
   const { pId } = useParams<RouterParams>()
-  const navigate = useNavigate()
-  const [projects, loading] = useProjects()
-  const [activeProj, setActiveProj] = useState<Project | null>(null)
-
-  useEffect(() => {
-    if (loading || !projects.length) {
-      return
-    }
-
-    const project = projects.find(p => toKebab(p.title) === pId)
-    if (!project) {
-      void navigate('/projects')
-      return
-    }
-    setActiveProj(project)
-  }, [loading, projects, pId, navigate])
-
+  const activeProj = useMemo(() => projects.find(p => toKebab(p.title) === pId), [pId])
   if (!activeProj) {
     return <LoadingModal hideBG />
   }
@@ -55,8 +39,8 @@ export default function ProjectView() {
         <p className="title is-3">{ activeProj.title }</p>
         <Grid maxW="1200px" justifyItems="center" justifyContent="center" w="100%" rowGap={4} columnGap={2} templateColumns="repeat(auto-fill, minmax(auto, 500px))">
           <Text maxW="600px" my={4}>{ activeProj.description }</Text>
-          <ImageEle px={1} width="400px" meta={activeProj.gifId} />
-          <ImageEle width="400px" meta={activeProj.imageId} />
+          <ImageEle px={1} width="400px" uri={activeProj.gifURI} />
+          <ImageEle width="400px" uri={activeProj.imageURI} />
           <Flex flexDir="column" alignItems="flex-end" rowGap={4} gridTemplateColumns="auto" w="100%">
             {
               activeProj.links?.map(x => <LinkView {...x} key={x.link} />)

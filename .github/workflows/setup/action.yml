@@ -17,11 +17,6 @@ runs:
       working-directory: tbarlowg.com
       run: pnpm i
 
-    - name: Pnpm - API Build
-      shell: bash
-      working-directory: tbarlowg.com/api
-      run: pnpm build
-
     - name: Pnpm - UI Build
       shell: bash
       working-directory: tbarlowg.com/ui
