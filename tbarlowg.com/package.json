@@ -1,11 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "yarn build:p && yarn workspace website build",
-    "start:site": "yarn --cwd website start",
-    "start:server": "yarn workspace server start",
-    "lint": "pnpm eslint .",
-    "build:p": "yarn workspace @tbg/types build && yarn workspace @tbg/util build"
+    "lint": "pnpm eslint ."
   },
   "devDependencies": {
     "@eslint/js": "9.27.0",
