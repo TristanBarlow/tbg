@@ -30,7 +30,6 @@ interface Node {
   parent: Node | null
   depth: number
   maxDepth: number
-  averageEval: number
 }
 
 function evaluateBoard(game: Chess) {
@@ -74,7 +73,6 @@ function makeNode(move: string, fen: string, game: Chess, parent: Node | null): 
     isPopulated: false,
     moveColour: invertColour(moveColour),
     depth,
-    averageEval: 0,
     maxDepth: depth,
   }
 }
@@ -85,7 +83,6 @@ function populateNode(node: Node) {
   node.children = getNodeChildren(game, game.fen(), node)
   node.children.sort((a, b) => b.eval - a.eval)
   node.isPopulated = true
-  node.averageEval = sumBy(node.children, c => c.eval) / node.children.length
 
   let currentNode = node.parent
   while (currentNode) {
@@ -116,24 +113,49 @@ function getNodeChildren(game: Chess, fen: string, parentNode: Node | null) {
 }
 
 interface ScoreCounter {
-  opMoves: number
+  playerBestEval: number
   playerMoves: number
-  opSum: number
   playerSum: number
+  totalPlayerMoves: number
+
+  opBestEval: number
+  opMoves: number
+  opSum: number
+  totalOpMoves: number
 }
 
 interface IteratedCounter {
   populated: number
 }
 
+const BEST_N_MOVES = 2
 function getNodeScore(node: Node, maxingPlayer: Color, counter: ScoreCounter) {
-  if (node.moveColour === maxingPlayer) {
-    counter.playerSum += node.eval / node.depth
-    counter.playerMoves++
-  } else {
-    counter.opSum += node.eval / node.depth
-    counter.opMoves++
+  if (!node.children.length) {
+    if (maxingPlayer === node.moveColour) {
+      counter.totalPlayerMoves++
+    } else {
+      counter.totalOpMoves++
+    }
   }
+
+  const best = node.children
+    .sort((a, b) => b.eval - a.eval)
+    .slice(0, BEST_N_MOVES)
+    .forEach((b) => {
+      if (b.moveColour === maxingPlayer) {
+        if (b.eval > counter.playerBestEval) {
+          counter.playerBestEval = b.eval
+        }
+        counter.playerSum += b.eval / b.depth
+        counter.playerMoves++
+      } else {
+        counter.opSum += b.eval / b.depth
+        counter.opMoves++
+        if (b.eval > counter.opBestEval) {
+          counter.playerBestEval = b.eval
+        }
+      }
+    })
 
   node.children.forEach(c => getNodeScore(c, maxingPlayer, counter))
 }
@@ -159,18 +181,24 @@ function getMove(fen: string, maxTime: number) {
       playerMoves: 0,
       playerSum: 0,
       opSum: 0,
+      totalOpMoves: 0,
+      totalPlayerMoves: 0,
+      playerBestEval: 0,
+      opBestEval: 0,
     }
 
     getNodeScore(node, maxingColour, counter)
 
-    opMoves += counter.opMoves
-    myMoves += counter.playerMoves
+    opMoves += counter.totalOpMoves
+    myMoves += counter.totalPlayerMoves
 
     const playerAvg = counter.playerSum / counter.playerMoves
     const enemyAvg = counter.opSum / counter.opMoves
     return {
       ...node,
       counter,
+      playerAvg,
+      enemyAvg,
       rating: playerAvg - enemyAvg,
     }
   })
