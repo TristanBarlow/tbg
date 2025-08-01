@@ -1,7 +1,7 @@
 import { newBoard } from '../../chess'
 import { PlayerColour } from '../chessPlayer'
 import { shuffle } from '../../../ts/util'
-import { MoveResponse, timeTaken } from '../types'
+import { MoveRequest, MoveResponse, timeTaken } from '../types'
 import { Chess, PieceSymbol } from 'chess.js'
 
 const MINIMAX_VALS: { [key in PieceSymbol]: number } = {
@@ -13,16 +13,17 @@ const MINIMAX_VALS: { [key in PieceSymbol]: number } = {
   k: 10,
 }
 
+const CHECK_MATE_VALUE = 50
+
 export class MiniMacsNode {
   game: Chess
   isDone = false
   moves: string[]
   bestValue = Number.NEGATIVE_INFINITY
   bestMove: string | null = null
-  a: number = Number.POSITIVE_INFINITY
-  b: number = Number.NEGATIVE_INFINITY
+  myMovesChecked = 0
+  opMovesChecked = 0
   colour: PlayerColour
-  moveCount = 0
 
   constructor(fen: string) {
     this.game = newBoard(fen)
@@ -43,9 +44,15 @@ export class MiniMacsNode {
 
     for (let i = 0; i < moves.length; i++) {
       const move = moves[i]
-      this.moveCount++
+      if (isMaxing) {
+        this.myMovesChecked++
+      } else {
+        this.opMovesChecked++
+      }
+
       if (!this.game.move(move)) {
         console.log('move failed')
+        continue
       }
 
       const value = this.NewLayer(depth - 1, !isMaxing, a, b)
@@ -56,8 +63,7 @@ export class MiniMacsNode {
           best_value = value
         }
         a = Math.max(a, value)
-      }
-      else {
+      } else {
         if (value < best_value) {
           best_move = move
           best_value = value
@@ -83,7 +89,7 @@ export class MiniMacsNode {
     const board = this.game.board()
 
     if (this.game.isCheckmate()) {
-      return this.isMyGo ? -100 : 100
+      return this.isMyGo ? CHECK_MATE_VALUE : -CHECK_MATE_VALUE
     }
 
     let b = 0
@@ -102,14 +108,14 @@ export class MiniMacsNode {
   }
 }
 
-export function quickGetMove(fen: string): MoveResponse {
+export function quickGetMove({ fen }: MoveRequest): MoveResponse {
   const node = new MiniMacsNode(fen)
   const strt = performance.now()
   const rating = node.NewLayer(4, true)
   return {
     move: node.bestMove,
     rating,
-    details: `Searched ${node.moveCount} different moves`,
+    details: `Total Moves Searched: ${node.myMovesChecked + node.opMovesChecked}. My Moves: ${node.myMovesChecked} Ops Moves: ${node.opMovesChecked}`,
     timeTaken: timeTaken(strt),
   }
 }

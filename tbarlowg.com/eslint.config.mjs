@@ -20,6 +20,7 @@ export default [
     reactHooks.configs['recommended-latest'],
     stylistic.configs.customize({
       indent: 2,
+      braceStyle: '1tbs',
     }),
     {
       languageOptions: {

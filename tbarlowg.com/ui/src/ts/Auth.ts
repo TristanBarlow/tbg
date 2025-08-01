@@ -32,8 +32,7 @@ export class Auth {
       const listner = this.authStateListners[key]
       try {
         listner(this._isAuthed)
-      }
-      catch (e: unknown) {
+      } catch (e: unknown) {
         console.error(e)
         console.log('Removing listner: ', key)
         delete this.authStateListners[key]

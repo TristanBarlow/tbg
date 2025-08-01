@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react'
 import ChessController from './ChessController'
 import MyHelmet from '../components/MyHelmet'
+
 export function ChessPage() {
   return (
     <Flex w="100%" justifyContent="center" flexDir="column">

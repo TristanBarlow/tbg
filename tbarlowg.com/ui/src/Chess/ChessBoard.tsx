@@ -7,8 +7,9 @@ import { CustomSquareStyles } from 'react-chessboard/dist/chessboard/types'
 import { Alert, Flex } from '@chakra-ui/react'
 import Button from '../components/Button'
 import { toTitle } from '@tbg/util'
+import { invertColour } from './chess'
 
-const colorLookup: { w: 'white', b: 'black' } = {
+export const colourLookup: { w: 'white', b: 'black' } = {
   w: 'white',
   b: 'black',
 }
@@ -19,12 +20,18 @@ export interface ChessboardWithControlsProps {
   onMove: (player: PlayerColour, moveResponse: MoveResponse) => void
 }
 
+const TEST_FENS = {
+  ATTACK: 'rnbqk2r/pppp2pp/4p2n/5pB1/1b1P4/2P5/PP2PPPP/RN1QKBNR w KQkq - 1 5',
+  DEFENCE: 'rnbqk1nr/ppppppbp/6p1/P7/8/1P6/2PPPPPP/RNBQKBNR w KQkq - 1 5',
+  QUEEN_SACK: 'q3k1n1/p2rpp2/p1p3p1/8/Q1P5/5p1P/2K2P2/5B1R w',
+}
 const TIME_BETWEEN_MOVES = 3000
 export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   const { black, onMove, white } = props
-  const [fen, setFen] = useState(new Chess().fen())
+  const [fen, setFen] = useState(new Chess(TEST_FENS.QUEEN_SACK).fen())
   const game = useMemo(() => new Chess(fen), [fen])
 
+  console.log(fen)
   const currentPlayerColour = game.turn()
   const currentPlayer: ChessPlayer = currentPlayerColour === 'w'
     ? white
@@ -89,7 +96,7 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
       return
     }
 
-    const response = await currentPlayer.getMove(game.fen())
+    const response = await currentPlayer.getMove({ fen: game.fen(), maxTime: TIME_BETWEEN_MOVES })
     if (!response?.move) {
       checkGameOver()
       return
@@ -114,6 +121,7 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   }, [currentIsHuman, makeMove])
 
   const lastMoveAt = useRef<Date>(new Date())
+
   useEffect(() => {
     if (currentIsHuman || isPaused) return
     const timeElapsed = new Date().getTime() - lastMoveAt.current.getTime()
@@ -139,17 +147,17 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   }
 
   return (
-    <Flex flexDirection="column" width="100%">
+    <Flex gridGap=".5rem" flexDirection="column" width="100%">
       <ChessBoardEndStatus game={game} />
       <div className="shadow-1">
         <Chessboard
           position={fen}
-          boardOrientation={colorLookup[orientation]}
+          boardOrientation={colourLookup[orientation]}
           onPieceDrop={onDrop}
           customSquareStyles={tileColours()}
         />
       </div>
-      <Flex mt=".5rem" gridGap=".5rem">
+      <Flex gridGap=".5rem">
         <Button onClick={() => setFen(new Chess().fen())}>
           Reset
         </Button>
@@ -161,7 +169,6 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
           onClick={() => setIsPaused(!isPaused)}
         />
       </Flex>
-
     </Flex>
   )
 }
@@ -177,8 +184,8 @@ function ChessBoardEndStatus({ game }: ChessBoardEndStatusProps) {
     }
     const isCheckmate = game.isCheckmate()
     if (!isCheckmate) return null
-    const loser = game.turn()
-    return `${toTitle(colorLookup[loser])} is the winner!`
+    const loser = invertColour(game.turn())
+    return `${toTitle(colourLookup[loser])} is the winner!`
   }, [game])
 
   if (!message) return null
