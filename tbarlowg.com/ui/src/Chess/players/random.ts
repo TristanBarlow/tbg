@@ -1,4 +1,4 @@
-import { ChessPlayer } from '@tbg/chess-bots'
+import { ChessPlayer, MoveRequest, MoveResponse, newBoard, timeTaken } from '@tbg/chess-bots'
 
 export class RandomBot extends ChessPlayer {
   name = 'Random'

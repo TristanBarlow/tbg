@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { PlayersTypes, PlayerFactory, PlayerColour, MoveResponse } from './players'
+import { PLAYER_OPTIONS, PlayerFactory, RANDOM_TYPE } from './players'
 import { ChessboardWithControls } from './ChessBoard'
 import MySelect from '../components/MySelect'
 import { Flex, Grid } from '@chakra-ui/react'
@@ -9,12 +9,12 @@ import { Log, ChessLog } from './ChessLog'
 import { generate } from 'short-uuid'
 import { useLocalStorageState } from '../hooks/useLocalStorageState'
 import { z } from 'zod'
+import { MoveResponse, PlayerColour } from '@tbg/chess-bots'
 
-const playerOptions = Object.values(PlayersTypes)
-const playerSchema = z.nativeEnum(PlayersTypes)
+const playerSchema = z.enum(PLAYER_OPTIONS)
 export default function ChessController() {
-  const [blackType, setBlackType] = useLocalStorageState('black', playerSchema, PlayersTypes.RANDOM)
-  const [whiteType, setWhiteType] = useLocalStorageState('white', playerSchema, PlayersTypes.RANDOM)
+  const [blackType, setBlackType] = useLocalStorageState('black', playerSchema, RANDOM_TYPE)
+  const [whiteType, setWhiteType] = useLocalStorageState('white', playerSchema, RANDOM_TYPE)
   const [windowWidth] = useWindowSize()
   const [logs, setLogs] = useState<Log[]>([])
 
@@ -41,14 +41,14 @@ export default function ChessController() {
           <Flex mb={2} justifyContent="space-around" flexDirection="row" w="100%">
             <MySelect
               label="White"
-              value={white.name}
-              options={playerOptions}
+              value={whiteType}
+              options={PLAYER_OPTIONS}
               change={x => x && setWhiteType(x)}
             />
             <MySelect
               label="Black"
-              value={black.name}
-              options={playerOptions}
+              value={blackType}
+              options={PLAYER_OPTIONS}
               change={x => x && setBlackType(x)}
             />
           </Flex>
