@@ -1,0 +1,21 @@
+{
+  "name": "@tbg/chess-bot-testing",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@dsnp/parquetjs": "1.8.7",
+    "@tbg/chess-bots": "workspace:*",
+    "axios": "1.11.0",
+    "chess.js": "1.2.0"
+  },
+  "devDependencies": {
+    "@types/yargs": "17.0.33",
+    "yargs": "17"
+  }
+}
