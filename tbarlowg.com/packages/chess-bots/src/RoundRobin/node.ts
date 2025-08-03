@@ -1,7 +1,6 @@
-import { invertColour, newBoard } from '../../chess'
-import { shuffle } from '../../../ts/util'
-import { MoveRequest, MoveResponse } from '../types'
+import { invertColour, newBoard, shuffle } from '../chessUtils'
 import { Chess, Color, PieceSymbol } from 'chess.js'
+import { MoveRequest, MoveResponse } from '../chessTypes'
 
 const ROUND_ROBIN_VALS: { [key in PieceSymbol]: number } = {
   p: 0.1,

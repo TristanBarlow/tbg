@@ -1,8 +1,11 @@
 import { ChessPlayer } from './chessPlayer'
-import { MoveRequest, MoveResponse } from './types'
+import { MoveRequest, MoveResponse } from './chessTypes'
 
 export abstract class WebWorkerChessPlayer extends ChessPlayer {
-  abstract inlineWorkerStr: string
+  constructor(private inlineWorkerStr: string) {
+    super()
+  }
+
   private _worker: Worker | undefined
   get worker() {
     if (!this._worker) {

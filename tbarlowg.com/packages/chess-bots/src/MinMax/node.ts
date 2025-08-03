@@ -1,8 +1,7 @@
-import { newBoard } from '../../chess'
+import { newBoard, shuffle } from '../chessUtils'
 import { PlayerColour } from '../chessPlayer'
-import { shuffle } from '../../../ts/util'
-import { MoveRequest, MoveResponse, timeTaken } from '../types'
 import { Chess, PieceSymbol } from 'chess.js'
+import { MoveRequest, MoveResponse, timeTaken } from '../chessTypes'
 
 const MINIMAX_VALS: { [key in PieceSymbol]: number } = {
   p: 1,

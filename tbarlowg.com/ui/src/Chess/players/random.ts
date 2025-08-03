@@ -1,9 +1,7 @@
-import { ChessPlayer } from './chessPlayer'
-import { newBoard } from '../chess'
-import { PlayersTypes, MoveResponse, timeTaken, MoveRequest } from './types'
+import { ChessPlayer } from '@tbg/chess-bots'
 
 export class RandomBot extends ChessPlayer {
-  name = PlayersTypes.RANDOM
+  name = 'Random'
   isHuman = false
   lastNumberOfMoves = 0
 

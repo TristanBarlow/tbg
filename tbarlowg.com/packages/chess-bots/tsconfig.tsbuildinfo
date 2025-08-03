@@ -1,0 +1,1 @@
+{"root":["./src/chessplayer.ts","./src/chessplayermultithreaded.ts","./src/chesstypes.ts","./src/chessutils.ts","./src/index.ts","./src/minmax/index.ts","./src/minmax/node.ts","./src/minmax/node.worker.ts","./src/roundrobin/index.ts","./src/roundrobin/node.ts","./src/roundrobin/node.worker.ts"],"version":"5.8.3"}

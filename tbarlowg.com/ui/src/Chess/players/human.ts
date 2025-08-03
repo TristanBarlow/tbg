@@ -1,4 +1,3 @@
-import { ChessPlayer } from './chessPlayer'
 import { PlayersTypes, MoveResponse } from './types'
 
 export class Human extends ChessPlayer {
