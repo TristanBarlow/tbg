@@ -9,3 +9,5 @@ export class RoundRobin extends WebWorkerChessPlayer {
     return this.statHistory
   }
 }
+
+export { getMoveRoundRobin } from './node'

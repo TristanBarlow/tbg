@@ -1,4 +1,4 @@
 import { makeWebWorker } from '../chessUtils'
-import { quickGetMove } from './node'
+import { getMoveMinMax } from './node'
 
-makeWebWorker(quickGetMove)
+makeWebWorker(getMoveMinMax)

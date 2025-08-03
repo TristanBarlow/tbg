@@ -216,7 +216,7 @@ function getMove(fen: string, maxTime: number) {
   }
 }
 
-export function quickGetMove({ fen, maxTime }: MoveRequest): MoveResponse {
+export function getMoveRoundRobin({ fen, maxTime }: MoveRequest): MoveResponse {
   const { move, rating, myMoves, opMoves, timeTaken } = getMove(fen, maxTime)
   return {
     move,

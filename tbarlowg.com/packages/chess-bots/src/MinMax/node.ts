@@ -107,7 +107,7 @@ export class MiniMacsNode {
   }
 }
 
-export function quickGetMove({ fen }: MoveRequest): MoveResponse {
+export function getMoveMinMax({ fen }: MoveRequest): MoveResponse {
   const node = new MiniMacsNode(fen)
   const strt = performance.now()
   const rating = node.NewLayer(4, true)

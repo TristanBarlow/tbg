@@ -1,4 +1,4 @@
 import { makeWebWorker } from '../chessUtils'
-import { quickGetMove } from './node'
+import { getMoveRoundRobin } from './node'
 
-makeWebWorker(quickGetMove)
+makeWebWorker(getMoveRoundRobin)

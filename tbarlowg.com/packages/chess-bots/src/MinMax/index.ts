@@ -9,3 +9,5 @@ export class MinMaxBot extends WebWorkerChessPlayer {
     return this.statHistory
   }
 }
+
+export { getMoveMinMax } from './node'
