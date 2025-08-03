@@ -2,10 +2,14 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Chessboard } from 'react-chessboard'
 import { Chess, Color, Move, Square } from 'chess.js'
 import { CustomSquareStyles } from 'react-chessboard/dist/chessboard/types'
-import { Alert, Flex } from '@chakra-ui/react'
+import { Alert, Flex, Input, Menu, Portal } from '@chakra-ui/react'
 import Button from '../components/Button'
 import { toTitle } from '@tbg/util'
 import { ChessPlayer, invertColour, MoveResponse, PlayerColour } from '@tbg/chess-bots'
+import { useLocalStorageState } from '../hooks/useLocalStorageState'
+import { z } from 'zod'
+import { toaster } from '../components/toaster'
+import { isError } from 'lodash'
 
 export const colourLookup: { w: 'white', b: 'black' } = {
   w: 'white',
@@ -19,12 +23,14 @@ export interface ChessboardWithControlsProps {
 }
 
 const TIME_BETWEEN_MOVES = 3000
+const fenSchema = z.string()
+const STARTING_FEN = new Chess().fen()
 export function ChessboardWithControls(props: ChessboardWithControlsProps) {
   const { black, onMove, white } = props
-  const [fen, setFen] = useState(new Chess().fen())
+  const [fen, setFen] = useLocalStorageState('fen', fenSchema, STARTING_FEN)
+  const [baseFen, setBaseFen] = useLocalStorageState('fen-base', fenSchema, STARTING_FEN)
   const game = useMemo(() => new Chess(fen), [fen])
 
-  console.log(fen)
   const currentPlayerColour = game.turn()
   const currentPlayer: ChessPlayer = currentPlayerColour === 'w'
     ? white
@@ -53,12 +59,12 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
     setIsPaused(true)
     setFen(previousState)
     setHistory(newHistory)
-  }, [history])
+  }, [history, setFen])
 
   const updateBoard = useCallback(() => {
     setFen(game.fen())
     lastMoveAt.current = new Date()
-  }, [game])
+  }, [game, setFen])
 
   const checkGameOver = useCallback(() => {
     return game.isGameOver()
@@ -84,12 +90,20 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
     return true
   }, [checkGameOver, game, updateBoard])
 
+  const moveFenRef = useRef<string>(fen)
+  moveFenRef.current = fen
   const tryMakeMove = useCallback(async () => {
     if (currentIsHuman || isPaused) {
       return
     }
 
-    const response = await currentPlayer.getMove({ fen: game.fen(), maxTime: TIME_BETWEEN_MOVES })
+    const moveFen = game.fen()
+    const response = await currentPlayer.getMove({ fen: moveFen, maxTime: TIME_BETWEEN_MOVES })
+    if (moveFenRef.current !== moveFen) {
+      console.log('Move was generated from previous FEN, ignoring move')
+      return
+    }
+
     if (!response?.move) {
       checkGameOver()
       return
@@ -139,6 +153,21 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
     }
   }
 
+  function updateBaseFEN(_newFen: string) {
+    let newFen = _newFen
+    try {
+      newFen = new Chess(newFen).fen()
+    } catch (e) {
+      toaster.create({
+        type: 'error',
+        title: `FEN is not valid ${isError(e) ? e.message : ''}`,
+      })
+      return
+    }
+    setFen(newFen)
+    setBaseFen(newFen)
+  }
+
   return (
     <Flex gridGap=".5rem" flexDirection="column" width="100%">
       <ChessBoardEndStatus game={game} />
@@ -150,16 +179,45 @@ export function ChessboardWithControls(props: ChessboardWithControlsProps) {
           customSquareStyles={tileColours()}
         />
       </div>
-      <Flex gridGap=".5rem">
-        <Button onClick={() => setFen(new Chess().fen())}>
-          Reset
-        </Button>
-        <Button onClick={undo}>
-          Undo
-        </Button>
-        <Button
-          label={isPaused ? 'Start' : 'Pause'}
-          onClick={() => setIsPaused(!isPaused)}
+      <Flex width="100%" flexDir="column" gridGap=".5rem">
+        <Flex gridGap=".5rem">
+          <Button
+            label={isPaused ? 'Start' : 'Pause'}
+            onClick={() => setIsPaused(!isPaused)}
+          />
+          <Button onClick={undo}>
+            Undo
+          </Button>
+          <Menu.Root>
+            <Menu.Trigger asChild>
+              <Button>
+                Settings
+              </Button>
+            </Menu.Trigger>
+            <Portal>
+              <Menu.Positioner>
+                <Menu.Content border="1px">
+                  <Menu.Item
+                    value="Reset"
+                    onClick={() => setFen(baseFen)}
+                  >
+                    Reset
+                  </Menu.Item>
+                  <Menu.Item
+                    value="ResetToStart"
+                    onClick={() => updateBaseFEN(STARTING_FEN)}
+                  >
+                    Reset To Start
+                  </Menu.Item>
+                </Menu.Content>
+              </Menu.Positioner>
+            </Portal>
+          </Menu.Root>
+        </Flex>
+        <Input
+          value={fen}
+          bgColor="white"
+          onChange={e => updateBaseFEN(e.target.value)}
         />
       </Flex>
     </Flex>

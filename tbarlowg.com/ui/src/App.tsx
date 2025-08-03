@@ -12,6 +12,7 @@ import { Flex } from '@chakra-ui/react'
 import ReactGA from 'react-ga'
 import { CFG, Mode } from './env'
 import { ChessPage } from './Chess/ChessPage'
+import { Toaster } from './components/toaster'
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ function Router() {
   return (
     <>
       <NavBar />
+      <Toaster />
       <Flex flexDirection="column" alignItems="center">
         <Flex pt={2} px={1} w="100%" maxW="1200px">
           <Routes>
