@@ -4,10 +4,11 @@ import { LichessPuzzle } from './lichessPuzzles'
 import { MoveResponse, getMoveMinMax, getMoveRoundRobin } from '@tbg/chess-bots'
 import { options } from 'yargs'
 import { Chess } from 'chess.js'
+import { mkdir, writeFile } from 'fs/promises'
 
 type BotKey = 'minmax' | 'roundrobin'
 const botOptions: BotKey[] = ['minmax', 'roundrobin']
-const { maxRating, bot, maxTime } = options({
+const { maxRating, bot, maxTime, limit } = options({
   maxRating: {
     number: true,
     alias: 'r',
@@ -21,6 +22,11 @@ const { maxRating, bot, maxTime } = options({
     default: 3000,
     number: true,
   },
+  limit: {
+    alias: 'limit',
+    number: true,
+    default: 100,
+  },
 }).parseSync()
 
 const bots = {
@@ -30,7 +36,10 @@ const bots = {
 
 const keys: (keyof LichessPuzzle)[] = ['FEN', 'Rating', 'Moves']
 
+const outputDir = 'output'
+
 async function run() {
+  await mkdir(outputDir, { recursive: true }).catch(console.error)
   const { testFileOnePath } = await setupTests()
   const reader = await ParquetReader.openFile(testFileOnePath)
 
@@ -39,14 +48,20 @@ async function run() {
   console.log('Total Rows:', reader.getRowCount().toNumber())
   let row: LichessPuzzle | null = null
 
-  const puzzles: LichessPuzzle[] = []
+  const allPuzzles: LichessPuzzle[] = []
   // eslint-disable-next-line no-cond-assign
   while (row = await cursor.next() as LichessPuzzle | null) {
     if (maxRating && row.Rating > maxRating) continue
-    puzzles.push(row)
+    allPuzzles.push(row)
   }
 
-  puzzles.sort((a, b) => a.Rating - b.Rating)
+  const puzzles = allPuzzles
+    .map((p) => {
+      p.Rating = Number(p.Rating)
+      return p
+    })
+    .sort((a, b) => a.Rating - b.Rating)
+    .slice(0, limit)
 
   const botKeysToTest = (bot ? [bot] : Object.keys(bots)) as BotKey[]
   botKeysToTest.forEach((key) => {
@@ -54,43 +69,61 @@ async function run() {
   })
 }
 
-const LOG_INTERVAL = 10_000
-function runPuzzlesTest(puzzles: LichessPuzzle[], botKey: BotKey) {
+const LOG_INTERVAL = 1
+async function runPuzzlesTest(puzzles: LichessPuzzle[], botKey: BotKey) {
   const countMap: CountMap = {
     failed: 0,
     failedIds: [],
     partialSuccess: 0,
+    total: 0,
     success: 0,
   }
 
   function statStr(key: string, value: number) {
-    return `\n${key}: ${value} (${(value / puzzles.length).toFixed(2)}%)`
+    return `\n${key}: ${value} (${((value / countMap.total) * 100).toFixed(2)}%)`
   }
 
   console.log(`--------- ${botKey} ---------`)
+
+  function getStats() {
+    return [
+      statStr('Success', countMap.success),
+      statStr('Failed', countMap.failed),
+      statStr('Partial Success', countMap.partialSuccess),
+    ]
+  }
+
   const game = new Chess()
-  puzzles.forEach((puzzle, index) => {
-    testBotPuzzle({
+  const failedMoves: (LichessPuzzle & { failedMove?: string })[] = []
+  for (const [index, puzzle] of puzzles.entries()) {
+    const { success, move } = testBotPuzzle({
       botKey,
       countMap,
       game,
       puzzle,
     })
 
+    if (!success) {
+      failedMoves.push({
+        failedMove: move,
+        ...puzzle,
+      })
+      await writeFile(`${outputDir}/${botKey}_FAILED_MOVES.json`, JSON.stringify(failedMoves, undefined, 4))
+    }
+
     if (index % LOG_INTERVAL) return
-    console.log(statStr('Processed', index))
-  })
+    console.log(statStr(`${botKey} - Processed`, index), ...getStats())
+  }
 
   console.log(
     `--------- ${botKey} ----------\n`,
-    statStr('Success', countMap.success),
-    statStr('Failed', countMap.failed),
-    statStr('Partial Success', countMap.partialSuccess),
+    ...getStats(),
   )
 }
 
 interface CountMap {
   success: number
+  total: number
   failed: number
   partialSuccess: number
   failedIds: string[]
@@ -103,25 +136,40 @@ interface TestBotPuzzleProps {
   countMap: CountMap
 }
 
-function testBotPuzzle({ botKey, game, puzzle, countMap }: TestBotPuzzleProps) {
+interface PuzzleAttemptResponse {
+  success: boolean
+  move?: string
+}
+
+function testBotPuzzle({ botKey, game, puzzle, countMap }: TestBotPuzzleProps): PuzzleAttemptResponse {
   const { FEN, Moves, PuzzleId } = puzzle
   // Setup the test
   const [openingMove, ...rest] = Moves.split(' ')
   game.load(FEN, { skipValidation: true })
   game.move(openingMove)
+  countMap.total++
 
+  let partialSuccess = false
   for (const actualMove of rest) {
     const botMove = bots[botKey](game.fen())
-    if (botMove.move !== actualMove) {
+    const move = botMove.move
+      ? game.move(botMove.move)
+      : null
+
+    const longFormMove = `${move?.from}${move?.to}${move?.promotion ?? ''}`
+    if (longFormMove !== actualMove) {
+      if (partialSuccess) {
+        countMap.partialSuccess++
+      }
       countMap.failedIds.push(PuzzleId)
       countMap.failed++
-      return
+      return { success: false, move: longFormMove }
     }
-    countMap.partialSuccess++
-    game.move(actualMove)
+    partialSuccess = true
   }
 
   countMap.success++
+  return { success: true }
 }
 
 run().catch(console.error)
