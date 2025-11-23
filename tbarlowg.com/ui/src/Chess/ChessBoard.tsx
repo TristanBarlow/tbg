@@ -9,7 +9,7 @@ import { ChessPlayer, invertColour, MoveResponse, PlayerColour } from '@tbg/ches
 import { useLocalStorageState } from '../hooks/useLocalStorageState'
 import { z } from 'zod'
 import { isError } from 'lodash'
-import { toaster } from '../components/foobar'
+import { toaster } from '../components/Toaster'
 
 export const colourLookup: { w: 'white', b: 'black' } = {
   w: 'white',
