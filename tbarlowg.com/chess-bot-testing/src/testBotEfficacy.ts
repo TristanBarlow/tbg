@@ -8,7 +8,7 @@ import { mkdir, writeFile } from 'fs/promises'
 
 type BotKey = 'minmax' | 'roundrobin'
 const botOptions: BotKey[] = ['minmax', 'roundrobin']
-const { maxRating, bot, maxTime, limit } = options({
+const { maxRating, bot, maxTime, limit, minELO } = options({
   maxRating: {
     number: true,
     alias: 'r',
@@ -26,6 +26,10 @@ const { maxRating, bot, maxTime, limit } = options({
     alias: 'limit',
     number: true,
     default: 100,
+  },
+  minELO: {
+    number: true,
+    default: 0,
   },
 }).parseSync()
 
@@ -61,6 +65,7 @@ async function run() {
       return p
     })
     .sort((a, b) => a.Rating - b.Rating)
+    .filter(puz => puz.Rating >= minELO)
     .slice(0, limit)
 
   const botKeysToTest = (bot ? [bot] : Object.keys(bots)) as BotKey[]

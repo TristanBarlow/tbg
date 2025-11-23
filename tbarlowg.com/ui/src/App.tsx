@@ -12,7 +12,7 @@ import { Flex } from '@chakra-ui/react'
 import ReactGA from 'react-ga'
 import { CFG, Mode } from './env'
 import { ChessPage } from './Chess/ChessPage'
-import { Toaster } from './components/toaster'
+import { Toaster } from './components/foobar'
 
 export default function App() {
   return (
