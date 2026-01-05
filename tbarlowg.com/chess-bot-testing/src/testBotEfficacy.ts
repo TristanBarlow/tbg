@@ -8,7 +8,7 @@ import { mkdir, writeFile } from 'fs/promises'
 
 type BotKey = 'minmax' | 'roundrobin'
 const botOptions: BotKey[] = ['minmax', 'roundrobin']
-const { maxRating, bot, maxTime, limit, minELO } = options({
+const { maxRating, bot, maxTime, limit, minELO, skip, fen } = options({
   maxRating: {
     number: true,
     alias: 'r',
@@ -27,9 +27,16 @@ const { maxRating, bot, maxTime, limit, minELO } = options({
     number: true,
     default: 100,
   },
+  skip: {
+    number: true,
+    default: 0,
+  },
   minELO: {
     number: true,
     default: 0,
+  },
+  fen: {
+    string: true,
   },
 }).parseSync()
 
@@ -55,6 +62,7 @@ async function run() {
   const allPuzzles: LichessPuzzle[] = []
   // eslint-disable-next-line no-cond-assign
   while (row = await cursor.next() as LichessPuzzle | null) {
+    if (fen && row.FEN !== fen) continue
     if (maxRating && row.Rating > maxRating) continue
     allPuzzles.push(row)
   }
@@ -66,7 +74,7 @@ async function run() {
     })
     .sort((a, b) => a.Rating - b.Rating)
     .filter(puz => puz.Rating >= minELO)
-    .slice(0, limit)
+    .slice(skip, skip + limit)
 
   const botKeysToTest = (bot ? [bot] : Object.keys(bots)) as BotKey[]
   botKeysToTest.forEach((key) => {
@@ -99,9 +107,9 @@ async function runPuzzlesTest(puzzles: LichessPuzzle[], botKey: BotKey) {
   }
 
   const game = new Chess()
-  const failedMoves: (LichessPuzzle & { failedMove?: string })[] = []
+  const failedMoves: (LichessPuzzle & { failedMoves?: string[] })[] = []
   for (const [index, puzzle] of puzzles.entries()) {
-    const { success, move } = testBotPuzzle({
+    const { success, moves } = testBotPuzzle({
       botKey,
       countMap,
       game,
@@ -110,7 +118,7 @@ async function runPuzzlesTest(puzzles: LichessPuzzle[], botKey: BotKey) {
 
     if (!success) {
       failedMoves.push({
-        failedMove: move,
+        failedMoves: moves,
         ...puzzle,
       })
       await writeFile(`${outputDir}/${botKey}_FAILED_MOVES.json`, JSON.stringify(failedMoves, undefined, 4))
@@ -143,7 +151,7 @@ interface TestBotPuzzleProps {
 
 interface PuzzleAttemptResponse {
   success: boolean
-  move?: string
+  moves?: string[]
 }
 
 function testBotPuzzle({ botKey, game, puzzle, countMap }: TestBotPuzzleProps): PuzzleAttemptResponse {
@@ -155,6 +163,7 @@ function testBotPuzzle({ botKey, game, puzzle, countMap }: TestBotPuzzleProps): 
   countMap.total++
 
   let partialSuccess = false
+  const moves: string[] = []
   for (const actualMove of rest) {
     const botMove = bots[botKey](game.fen())
     const move = botMove.move
@@ -162,13 +171,14 @@ function testBotPuzzle({ botKey, game, puzzle, countMap }: TestBotPuzzleProps): 
       : null
 
     const longFormMove = `${move?.from}${move?.to}${move?.promotion ?? ''}`
+    moves.push(longFormMove)
     if (longFormMove !== actualMove) {
       if (partialSuccess) {
         countMap.partialSuccess++
       }
       countMap.failedIds.push(PuzzleId)
       countMap.failed++
-      return { success: false, move: longFormMove }
+      return { success: false, moves }
     }
     partialSuccess = true
   }
